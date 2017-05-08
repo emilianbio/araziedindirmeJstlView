@@ -26,12 +26,18 @@ import forms.Kullanici;
 
 public class Genel {
 
+	public static String errorMessage = null;
+
 	public static Kullanici kullaniciBean = null;
 
 	public static Kullanici getKullaniciBean() {
 		return kullaniciBean;
 	}
 
+	/**
+	 * @param kullaniciBean
+	 *            the kullaniciBean to set
+	 */
 	public static void setKullaniciBean(Kullanici kullaniciBean) {
 		Genel.kullaniciBean = kullaniciBean;
 	}
@@ -64,11 +70,10 @@ public class Genel {
 			Integer carpim = 0;
 			try {
 				if (Long.parseLong(TCKimlik) > 9999999999L) {
-					carpim = (TamSayi(TCKimlik, 1) + TamSayi(TCKimlik, 3)
-							+ TamSayi(TCKimlik, 5) + TamSayi(TCKimlik, 7) + TamSayi(
-							TCKimlik, 9)) * 7;
-					carpim -= (TamSayi(TCKimlik, 2) + TamSayi(TCKimlik, 4)
-							+ TamSayi(TCKimlik, 6) + TamSayi(TCKimlik, 8));
+					carpim = (TamSayi(TCKimlik, 1) + TamSayi(TCKimlik, 3) + TamSayi(TCKimlik, 5) + TamSayi(TCKimlik, 7)
+							+ TamSayi(TCKimlik, 9)) * 7;
+					carpim -= (TamSayi(TCKimlik, 2) + TamSayi(TCKimlik, 4) + TamSayi(TCKimlik, 6)
+							+ TamSayi(TCKimlik, 8));
 					sonuc = (carpim % 10 == TamSayi(TCKimlik, 10));
 				}
 			} catch (Exception e) {
@@ -105,8 +110,7 @@ public class Genel {
 	public static String tarihZamanStringe(Date tarih) {
 		String sonuc = "";
 		try {
-			SimpleDateFormat dateFormat = new SimpleDateFormat(
-					"dd.MM.yyyy HH:mm:ss");
+			SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 			if (tarih != null)
 				sonuc = dateFormat.format(tarih);
 		} finally {
@@ -191,7 +195,7 @@ public class Genel {
 		aylar.put("08", "Ağustos");
 		aylar.put("09", "Eylül");
 		aylar.put("10", "Ekim");
-		
+
 		aylar.put("12", "Aralık");
 		return aylar;
 	}
@@ -211,14 +215,13 @@ public class Genel {
 	private static String smskullaniciParametre() {
 		String sonuc = "";
 		try {
-			String userName = URLEncoder.encode("HermesTest", "UTF-8"), userPass = URLEncoder
-					.encode("test017", "UTF-8"), customerCode = URLEncoder
-					.encode("01001201", "UTF-8"), apiKey = URLEncoder.encode(
-					"256c51b89746fffa807d14241c9", "UTF-8"), vendorCode = URLEncoder
-					.encode("2", "UTF-8");
-			sonuc = "userName=" + userName + "&userPass=" + userPass
-					+ "&customerCode=" + customerCode + "&apiKey=" + apiKey
-					+ "&vendorCode=" + vendorCode;
+			String userName = URLEncoder.encode("HermesTest", "UTF-8"),
+					userPass = URLEncoder.encode("test017", "UTF-8"),
+					customerCode = URLEncoder.encode("01001201", "UTF-8"),
+					apiKey = URLEncoder.encode("256c51b89746fffa807d14241c9", "UTF-8"),
+					vendorCode = URLEncoder.encode("2", "UTF-8");
+			sonuc = "userName=" + userName + "&userPass=" + userPass + "&customerCode=" + customerCode + "&apiKey="
+					+ apiKey + "&vendorCode=" + vendorCode;
 		} catch (Exception e) {
 
 		}
@@ -237,20 +240,16 @@ public class Genel {
 		Document xmlDocument = null;
 		try {
 			URL url = new URL(requestUrl);
-			HttpURLConnection connection = (HttpURLConnection) url
-					.openConnection();
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestMethod("POST");
-			connection.setRequestProperty("Content-Type",
-					"application/x-www-form-urlencoded");
-			connection.setRequestProperty("Content-Length",
-					"" + Integer.toString(param.getBytes().length));
+			connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+			connection.setRequestProperty("Content-Length", "" + Integer.toString(param.getBytes().length));
 			// connection.setRequestProperty("Content-Language", "en-US");
 			connection.setUseCaches(false);
 			connection.setDoOutput(true);
 			connection.setDoInput(true);
 			// Send request
-			DataOutputStream wr = new DataOutputStream(
-					connection.getOutputStream());
+			DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
 			wr.writeBytes(param);
 			wr.flush();
 			wr.close();
@@ -394,38 +393,32 @@ public class Genel {
 		String sonuc = "";
 		if (sayfaSayisi > 1) {
 			sonuc = "<div style='float:left;'>Sayfa : <img src='/uygulama/resources/resim/sola_trans.png'"
-					+ ((sayfa > 1) ? " onclick='sayfadakiKayitlariGetir("
-							+ (sayfa - 1) + ")' style='cursor:pointer;'"
-							: "style='opacity:0.20;'") + " /></div>";
+					+ ((sayfa > 1) ? " onclick='sayfadakiKayitlariGetir(" + (sayfa - 1) + ")' style='cursor:pointer;'"
+							: "style='opacity:0.20;'")
+					+ " /></div>";
 			if (1 != sayfa)
-				sonuc += bosluk
-						+ "<div onclick='sayfadakiKayitlariGetir(1)' style='"
-						+ stilClick + "'>1 </div>";
+				sonuc += bosluk + "<div onclick='sayfadakiKayitlariGetir(1)' style='" + stilClick + "'>1 </div>";
 			else
 				sonuc += bosluk + "<div style='" + stil + "'>1 </div>";
 			if (baslangicSayfa > 2)
 				sonuc += bosluk + "<div style='float:left;'>....</div>";
-			for (int i = baslangicSayfa; i <= baslangicSayfa + sayfalamaSayi
-					&& i <= sayfaSayisi; i++) {
+			for (int i = baslangicSayfa; i <= baslangicSayfa + sayfalamaSayi && i <= sayfaSayisi; i++) {
 				if (i != sayfa)
-					sonuc += bosluk + "<div onclick='sayfadakiKayitlariGetir("
-							+ i + ")' style='" + stilClick + "'> " + i
-							+ " </div> ";
+					sonuc += bosluk + "<div onclick='sayfadakiKayitlariGetir(" + i + ")' style='" + stilClick + "'> "
+							+ i + " </div> ";
 				else
-					sonuc += bosluk + "<div style='" + stil + "'> " + i
-							+ " </div>";
+					sonuc += bosluk + "<div style='" + stil + "'> " + i + " </div>";
 			}
 			if (baslangicSayfa + sayfalamaSayi + 1 < sayfaSayisi)
 				sonuc += bosluk + "<div style='float:left;'>....</div>";
 			if (baslangicSayfa + sayfalamaSayi < sayfaSayisi)
-				sonuc += bosluk + " <div onclick='sayfadakiKayitlariGetir("
-						+ sayfaSayisi + ")' style='" + stilClick + "'> "
-						+ sayfaSayisi + " </div> ";
-			sonuc += bosluk
-					+ "<div style='float:left;'><img src='/uygulama/resources/resim/saga_trans.png'"
-					+ ((sayfa < sayfaSayisi) ? " onclick='sayfadakiKayitlariGetir("
-							+ (sayfa + 1) + ")' style='cursor:pointer;'"
-							: "style='opacity:0.20;'") + " /></div>";
+				sonuc += bosluk + " <div onclick='sayfadakiKayitlariGetir(" + sayfaSayisi + ")' style='" + stilClick
+						+ "'> " + sayfaSayisi + " </div> ";
+			sonuc += bosluk + "<div style='float:left;'><img src='/uygulama/resources/resim/saga_trans.png'"
+					+ ((sayfa < sayfaSayisi)
+							? " onclick='sayfadakiKayitlariGetir(" + (sayfa + 1) + ")' style='cursor:pointer;'"
+							: "style='opacity:0.20;'")
+					+ " /></div>";
 		}
 		return sonuc;
 	}
@@ -478,7 +471,7 @@ public class Genel {
 		String bosluk = "<div style='float:left;'>&nbsp;</div>";
 		int sayfaSayisi = (int) (Math.ceil((double) kSayisi / kayitSayisi));
 		// System.out.println("sayfa Sayisi "+sayfaSayisi
-		// +" kayi"+kayitSayisi+"   ksayisi"+kSayisi);
+		// +" kayi"+kayitSayisi+" ksayisi"+kSayisi);
 		int baslangicSayfa = sayfa - sayfalamaSayi / 2;
 		if ((sayfaSayisi - sayfa) < sayfalamaSayi / 2)
 			baslangicSayfa = sayfaSayisi - sayfalamaSayi;
@@ -486,31 +479,32 @@ public class Genel {
 			baslangicSayfa = 2;
 		String sonuc = "";
 		if (sayfaSayisi > 1) {
-			// sonuc="<div style='float:left;'>Sayfa : <a href='"+url+"?sayfano="+(sayfa-1)+"'>'<img src='/uygulama/resources/resim/sola_trans.png' style='opacity:0.20;'/></a></div>";
+			// sonuc="<div style='float:left;'>Sayfa : <a
+			// href='"+url+"?sayfano="+(sayfa-1)+"'>'<img
+			// src='/uygulama/resources/resim/sola_trans.png'
+			// style='opacity:0.20;'/></a></div>";
 			if (1 != sayfa)
-				sonuc += bosluk + "<div style='" + stilClick + "'><a href='"
-						+ url + "?sayfano=1'>1</a> </div>";
+				sonuc += bosluk + "<div style='" + stilClick + "'><a href='" + url + "?sayfano=1'>1</a> </div>";
 			else
 				sonuc += bosluk + "<div style='" + stil + "'>1 </div>";
 			if (baslangicSayfa > 2)
 				sonuc += bosluk + "<div style='float:left;'>....</div>";
-			for (int i = baslangicSayfa; i <= baslangicSayfa + sayfalamaSayi
-					&& i <= sayfaSayisi; i++) {
+			for (int i = baslangicSayfa; i <= baslangicSayfa + sayfalamaSayi && i <= sayfaSayisi; i++) {
 				if (i != sayfa)
-					sonuc += bosluk + "<div style='" + stilClick
-							+ "'> <a href='" + url + "?sayfano=" + i + "'>" + i
+					sonuc += bosluk + "<div style='" + stilClick + "'> <a href='" + url + "?sayfano=" + i + "'>" + i
 							+ "</a> </div> ";
 				else
-					sonuc += bosluk + "<div style='" + stil + "'> " + i
-							+ " </div>";
+					sonuc += bosluk + "<div style='" + stil + "'> " + i + " </div>";
 			}
 			if (baslangicSayfa + sayfalamaSayi + 1 < sayfaSayisi)
 				sonuc += bosluk + "<div style='float:left;'>....</div>";
 			if (baslangicSayfa + sayfalamaSayi < sayfaSayisi)
-				sonuc += bosluk + " <div style='" + stilClick + "'> <a href='"
-						+ url + "?sayfano=" + sayfaSayisi + "'>" + sayfaSayisi
-						+ "</a> </div> ";
-			// sonuc+=bosluk+"<div style='float:left;'><img src='/uygulama/resources/resim/saga_trans.png'"+((sayfa<sayfaSayisi)?" onclick='sayfadakiKayitlariGetir("+(sayfa+1)+")' style='cursor:pointer;'":"style='opacity:0.20;'")
+				sonuc += bosluk + " <div style='" + stilClick + "'> <a href='" + url + "?sayfano=" + sayfaSayisi + "'>"
+						+ sayfaSayisi + "</a> </div> ";
+			// sonuc+=bosluk+"<div style='float:left;'><img
+			// src='/uygulama/resources/resim/saga_trans.png'"+((sayfa<sayfaSayisi)?"
+			// onclick='sayfadakiKayitlariGetir("+(sayfa+1)+")'
+			// style='cursor:pointer;'":"style='opacity:0.20;'")
 			// +" /></div>";
 		}
 		return sonuc;
@@ -536,6 +530,21 @@ public class Genel {
 
 		return ilceler;
 
+	}
+
+	/**
+	 * @return the errorMessage
+	 */
+	public static String getErrorMessage() {
+		return errorMessage;
+	}
+
+	/**
+	 * @param errorMessage
+	 *            the errorMessage to set
+	 */
+	public static void setErrorMessage(String errorMessage) {
+		Genel.errorMessage = errorMessage;
 	}
 
 }

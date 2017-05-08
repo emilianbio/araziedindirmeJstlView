@@ -15,19 +15,19 @@
 					width="35px"> ADANA İL GIDA TARIM VE HAYVANCILIK MÜDÜRLÜĞÜ <span
 					class="hidden-xs text-muted"> ARAZİ EDİNDİRME ŞUBESİ </span> </a> <span
 					class="hidden-xs text-muted fa fa-user" style="margin-left: 500px">
-					<!-- 		.replace("?","ğ") --> <a
-					href="${pageContext.request.contextPath}/kullanici-islemleri/kullanici">${cookie.isim.value}-ID
-						:${cookie.id.value} </a> <%-- <br>SessionID :${cookie.JSESSIONID.value	} --%>
+					<c:if test="${!empty cookie.id.value}">
+						<a
+							href="${pageContext.request.contextPath}/kullanici-islemleri/kullanici">${cookie.isim.value}-ID
+							:${cookie.id.value} </a>
+						<%-- <br>SessionID :${cookie.JSESSIONID.value	} --%>
 						
 					&nbsp;
-					<c:if test="${!empty cookie.id.value}">
-					<a href="/araziedindirme">ÇIKIŞ</a>
-					</c:if>
 					
-					<c:if test="${empty cookie.id.value}">
-					<a href="/araziedindirme">Sistem Girişi</a>
+					<a href="${pageContext.request.contextPath}/cikis">ÇIKIŞ</a>
+					</c:if> <c:if test="${empty cookie.id.value}">
+						<a href="/araziedindirme">Sistem Girişi</a>
 					</c:if>
-					
+
 				</span>
 			</div>
 		</div>

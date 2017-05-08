@@ -3,9 +3,17 @@
  */
 package controllers;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -43,7 +51,7 @@ public class AraziİslemHareketleriController {
 
 	@RequestMapping(value = "/satis")
 	public ModelAndView Satis(ModelMap model, @ModelAttribute("araziIslem") AraziİslemHareketleri islemHareketleri,
-			@CookieValue(value = "id", required = true) Long id) {
+			@CookieValue(value = "id") Long id) {
 
 		Genel.setKullaniciBean(null);
 		if (arazi == null) {
@@ -67,8 +75,8 @@ public class AraziİslemHareketleriController {
 
 	@RequestMapping(value = "/ekle")
 	public ModelAndView Satis2(@CookieValue(value = "id") Long id,
-			@ModelAttribute("araziIslem") AraziİslemHareketleri islemHareketleri, ModelMap model)
-			throws ParseException {
+			@ModelAttribute("araziIslem") AraziİslemHareketleri islemHareketleri, ModelMap model,
+			HttpServletRequest request, HttpServletResponse response) throws ParseException {
 
 		Kullanici kullanici = new Kullanici();
 		kullanici.setId(id);

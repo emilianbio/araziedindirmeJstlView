@@ -10,7 +10,7 @@ input {
 	width: 5em;
 }
 
-.date {
+#date {
 	width: 9em;
 }
 

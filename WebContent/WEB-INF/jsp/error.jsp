@@ -13,7 +13,7 @@
 	content="application/vnd.ms-excel; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="shortcut icon" href="<c:url value="/assets/gthbLogo.png"/>" />
-<title>${title}|AraziEdindirme</title>
+<title>Error |AraziEdindirme</title>
 <!-- <link rel="stylesheet"
 	href="http://openlayers.org/en/v3.18.2/css/ol.css" type="text/css"> -->
 <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
@@ -104,29 +104,34 @@
 	<!-- sidebar -->
 	<jsp:include page="sidebar.jsp" />
 	<!-- /sidebar -->
+	<h1>HATA</h1>
+	<h1>${errorMessage}</h1>
+	<c:if test="${empty errorMessage}">
+		<div id="page-content-wrapper" class="page-content-toggle">
 
-	<div id="page-content-wrapper" class="page-content-toggle">
-		<div class="container-fluid">
-			<h1>HATA</h1>
 
-			<div class="row">
-				<div id="content" class="col-md-8 col-md-offset-1 col-xs-12">
-					<h3>BU SAYFAYA GİRİŞ YETKİNİZ BULUNMAMAKTADIR.</h3>
-					<p>
+			<div class="container-fluid">
+
+				<div class="row">
+					<div id="content" class="col-md-8 col-md-offset-1 col-xs-12">
+						<h3>Sayfa Bulunamadı...</h3>
+						<p>
 						<h4>
-						İşlem aypmak için lütfen <a href="/araziedindirme">giriş</a> yapınız...
-					</h4>
-					</p>
-					
-				
-				</div>
-			</div>
-			<!-- /row -->
-		</div>
+							İşlem aypmak için lütfen <a href="/araziedindirme">giriş</a>
+							yapınız...
+						</h4>
+						</p>
 
-		<!-- footer -->
-		<jsp:include page="footer.jsp" />
-		<!-- /footer -->
-	</div>
+
+					</div>
+				</div>
+				<!-- /row -->
+			</div>
+
+			<!-- footer -->
+			<jsp:include page="footer.jsp" />
+			<!-- /footer -->
+		</div>
+	</c:if>
 </body>
 </html>

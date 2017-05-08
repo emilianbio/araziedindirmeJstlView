@@ -55,8 +55,14 @@ public class HomeController {
 		return modelAndView;
 	}
 
-	@RequestMapping(value = "/anasayfa")
-	public ModelAndView giris(ModelMap model, HttpServletResponse response,HttpServletRequest request) throws UnsupportedEncodingException {
+	@RequestMapping(value = "/cikis")
+	public ModelAndView cikis(ModelMap model, HttpServletResponse response, HttpServletRequest request)
+			throws UnsupportedEncodingException {
+		if (kullanici == null) {
+			kullanici = new Kullanici();
+
+		}
+
 		Cookie cookie1 = new Cookie("id", "");
 		Cookie cookie2 = new Cookie("isim", "");
 		// cookie.setValue("");
@@ -67,7 +73,17 @@ public class HomeController {
 		response.addCookie(cookie1);
 		response.addCookie(cookie2);
 		request.setCharacterEncoding("utf-8");
-		
+		ModelAndView modelAndView = new ModelAndView("redirect://");
+		modelAndView.addObject("girisBasarili", giris);
+		modelAndView.addObject("title", "GİRİŞ ");
+		modelAndView.addObject("kullanici", kullanici);
+		return new ModelAndView("redirect:/anasayfa");
+	}
+
+	@RequestMapping(value = "/anasayfa")
+	public ModelAndView giris(ModelMap model, HttpServletResponse response, HttpServletRequest request)
+			throws UnsupportedEncodingException {
+
 		if (kullanici == null) {
 			kullanici = new Kullanici();
 
@@ -119,9 +135,10 @@ public class HomeController {
 		System.out.println("logine basıldı" + " " + new Date());
 		if (kayitliKullanici == null) {
 			response.setCharacterEncoding("UTF-8");
-//			JOptionPane panel = new JOptionPane();
-//			JOptionPane.showMessageDialog(panel, "Yanlış Bilgi Girdiniz....", "Hatalı Giriş",
-//					JOptionPane.ERROR_MESSAGE);
+			// JOptionPane panel = new JOptionPane();
+			// JOptionPane.showMessageDialog(panel, "Yanlış Bilgi Girdiniz....",
+			// "Hatalı Giriş",
+			// JOptionPane.ERROR_MESSAGE);
 			System.out.println("Giriş Yapılamadı" + " " + new Date());
 			return new ModelAndView("redirect:/");
 		} else {
@@ -136,7 +153,6 @@ public class HomeController {
 			System.out.println("value isim / " + valueIsim);
 			System.out.println("value id / " + valueId);
 
-			
 			response.addCookie(cookieIsim);
 			response.addCookie(new Cookie("isim", valueIsim));
 			response.addCookie(new Cookie("id", valueId));
@@ -144,5 +160,13 @@ public class HomeController {
 			System.out.println("Giriş Başarılı.." + " " + new Date());
 			return new ModelAndView("redirect:/anasayfa");
 		}
+	}
+
+	@RequestMapping("/error")
+	public String errorPage(ModelMap model) {
+		String message = araclar.Genel.getErrorMessage();
+		if (message != null)
+			model.put("errorMessage", message);
+		return "error";
 	}
 }

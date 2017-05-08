@@ -61,6 +61,8 @@ public class JstlView extends InternalResourceView {
 		request.setAttribute("girisYapanKullanici", model.get("girisYapanKullanici"));
 		request.setAttribute("download", model.get("download"));
 		request.setAttribute("dosyaDurumu", model.get("dosyaDurumu"));
+		request.setAttribute("url", model.get("url"));
+		request.setAttribute("errorMessage", model.get("errorMessage"));
 		request.setAttribute("dataPoints", model.get("dataPoints"));
 		request.setAttribute("dataPoints1", model.get("dataPoints1"));
 		request.setAttribute("dataPoints2", model.get("dataPoints2"));
@@ -72,6 +74,7 @@ public class JstlView extends InternalResourceView {
 		requestDispatcher.include(request, response);
 
 	}
+
 
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException {
 		try {
@@ -88,5 +91,6 @@ public class JstlView extends InternalResourceView {
 			e.printStackTrace();
 		}
 	}
+	
 
 }

@@ -8,6 +8,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -17,6 +19,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.activation.MimetypesFileTypeMap;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -65,7 +68,9 @@ public class AracController {
 	public String download = "";
 
 	@RequestMapping(value = "/arac-islemleri")
-	public String aracTakip(ModelMap model, @CookieValue(value = "id") Long id) {
+	public String aracTakip(ModelMap model, @CookieValue(value = "id") Long id, HttpServletRequest request) {
+		String url = request.getRequestURI().toString();
+		System.out.println("adres satırı :" + url);
 		if (arac == null) {
 
 			arac = new Arac();
@@ -76,6 +81,7 @@ public class AracController {
 			model.put("dosyaDurumu", dosyaDurumu);
 		}
 
+		model.put("url", url);
 		model.put("arac", arac);
 		model.put("title", "Araç Takip ");
 		model.put("kullaniciListesi", kullaniciService.aktifKullaniciListesi('1'));
@@ -97,8 +103,8 @@ public class AracController {
 	}
 
 	@RequestMapping(value = "/araziCikisEkle")
-	public String araziCikisEkle(@ModelAttribute("arac") Arac arac,
-			@CookieValue(value = "id", required = true) Long id) {
+	public String araziCikisEkle(@ModelAttribute("arac") Arac arac, @CookieValue(value = "id", required = true) Long id,
+			HttpServletRequest request) {
 
 		Kullanici islemyapan = new Kullanici();
 		islemyapan.setId(id);
@@ -139,9 +145,28 @@ public class AracController {
 
 			return "redirect:/arazi-cikislari/arac-islemleri";
 		} catch (Exception e) {
+
+			String url1 = request.getRequestURI().toString();
+
+			URL url = null;
+			HttpURLConnection connection = null;
+			try {
+				url = new URL(url1);
+				connection = (HttpURLConnection) url.openConnection();
+				connection.setRequestMethod("GET");
+				connection.connect();
+				int code = connection.getResponseCode();
+				System.out.println("hata kodu : " + code);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
 			System.err.println("*********" + e.getMessage());
 			System.err.println(e);
-			return "redirect:/arazi-cikislari/arac-islemleri";
+
+			araclar.Genel.setErrorMessage(e.getMessage());
+			return "redirect:/error";
 		}
 
 	}
@@ -289,9 +314,23 @@ public class AracController {
 			response.setContentType(new MimetypesFileTypeMap().getContentType(file));
 			response.setContentLength((int) file.length());
 			response.setHeader("content-disposition", "attachment; filename=" + URLEncoder.encode(filename, "UTF-8"));
+			try {
 
-			InputStream is = new FileInputStream(file);
-			FileCopyUtils.copy(is, response.getOutputStream());
+				InputStream is = new FileInputStream(file);
+				FileCopyUtils.copy(is, response.getOutputStream());
+				System.out.println("dosya indirildi");
+
+			} catch (Exception e) {
+				// TODO: handle exception
+				System.out.println("dosya indirilemedi.. " + e);
+			}
+			try {
+				file.delete();
+				System.out.println("dosya silindi");
+			} catch (Exception e) {
+				// TODO: handle exception
+				System.out.println("dosya silinemedi.. " + e);
+			}
 
 			return null;
 		} catch (Exception e) {
