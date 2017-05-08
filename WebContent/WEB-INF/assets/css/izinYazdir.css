@@ -1,0 +1,43 @@
+.arkaRenkli {
+	background-color: #f2f2f2 !important;
+	-webkit-print-color-adjust: exact;
+}
+
+table {
+	border: 1px;
+	width: 800px;
+}
+
+input {
+	background-color: #f2f2f2;
+}
+
+.noBorder {
+	border: none;
+}
+
+.opacity {
+	opacity: 0.5;
+	filter: alpha(opacity = 50);
+	text-align: center;
+	border: 1px solid;
+}
+
+.blank {
+	height: 10px !important; /* Overwrite any previous rules */
+	background-color: #FFFFFF;
+	border: none;
+}
+
+.tc td, .valilik td, .tarým td {
+	height: 5px;
+	text-align: center;
+	border: none;
+	filter: alpha(opacity = 50);
+	
+}
+
+.tc, .valilik, .tarým {
+	opacity: 0.5;
+	filter: alpha(opacity = 50);
+}
