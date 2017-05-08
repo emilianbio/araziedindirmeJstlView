@@ -43,7 +43,7 @@ public class YerEklemeController {
 	private String tusYazisi = "Ekle";
 
 	@RequestMapping(value = "/sabitler")
-	public String sabitlers(HttpSession session, ModelMap model) {
+	public String sabitlers(HttpSession session, ModelMap model, @CookieValue(value = "id", required = true) Long id) {
 		model.put("modelListesi", yerEklemeService.tipGetir());
 		if (tips == null) {
 			tips = new Yerler();
@@ -56,12 +56,10 @@ public class YerEklemeController {
 					// model.put("altTipListesi",
 					// sabitTipsService.altTipGetir(tips.getId(), true));
 					tips.getTip().setTip(new Yerler(0));
-					tips.getTip().getTip()
-							.setTip(new Yerler(tips.getTip().getId()));
+					tips.getTip().getTip().setTip(new Yerler(tips.getTip().getId()));
 					tips.getTip().setId(0);
 					@SuppressWarnings("rawtypes")
-					List sonuc = yerEklemeService.altTipGetir(tips.getTip()
-							.getTip().getTip().getId(), true);
+					List sonuc = yerEklemeService.altTipGetir(tips.getTip().getTip().getTip().getId(), true);
 					model.put("altTipListesi", sonuc);
 					model.put("modelListesi", sonuc);
 					// tips.getTip().getTip().getTip().setId(tips.getId());
@@ -71,33 +69,23 @@ public class YerEklemeController {
 																	// se�ili
 																	// de�il
 				{
-					tips.getTip().getTip()
-							.setTip(new Yerler(tips.getTip().getTip().getId()));
+					tips.getTip().getTip().setTip(new Yerler(tips.getTip().getTip().getId()));
 					tips.getTip().getTip().setId(tips.getTip().getId());
 					tips.getTip().setId(0);
 					// Systgfvem.out.println("diz�st� se�ili");
 					// System.out.println(sabitTipsService.tipsGetir(tips.getTip().getTip().getTip().getId()).getIsim());
 					@SuppressWarnings("rawtypes")
-					List sonuc = yerEklemeService.altTipGetir(tips.getTip()
-							.getTip().getId(), true);
-					model.put(
-							"altTipListesi",
-							yerEklemeService.altTipGetir(tips.getTip().getTip()
-									.getTip().getId(), true));
+					List sonuc = yerEklemeService.altTipGetir(tips.getTip().getTip().getId(), true);
+					model.put("altTipListesi",
+							yerEklemeService.altTipGetir(tips.getTip().getTip().getTip().getId(), true));
 					model.put("markaListesi", sonuc);
 					model.put("modelListesi", sonuc);
 				} else {
 					// System.out.println("acer se�ili");
-					model.put(
-							"altTipListesi",
-							yerEklemeService.altTipGetir(tips.getTip().getTip()
-									.getTip().getId(), true));
-					model.put(
-							"markaListesi",
-							yerEklemeService.altTipGetir(tips.getTip().getTip()
-									.getId(), true));
-					model.put("modelListesi", yerEklemeService.altTipGetir(tips
-							.getTip().getId(), true));
+					model.put("altTipListesi",
+							yerEklemeService.altTipGetir(tips.getTip().getTip().getTip().getId(), true));
+					model.put("markaListesi", yerEklemeService.altTipGetir(tips.getTip().getTip().getId(), true));
+					model.put("modelListesi", yerEklemeService.altTipGetir(tips.getTip().getId(), true));
 				}
 		}
 		model.put("title", "Yer Ekleme");
@@ -110,10 +98,8 @@ public class YerEklemeController {
 	}
 
 	@RequestMapping(value = "/sabitonay", method = RequestMethod.GET)
-	public String ekleme(HttpSession session, HttpServletResponse response,
-			@ModelAttribute("tips") Yerler yer,
-			@ModelAttribute("kullanici") Kullanici kullanici,
-			@CookieValue(value = "memurid", required = false) Long memurid) {
+	public String ekleme(HttpSession session, HttpServletResponse response, @ModelAttribute("tips") Yerler yer,
+			@ModelAttribute("kullanici") Kullanici kullanici, @CookieValue(value = "id", required = true) Long id) {
 
 		if (yer.getTip().getTip().getTip().getId() == 0)
 
@@ -133,7 +119,7 @@ public class YerEklemeController {
 	}
 
 	@RequestMapping(value = "/edit/{id}")
-	public String sabitEdit(@PathVariable("id") Long Id) {
+	public String sabitEdit(@PathVariable("id") Long Id, @CookieValue(value = "id", required = true) Long id) {
 		tips = yerEklemeService.tipsGetir(Id);
 		tusYazisi = "Güncelle";
 		return "redirect:/yer-ekleme/sabitler";
@@ -153,10 +139,9 @@ public class YerEklemeController {
 	}
 
 	@RequestMapping(value = "/tipsil", method = RequestMethod.POST)
-	public @ResponseBody String tipsil(
-			@RequestParam(value = "id", required = true) Long id,
-			@CookieValue(value = "hitCounter", defaultValue = "0") Long hitCounter,
-			HttpServletResponse response) {
+	public @ResponseBody String tipsil(@RequestParam(value = "id", required = true) Long id,
+			@CookieValue(value = "hitCounter", defaultValue = "0") Long hitCounter, HttpServletResponse response,
+			@CookieValue(value = "id", required = true) Long cookieId) {
 		yerEklemeService.tipsil(id);
 		response.setCharacterEncoding("UTF-8");
 
@@ -170,11 +155,10 @@ public class YerEklemeController {
 	}
 
 	@RequestMapping(value = "/tipsekle", method = RequestMethod.POST)
-	public @ResponseBody byte[] tipsekle(
-			@RequestParam(value = "isim", required = true) String isim,
+	public @ResponseBody byte[] tipsekle(@RequestParam(value = "isim", required = true) String isim,
 			@RequestParam(value = "katid", required = true) Long katid,
-			@RequestParam(value = "durum", required = true) Boolean durum,
-			HttpServletResponse response) throws Exception {
+			@RequestParam(value = "durum", required = true) Boolean durum, HttpServletResponse response,
+			@CookieValue(value = "id", required = true) Long id) throws Exception {
 		Yerler tipsi = new Yerler();
 		tipsi.setIsim(isim);
 		tipsi.setTip(new Yerler(katid));
@@ -185,9 +169,8 @@ public class YerEklemeController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/markagetir", method = RequestMethod.POST)
 	@ResponseBody
-	public byte[] markaGetir(
-			@RequestParam(value = "altTipId", required = true) Long altTipId,
-			HttpServletResponse response) throws Exception {
+	public byte[] markaGetir(@RequestParam(value = "altTipId", required = true) Long altTipId,
+			HttpServletResponse response, @CookieValue(value = "id", required = true) Long id) throws Exception {
 		JSONObject jsonObject = new JSONObject();
 		List<Yerler> altTipListesi = new ArrayList<Yerler>();
 		altTipListesi = yerEklemeService.altTipGetir(altTipId, true);
@@ -202,8 +185,7 @@ public class YerEklemeController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/alttiplerigetir", method = RequestMethod.POST)
 	@ResponseBody
-	public byte[] altTipleriGetir(
-			@RequestParam(value = "katid", required = true) Long katid,
+	public byte[] altTipleriGetir(@RequestParam(value = "katid", required = true) Long katid,
 			HttpServletResponse response) throws Exception {
 		// System.out.println(ustId+"****");
 		JSONObject jsonObject = new JSONObject();
@@ -218,13 +200,10 @@ public class YerEklemeController {
 	}
 
 	@RequestMapping(value = "/modelgetir", method = RequestMethod.POST)
-	public @ResponseBody byte[] modelGetir(
-			@RequestParam(value = "altTipId", required = true) Long altTipId,
-			@RequestParam(value = "durum", required = true) Boolean durum)
-			throws Exception {
+	public @ResponseBody byte[] modelGetir(@RequestParam(value = "altTipId", required = true) Long altTipId,
+			@RequestParam(value = "durum", required = true) Boolean durum) throws Exception {
 
-		return modellerListesi(altTipId, durum).toJSONString()
-				.getBytes("UTF-8");
+		return modellerListesi(altTipId, durum).toJSONString().getBytes("UTF-8");
 	}
 
 	@SuppressWarnings("unchecked")
@@ -247,8 +226,7 @@ public class YerEklemeController {
 			jsonObject.put("durum", drm);
 
 			String date = "Bilinmiyor";
-			SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
-					"dd.MM.yyyy HH:mm:ss");
+			SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 			if (tip.getEklemezamani() != null)
 				date = DATE_FORMAT.format(tip.getEklemezamani());
 			jsonObject.put("ekleme", date);
