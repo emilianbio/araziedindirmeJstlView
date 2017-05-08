@@ -48,7 +48,7 @@ public class HomeController {
 		response.addCookie(cookie1);
 		response.addCookie(cookie2);
 		request.setCharacterEncoding("utf-8");
-		ModelAndView modelAndView = new ModelAndView("index");
+		ModelAndView modelAndView = new ModelAndView("giris");
 		modelAndView.addObject("girisBasarili", giris);
 		modelAndView.addObject("title", "GİRİŞ ");
 		modelAndView.addObject("kullanici", kullanici);
@@ -56,8 +56,24 @@ public class HomeController {
 	}
 
 	@RequestMapping(value = "/anasayfa")
-	public ModelAndView giris(ModelMap model, HttpServletResponse response) {
+	public ModelAndView giris(ModelMap model, HttpServletResponse response,HttpServletRequest request) throws UnsupportedEncodingException {
+		Cookie cookie1 = new Cookie("id", "");
+		Cookie cookie2 = new Cookie("isim", "");
+		// cookie.setValue("");
+		// cookie1.setValue("");
+		// cookie2.setValue("");
+		cookie1.setMaxAge(0);
+		cookie2.setMaxAge(0);
+		response.addCookie(cookie1);
+		response.addCookie(cookie2);
+		request.setCharacterEncoding("utf-8");
+		
+		if (kullanici == null) {
+			kullanici = new Kullanici();
+
+		}
 		ModelAndView modelAndView = new ModelAndView("giris");
+		modelAndView.addObject("kullanici", kullanici);
 		modelAndView.addObject("girisBasarili", giris);
 		modelAndView.addObject("title", "Anasayfa ");
 		return modelAndView;

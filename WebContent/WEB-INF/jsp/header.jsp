@@ -18,7 +18,16 @@
 					<!-- 		.replace("?","ğ") --> <a
 					href="${pageContext.request.contextPath}/kullanici-islemleri/kullanici">${cookie.isim.value}-ID
 						:${cookie.id.value} </a> <%-- <br>SessionID :${cookie.JSESSIONID.value	} --%>
-					&nbsp;<a href="/araziedindirme">ÇIKIŞ</a>
+						
+					&nbsp;
+					<c:if test="${!empty cookie.id.value}">
+					<a href="/araziedindirme">ÇIKIŞ</a>
+					</c:if>
+					
+					<c:if test="${empty cookie.id.value}">
+					<a href="/araziedindirme">Sistem Girişi</a>
+					</c:if>
+					
 				</span>
 			</div>
 		</div>

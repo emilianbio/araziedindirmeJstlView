@@ -42,7 +42,8 @@ public class AraziİslemHareketleriController {
 	public Long id = null;
 
 	@RequestMapping(value = "/satis")
-	public ModelAndView Satis(ModelMap model, @ModelAttribute("araziIslem") AraziİslemHareketleri islemHareketleri) {
+	public ModelAndView Satis(ModelMap model, @ModelAttribute("araziIslem") AraziİslemHareketleri islemHareketleri,
+			@CookieValue(value = "id", required = true) Long id) {
 
 		Genel.setKullaniciBean(null);
 		if (arazi == null) {
