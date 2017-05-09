@@ -103,7 +103,7 @@
 
 	
 	<div id="content" class="col-md-8 col-md-offset-1 col-xs-12">
-	<h1>HATA</h1>
+	<h1>HATA-404</h1>
 	<h1>${errorMessage}</h1>
 						<h3>Sayfa Bulunamadı...</h3>
 						<p>

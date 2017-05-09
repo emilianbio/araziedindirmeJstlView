@@ -36,7 +36,6 @@ select {
 	</script>
 
 </c:if>
-
 <form:form method="get" action="kullaniciEkle" commandName="kullanici">
 
 	<table class="table">
@@ -45,12 +44,20 @@ select {
 			<td><form:input path="adi" /></td>
 			<td>Kullanici Adı</td>
 			<td><form:input path="isimSoyisim" /></td>
+			<td>Rol</td>
+			<td><form:select path="roles.id" items="${roller}"
+					itemLabel="rollAdi" itemValue="id">
+					<%-- <form:option value="0">---Seçiniz------------</form:option>
+					<form:option value="2">20 Gün</form:option>
+					<form:option value="3">30 Gün</form:option> --%>
+				</form:select></td>
 			<td>Şifre</td>
 			<td><form:input path="sifre" /></td>
-			<td>Ünvanı</td>
-			<td><form:input path="unvan" /></td>
+
 		</tr>
 		<tr>
+			<td>Ünvanı</td>
+			<td><form:input path="unvan" /></td>
 			<td>Sicil No</td>
 			<td><form:input path="sicilNo" /></td>
 			<td>Birimi</td>
@@ -61,6 +68,7 @@ select {
 					<form:option value="2">20 Gün</form:option>
 					<form:option value="3">30 Gün</form:option>
 				</form:select></td>
+
 		</tr>
 		<tr>
 
@@ -91,6 +99,7 @@ select {
 	<tr>
 		<td>Sıra</td>
 		<td>İsim Soyisim</td>
+		<td>Rol</td>
 		<td>Şifre</td>
 		<td>Sicil No</td>
 		<td>Birimi</td>
@@ -106,10 +115,11 @@ select {
 				href="${pageContext.request.contextPath}/kullanici-islemleri/kullaniciGuncelle/${kullanici.id}">${siraNo.count }</a>
 			</td>
 			<td>${kullanici.adi}</td>
+			<td>${kullanici.roles.rollAdi}</td>
 			<td>**********</td>
 			<td>${kullanici.sicilNo}</td>
-			<td>${kullanici}</td>
-			<td>${kullanici}</td>
+			<td>${kullanici.birim}</td>
+			<td>${kullanici.unvan}</td>
 			<td>${kullanici.ePosta}</td>
 			<td>${kullanici.cepTelefonu}</td>
 			<c:if test="${kullanici.durum=='1'.charAt(0)}">

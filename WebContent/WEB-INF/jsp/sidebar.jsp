@@ -9,30 +9,30 @@
 				class="fa fa-home" aria-hidden="true"></i> <span>ANASAYFA</span>
 		</a></li>
 		<li role="separator" class="divider"></li>
-		
-			<!-- chart types -->
-			<li data-toggle="collapse" href="#chart-types" aria-expanded="false"
-				aria-controls="chart-types"><a href="#"> <i
-					class="fa fa-area-chart" aria-hidden="true"></i><span>SATIŞLAR</span>
-			</a></li>
-			<li>
-				<!-- !HATIRLATMA! sayfa yenilendiğinde aktif olan link sidebar kısmında seçili olarak geliyor -->
-				<ul id="chart-types"
-					class="sub-menu collapse ${fn:contains(pageContext.request.requestURI,'satis-cesitleri') ? 'in' : ''}">
-					<!-- HATIRLATMA SONU! -->
-					<li><a
-						href="${pageContext.request.contextPath}/satis-cesitleri/satis">Satış
-							Yoluyla Devir (5403)</a></li>
-					<%-- <li><a
+
+		<!-- chart types -->
+		<li data-toggle="collapse" href="#chart-types" aria-expanded="false"
+			aria-controls="chart-types"><a href="#"> <i
+				class="fa fa-area-chart" aria-hidden="true"></i><span>SATIŞLAR</span>
+		</a></li>
+		<li>
+			<!-- !HATIRLATMA! sayfa yenilendiğinde aktif olan link sidebar kısmında seçili olarak geliyor -->
+			<ul id="chart-types"
+				class="sub-menu collapse ${fn:contains(pageContext.request.requestURI,'satis-cesitleri') ? 'in' : ''}">
+				<!-- HATIRLATMA SONU! -->
+				<li><a
+					href="${pageContext.request.contextPath}/satis-cesitleri/satis">Satış
+						Yoluyla Devir (5403)</a></li>
+				<%-- <li><a
 					href="${pageContext.request.contextPath}/satis-cesitleri/miras">Miras
 						Yoluyla Devir (5403)</a></li>
 				<li><a
 					href="${pageContext.request.contextPath}/satis-cesitleri/3083">3083</a></li>
 				<li><a
 					href="${pageContext.request.contextPath}/satis-cesitleri/vasif">Vasıf</a></li> --%>
-				</ul>
-			</li>
-			<c:if test="${cookie.id.value==1 || cookie.id.value==9}">
+			</ul>
+		</li>
+		<c:if test="${cookie.id.value==1 || cookie.id.value==9}">
 			<!-- /chart types -->
 			<li role="separator" class="divider"></li>
 			<li data-toggle="collapse" href="#features" aria-expanded="false"
@@ -52,24 +52,24 @@
 			<!-- /chart types -->
 
 
-	
-		<li role="separator" class="divider"></li>
 
-		<li data-toggle="collapse" href="#izin" aria-expanded="false"
-			aria-controls="features"><a href="#"> <i
-				class="fa fa-map-marker" aria-hidden="true"></i><span>İZİN
-					İŞLEMLERİ</span>
-		</a></li>
-		<li>
-			<!-- !HATIRLATMA! sayfa yenilendiğinde aktif olan link sidebar kısmında seçili olarak geliyor -->
-			<ul id="izin"
-				class="sub-menu collapse ${fn:contains(pageContext.request.requestURI,'izin-islemleri') ? 'in' : ''}">
-				<!-- HATIRLATMA SONU! -->
-				<li><a
-					href="${pageContext.request.contextPath}/izin-islemleri/izin-formu">İzin
-						İşlemleri</a></li>
-			</ul>
-		</li>
+			<li role="separator" class="divider"></li>
+
+			<li data-toggle="collapse" href="#izin" aria-expanded="false"
+				aria-controls="features"><a href="#"> <i
+					class="fa fa-map-marker" aria-hidden="true"></i><span>İZİN
+						İŞLEMLERİ</span>
+			</a></li>
+			<li>
+				<!-- !HATIRLATMA! sayfa yenilendiğinde aktif olan link sidebar kısmında seçili olarak geliyor -->
+				<ul id="izin"
+					class="sub-menu collapse ${fn:contains(pageContext.request.requestURI,'izin-islemleri') ? 'in' : ''}">
+					<!-- HATIRLATMA SONU! -->
+					<li><a
+						href="${pageContext.request.contextPath}/izin-islemleri/izin-formu">İzin
+							İşlemleri</a></li>
+				</ul>
+			</li>
 		</c:if>
 		<!-- /chart types -->
 		<li role="separator" class="divider"></li>
@@ -88,14 +88,14 @@
 			</ul>
 		</li>
 
-	<c:if test="${cookie.id.value==1 }">
-		<!-- /chart types -->
-		<li role="separator" class="divider"></li>
-		<li data-toggle="collapse" href="#sabitler" aria-expanded="false"
-			aria-controls="features"><a href="#"> <i class="fa fa-star"
-				aria-hidden="true"></i><span>YÖNETİM PANELİ</span>
-		</a></li>
-	
+		<c:if test="${cookie.id.value==1 }">
+			<!-- /chart types -->
+			<li role="separator" class="divider"></li>
+			<li data-toggle="collapse" href="#sabitler" aria-expanded="false"
+				aria-controls="features"><a href="#"> <i class="fa fa-star"
+					aria-hidden="true"></i><span>YÖNETİM PANELİ</span>
+			</a></li>
+
 			<li>
 				<!-- !HATIRLATMA! sayfa yenilendiğinde aktif olan link sidebar kısmında seçili olarak geliyor -->
 				<ul id="sabitler"
@@ -104,6 +104,9 @@
 					<li><a
 						href="${pageContext.request.contextPath}/yer-ekleme/sabitler">Köy/Mahalle/İlçe/İl
 							Ekleme</a></li>
+					<li><a
+						href="${pageContext.request.contextPath}/roller/rol-yonetimi">Kullanici
+							Yetki Belirleme</a></li>
 				</ul>
 			</li>
 		</c:if>

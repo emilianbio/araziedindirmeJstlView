@@ -22,11 +22,13 @@ import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.poi.hwpf.usermodel.TableCell;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
+import org.apache.poi.xwpf.usermodel.XWPFTableCell;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 import org.json.simple.JSONObject;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTString;
@@ -90,7 +92,7 @@ public class AracController {
 		download = "";
 		dosyaDurumu = null;
 
-		if (id == 1 || id == 9) {
+		if (id == 1 || id == 9 || id == 7) {
 			model.put("aracCikisListesi", aracService.tumAracCikislari());
 			model.put("girisYapanKullanici", kullaniciService.kullanici());
 		} else {
@@ -230,12 +232,15 @@ public class AracController {
 		// üstbaşlık oluşturma
 		XWPFTableRow tableUstBaslik = tableUst.getRow(0);
 		tableUstBaslik.getCell(0).setText("GIDA TARIM VE HAYVANCILIK BAKANLIĞI");
+		tableUstBaslik.addNewTableCell().setText("GIDA TARIM VE HAYVANCILIK BAKANLIĞI");
+		tableUstBaslik.addNewTableCell().setText("GIDA TARIM VE HAYVANCILIK BAKANLIĞI");
 		XWPFParagraph paragraph = document.createParagraph();
 		XWPFRun run = paragraph.createRun();
 		run.addBreak();
 		run.addBreak();
-		run.addBreak();
 
+		// tablo çizgilerini siler
+		tableUst.getCTTbl().getTblPr().unsetTblBorders();
 		// create table
 		XWPFTable table = document.createTable();
 		// table.setCellMargins(10, 10, 10, 10);
@@ -247,11 +252,12 @@ public class AracController {
 		// create first row
 		XWPFTableRow tableRowOne = table.getRow(0);
 		tableRowOne.getCell(0).setText("Günler");
-		tableRowOne.addNewTableCell().setText("Gidilen Yer");
+		tableRowOne.addNewTableCell().setText("   Gidilen Yer   ");
 		tableRowOne.addNewTableCell().setText("Gidiş Saati");
 		tableRowOne.addNewTableCell().setText("Geliş Saati");
-		tableRowOne.addNewTableCell().setText("Araç Plakası");
-		tableRowOne.addNewTableCell().setText("Yapılan İşin Özeti");
+		tableRowOne.addNewTableCell().setText("Araç Plakası  ");
+		tableRowOne.addNewTableCell().setText("     Yapılan İşin Özeti    ");
+		tableRowOne.setHeight(10);
 
 		for (int i = 0; i < cikisListesi.size(); i++) {
 			String tamTarih = cikisListesi.get(i).getTarih();
@@ -279,7 +285,7 @@ public class AracController {
 			System.out.println(cikisListesi.get(i).getTarih());
 		}
 
-		for (int i = 0; i < 22 - cikisListesi.size(); i++) {
+		for (int i = 0; i < 18 - cikisListesi.size(); i++) {
 
 			// create blank row
 			XWPFTableRow tableRowTwo = table.createRow();
@@ -290,10 +296,46 @@ public class AracController {
 			tableRowTwo.getCell(3).setText("");
 			tableRowTwo.getCell(4).setText("");
 			tableRowTwo.getCell(5).setText("");
-
+			tableRowTwo.setHeight(5);
 			System.out.println("boş satırlar eklendi...");
 		}
+		XWPFParagraph paragraph2 = document.createParagraph();
+		XWPFRun run2 = paragraph2.createRun();
+	
+		// create table
+		XWPFTable tableAlt = document.createTable();
+		// table.setCellMargins(10, 10, 10, 10);
 
+		// XWPFTableRow altTableRow1 = tableAlt.getRow(0);
+		// altTableRow1.getCell(0).setText("GIDA TARIM VE HAYVANCILIK
+		// BAKANLIĞI");
+		// altTableRow1.addNewTableCell().setText("GIDA TARIM VE HAYVANCILIK
+		// BAKANLIĞI");
+		// altTableRow1.addNewTableCell().setText("GIDA TARIM VE HAYVANCILIK
+		// BAKANLIĞI");
+
+		XWPFTableRow altTableRow1 = tableAlt.createRow();
+		altTableRow1.getCell(0).setText("Arazi Gün Sayısı " + cikisListesi.size() + " gün" + "");
+		altTableRow1.addNewTableCell().setText("Tasdik Olunur");
+
+		XWPFTableRow altTableRow2 = tableAlt.createRow();
+		altTableRow2.getCell(0).setText("2017/4 Döneminde Tarafımdan Yapılan Arazi Çalışmalarına Ait Rapordur");
+		altTableRow2.addNewTableCell().setText(" .../.../2017");
+
+		XWPFTableRow altTableRow3 = tableAlt.createRow();
+		altTableRow3.getCell(0).setText("");
+		altTableRow3.addNewTableCell().setText("");
+
+		XWPFTableRow altTableRow4 = tableAlt.createRow();
+		altTableRow4.getCell(0).setText("Setap Keskin");
+		altTableRow4.addNewTableCell().setText("Memmet Oğultekin" );
+
+		XWPFTableRow altTableRow5 = tableAlt.createRow();
+		altTableRow5.getCell(0).setText("Tekniker");
+		altTableRow5.addNewTableCell().setText("Şube Müdürü");
+
+		// tablo çizgilerini siler
+		tableAlt.getCTTbl().getTblPr().unsetTblBorders();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 		System.out.println(isim);
 		Date tarih = new Date();

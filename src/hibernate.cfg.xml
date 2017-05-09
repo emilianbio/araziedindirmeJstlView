@@ -10,7 +10,9 @@
 		<mapping class="forms.OpenLayer" />
 		<mapping class="forms.IzinIslemleri" />
 		<mapping class="forms.IzinHareketleri" />
-		<mapping class="forms.Yerler" /><mapping class="forms.Arac" />
+		<mapping class="forms.Yerler" />
+		<mapping class="forms.Arac" />
+		<mapping class="forms.UserRoles" />
 		<!-- <mapping class="forms.Birimler" /> -->
 	</session-factory>
 

@@ -9,6 +9,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -35,12 +37,27 @@ public class Kullanici implements Serializable {
 	@Column(name = "adi")
 	private String adi;
 
-
 	@Column(name = "unvan")
 	private String unvan;
 
 	@Column(name = "birim")
 	private String birim;
+
+	@ManyToOne
+	@JoinColumn(name = "role")
+	private UserRoles roles;
+
+	public UserRoles getRoles() {
+
+		if (roles == null) {
+			roles = new UserRoles();
+		}
+		return roles;
+	}
+
+	public void setRoles(UserRoles roles) {
+		this.roles = roles;
+	}
 
 	public String getUnvan() {
 		return unvan;

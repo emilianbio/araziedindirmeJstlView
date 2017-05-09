@@ -5,6 +5,7 @@ package controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import araclar.Genel;
 import forms.Kullanici;
 import service.KullaniciService;
+import service.UserRolesService;
 
 /**
  * @author Emrah Denizer
@@ -23,20 +25,21 @@ import service.KullaniciService;
 public class KullaniciController {
 	@Autowired
 	KullaniciService kullaniciService;
+
+	@Autowired
+	UserRolesService userRolesService;
 	public String tusYazisi = "Ekle";
 
 	@RequestMapping(value = "/kullanici")
-	public ModelAndView kullanici() {
+	public ModelAndView kullanici(@CookieValue(value = "id", required = true) Long id) {
 		if (Genel.kullaniciBean == null) {
 			Genel.kullaniciBean = new Kullanici();
 		}
-		ModelAndView modelAndView = new ModelAndView(
-				"KullaniciIslemleri/KullaniciDuzenle");
+		ModelAndView modelAndView = new ModelAndView("KullaniciIslemleri/KullaniciDuzenle");
 		modelAndView.addObject("kullanici", Genel.kullaniciBean);
-		modelAndView
-				.addObject("kullaniciListesi", kullaniciService.kullanici());
+		modelAndView.addObject("kullaniciListesi", kullaniciService.kullanici());
 		modelAndView.addObject("title", "Kullanici Bilgileri");
-
+		modelAndView.addObject("roller", userRolesService.roleList());
 		return modelAndView;
 	}
 
@@ -65,19 +68,20 @@ public class KullaniciController {
 	@SuppressWarnings("null")
 	@RequestMapping(value = "/kullaniciVazgec")
 	public String kullaniciVazgec() {
-		if (Genel.kullaniciBean != null) {
+		// if (Genel.kullaniciBean != null) {
 
-			Genel.kullaniciBean.setId(0);
-			// Genel.kullaniciBean.setBirim(null);
+		Genel.kullaniciBean.setId(0);
+		// Genel.kullaniciBean.setBirim(null);
 
-			Genel.kullaniciBean.setCepTelefonu(0);
-			Genel.kullaniciBean.setDurum((Character) null);
-			Genel.kullaniciBean.setePosta(null);
-			Genel.kullaniciBean.setIsimSoyisim(null);
-			Genel.kullaniciBean.setSicilNo(null);
-			Genel.kullaniciBean.setSifre(null);
-			// Genel.kullaniciBean.setUnvan(null);
-		}
+		Genel.kullaniciBean.setCepTelefonu(0);
+		Genel.kullaniciBean.setDurum((Character) null);
+		Genel.kullaniciBean.setePosta(null);
+		Genel.kullaniciBean.setIsimSoyisim(null);
+		Genel.kullaniciBean.setSicilNo(null);
+		Genel.kullaniciBean.setSifre(null);
+		Genel.kullaniciBean.setRoles(null);
+		// Genel.kullaniciBean.setUnvan(null);
+		// }
 		return "redirect:/kullanici-islemleri/kullanici";
 	}
 

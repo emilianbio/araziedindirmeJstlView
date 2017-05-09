@@ -13,11 +13,14 @@
 				<a href="/araziedindirme"><img alt=""
 					src="${pageContext.request.contextPath}/assets/gthbLogo.png"
 					width="35px"> ADANA İL GIDA TARIM VE HAYVANCILIK MÜDÜRLÜĞÜ <span
-					class="hidden-xs text-muted"> ARAZİ EDİNDİRME ŞUBESİ </span> </a> <span
-					class="hidden-xs text-muted fa fa-user" style="margin-left: 500px">
+					class="hidden-xs text-muted"> ARAZİ EDİNDİRME ŞUBESİ </span> </a>
+					
+					
+					 <span
+					class="hidden-xs text-muted fa fa-user" style="margin-left: 400px;">
 					<c:if test="${!empty cookie.id.value}">
 						<a
-							href="${pageContext.request.contextPath}/kullanici-islemleri/kullanici">${cookie.isim.value}-ID
+							href="${pageContext.request.contextPath}/kullanici-islemleri/kullaniciGuncelle/${cookie.id.value}">${cookie.isim.value}-ID
 							:${cookie.id.value} </a>
 						<%-- <br>SessionID :${cookie.JSESSIONID.value	} --%>
 						
