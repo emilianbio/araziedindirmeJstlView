@@ -99,7 +99,7 @@ select {
 		<form:hidden path="id" />
 		<tr>
 			<td style="width: 200px;"><form:select path="kullanici.id"
-					id="slctAltTip">
+					multiple="multiple" id="slctAltTip">
 					<form:option value="0">Seçiniz</form:option>
 					<form:options items="${girisYapanKullanici}" itemValue="id"
 						itemLabel="adi" />
@@ -182,7 +182,7 @@ select {
 		<td colspan="12"><form:form action="raporAl" method="get"
 				id="raporAl">
 				<tr>
-					<td><select name="id" id="personelID">
+					<td><select name="id" id="personelID" multiple="multiple">
 
 							<option value="0">Seç----</option>
 							<c:forEach items="${girisYapanKullanici}" var="kullanici">
@@ -193,14 +193,14 @@ select {
 						onclick="raporAlFormControl();"></td>
 					<td colspan="10"><a href="../arazi-cikislari/raporAl">TÜM
 							ÇIKIŞ RAPORLARI</a></td>
-					<%-- 	
-			<c:if test="${!empty download }">
-				<td colspan="4"><a href="../arazi-cikislari/raporAl">TÜM
-						ÇIKIŞ RAPORLARI</a></td>
-				<td colspan="6" style="text-align: right;">${dosyaDurumu}</td>
-				<td colspan="2" style="text-align: right;"><a
-					href="../arazi-cikislari/download?id=1">İNDİR</a></td>
-			</c:if> --%>
+
+					<c:if test="${!empty download }">
+						<td colspan="4"><a href="../arazi-cikislari/raporAl">TÜM
+								ÇIKIŞ RAPORLARI</a></td>
+						<td colspan="6" style="text-align: right;">${dosyaDurumu}</td>
+						<td colspan="2" style="text-align: right;"><a
+							href="../arazi-cikislari/download?id=1">İNDİR</a></td>
+					</c:if>
 				</tr>
 			</form:form></td>
 	</tr>

@@ -68,6 +68,8 @@ public class AracController {
 	public String dosyaDurumu = null;
 	public String download = "";
 
+	public List<Arac> cikisListesi1 = null;
+
 	@RequestMapping(value = "/arac-islemleri")
 	public String aracTakip(ModelMap model, @CookieValue(value = "id") Long id, HttpServletRequest request) {
 		String url = request.getRequestURI().toString();
@@ -200,15 +202,16 @@ public class AracController {
 	public String personelAraCikisRaporu(@RequestParam(value = "id", required = false) Long id,
 			@CookieValue(value = "isim", required = true) String isim, HttpServletResponse response)
 			throws ParseException, InvalidFormatException, IOException {
-
+		System.out.println("ID = " + id);
 		System.out.println("bilinmeyen karakter" + "\0 dsfgdfgdfg");
 		List<Arac> cikisListesi = null;
 		if (id == null) {
 			cikisListesi = aracService.tumAracCikislari();
+
 		} else {
 
-			cikisListesi = aracService.kullaniciyaGoreCikisListesi(id);
-
+			cikisListesi1 = aracService.kullaniciyaGoreCikisListesi(id);
+			return "redirect:/arazi-cikislari/araziCikislari";
 		}
 
 		String[] isimAyrac = isim.split("\\.");
@@ -236,7 +239,7 @@ public class AracController {
 		tableUstBaslik.getCell(0)
 				.setText("     GIDA TARIM VE HAYVANCILIK BAKANLIĞI                                            ");
 		tableUstBaslik.addNewTableCell().setText("                                   ");
-		tableUstBaslik.addNewTableCell().setText("                              "+baslikIsmi);
+		tableUstBaslik.addNewTableCell().setText("                              " + baslikIsmi);
 		XWPFParagraph paragraph = document.createParagraph();
 		XWPFRun run = paragraph.createRun();
 		run.addBreak();
@@ -405,6 +408,14 @@ public class AracController {
 
 		return null;
 
+	}
+
+	@RequestMapping(value = "/araziCikislari")
+	public String raporAlmaSayasi(ModelMap model) {
+System.out.println(cikisListesi1);
+		model.put("aracCikisListesi", cikisListesi1);
+
+		return "Raporlar/AraziCikis";
 	}
 
 }

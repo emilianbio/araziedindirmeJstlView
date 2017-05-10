@@ -64,7 +64,6 @@
 package araclar;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -94,19 +93,7 @@ public class SetCharacterEncodingFilter implements Filter {
 		// System.out.println("filtre: "+((HttpServletRequest)
 		// request).getRequestURI());
 		
-		try {
-			request.setCharacterEncoding("UTF-8");
-			response.setCharacterEncoding("UTF-8");
-		} catch (UnsupportedEncodingException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		try {
-			chain.doFilter(request, response);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			
 	}
 
 	@Override

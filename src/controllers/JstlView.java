@@ -72,27 +72,22 @@ public class JstlView extends InternalResourceView {
 		request.setAttribute("dataPoints1", model.get("dataPoints1"));
 		request.setAttribute("dataPoints2", model.get("dataPoints2"));
 		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("utf-8");
 
 		// force everything to be template.jsp
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/template.jsp");
 		requestDispatcher.include(request, response);
 
-//		if (Genel.kullaniciLoginInfo != null) {
-//			HttpSession session = request.getSession(true); // create a new
-//															// session
-//
-//			// put the UserDetails object here.
-//			session.setAttribute("userDetails", Genel.kullaniciLoginInfo.getAdi());
-//
-//			try {
-//				request.setCharacterEncoding("UTF-8");
-//				response.setCharacterEncoding("UTF-8");
-//			} catch (UnsupportedEncodingException e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			}
-//
-//		}
+		if (Genel.kullaniciLoginInfo != null) {
+			HttpSession session = request.getSession(true); // create a new
+			// session
+
+			// put the UserDetails object here.
+			session.setAttribute("userDetails", Genel.kullaniciLoginInfo.getAdi());
+			session.setAttribute("userUnvan", Genel.kullaniciLoginInfo.getUnvan());
+			session.setAttribute("userSicilNo", Genel.kullaniciLoginInfo.getSicilNo());
+
+		}
 
 	}
 

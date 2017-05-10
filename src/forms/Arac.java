@@ -192,7 +192,7 @@ public class Arac implements java.io.Serializable {
 
 	@Override
 	public String toString() {
-		return "Arac [id=" + id + ", kullanici=" + kullanici + ", tarih=" + tarih + ", resmiPlaka=" + resmiPlaka
+		return "Arac [id=" + id + ", kullanici=" + kullanici.getAdi() + ", tarih=" + tarih + ", resmiPlaka=" + resmiPlaka
 				+ ", ozelPlaka=" + ozelPlaka + ", ilce=" + ilce + ", mahalle=" + mahalle + ", cikisSaati=" + cikisSaati
 				+ ", girisSaati=" + girisSaati + ", aciklama=" + aciklama + ", islemZamani=" + islemZamani + "]";
 	}

@@ -67,8 +67,8 @@ public class HomeController {
 
 		}
 
-		session = request.getSession();
-		session.invalidate();
+//		session = request.getSession();
+//		session.invalidate();
 		Genel.kullaniciLoginInfo = null;
 		Cookie cookie1 = new Cookie("id", "");
 		Cookie cookie2 = new Cookie("isim", "");
