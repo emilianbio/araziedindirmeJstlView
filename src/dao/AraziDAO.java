@@ -15,6 +15,7 @@ public interface AraziDAO {
 	public AraziİslemHareketleri araziİslemGetir(Long id);
 
 	public JSONArray islemTipineGöreListele(String islemTipi);
+	public JSONArray islemTipineVePersoneleGöreListele(String islemTipi,Long id);
 
 	public Long sonIdGetir();
 

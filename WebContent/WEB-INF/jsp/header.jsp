@@ -26,9 +26,9 @@
 						
 					&nbsp;
 					
-					<a href="${pageContext.request.contextPath}/cikis">ÇIKIŞ</a>
+					<a href="${pageContext.request.contextPath}/cikis">ÇIKIŞ${userDetails}</a>
 					</c:if> <c:if test="${empty cookie.id.value}">
-						<a href="/araziedindirme">Sistem Girişi</a>
+						<a href="/araziedindirme">Sistem Girişi${userDetails}</a>
 					</c:if>
 
 				</span>

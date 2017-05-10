@@ -22,13 +22,11 @@ import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.poi.hwpf.usermodel.TableCell;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
-import org.apache.poi.xwpf.usermodel.XWPFTableCell;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 import org.json.simple.JSONObject;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTString;
@@ -45,6 +43,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import araclar.Genel;
 import forms.Arac;
 import forms.Kullanici;
 import forms.Yerler;
@@ -85,7 +84,7 @@ public class AracController {
 
 		model.put("url", url);
 		model.put("arac", arac);
-		model.put("title", "Araç Takip ");
+		model.put("title", Genel.getKullaniciLoginInfo().getAdi());
 		model.put("kullaniciListesi", kullaniciService.aktifKullaniciListesi('1'));
 		model.put("ilceListesi", yerEklemeService.altTipGetir(2l, true));
 		model.put("download", download);
@@ -197,10 +196,12 @@ public class AracController {
 	}
 
 	@SuppressWarnings("resource")
-	@RequestMapping(value = "/raporAl")
+	@RequestMapping(value = "/raporAl", method = RequestMethod.GET)
 	public String personelAraCikisRaporu(@RequestParam(value = "id", required = false) Long id,
 			@CookieValue(value = "isim", required = true) String isim, HttpServletResponse response)
 			throws ParseException, InvalidFormatException, IOException {
+
+		System.out.println("bilinmeyen karakter" + "\0 dsfgdfgdfg");
 		List<Arac> cikisListesi = null;
 		if (id == null) {
 			cikisListesi = aracService.tumAracCikislari();
@@ -218,6 +219,7 @@ public class AracController {
 
 		String filename = ayrilanIsim.toUpperCase() + " " + ayrilanSoyIsim.toUpperCase()
 				+ ".docx"/* path to a file */;
+		String baslikIsmi = ayrilanIsim.toUpperCase() + " " + ayrilanSoyIsim.toUpperCase();
 
 		XWPFDocument document = new XWPFDocument();
 
@@ -231,9 +233,10 @@ public class AracController {
 
 		// üstbaşlık oluşturma
 		XWPFTableRow tableUstBaslik = tableUst.getRow(0);
-		tableUstBaslik.getCell(0).setText("GIDA TARIM VE HAYVANCILIK BAKANLIĞI");
-		tableUstBaslik.addNewTableCell().setText("GIDA TARIM VE HAYVANCILIK BAKANLIĞI");
-		tableUstBaslik.addNewTableCell().setText("GIDA TARIM VE HAYVANCILIK BAKANLIĞI");
+		tableUstBaslik.getCell(0)
+				.setText("     GIDA TARIM VE HAYVANCILIK BAKANLIĞI                                            ");
+		tableUstBaslik.addNewTableCell().setText("                                   ");
+		tableUstBaslik.addNewTableCell().setText("                              "+baslikIsmi);
 		XWPFParagraph paragraph = document.createParagraph();
 		XWPFRun run = paragraph.createRun();
 		run.addBreak();
@@ -301,7 +304,7 @@ public class AracController {
 		}
 		XWPFParagraph paragraph2 = document.createParagraph();
 		XWPFRun run2 = paragraph2.createRun();
-	
+
 		// create table
 		XWPFTable tableAlt = document.createTable();
 		// table.setCellMargins(10, 10, 10, 10);
@@ -327,8 +330,8 @@ public class AracController {
 		altTableRow3.addNewTableCell().setText("");
 
 		XWPFTableRow altTableRow4 = tableAlt.createRow();
-		altTableRow4.getCell(0).setText("Setap Keskin");
-		altTableRow4.addNewTableCell().setText("Memmet Oğultekin" );
+		altTableRow4.getCell(0).setText(baslikIsmi);
+		altTableRow4.addNewTableCell().setText("Memmet Oğultekin");
 
 		XWPFTableRow altTableRow5 = tableAlt.createRow();
 		altTableRow5.getCell(0).setText("Tekniker");
@@ -342,8 +345,7 @@ public class AracController {
 		System.out.println(sdf.format(tarih));
 		// path +
 		try {
-			FileOutputStream out = new FileOutputStream(
-					path + ayrilanIsim.toUpperCase() + " " + ayrilanSoyIsim.toUpperCase() + ".docx");
+			FileOutputStream out = new FileOutputStream(filename);
 			document.write(out);
 			out.close();
 			dosyaDurumu = "Dosya Başarıyla Oluşturuldu...";
@@ -351,7 +353,7 @@ public class AracController {
 			System.out.println("dosya oluşturuldu...");
 
 			// oluşturulan dosyayı indirme linki
-			File file = new File(path + filename);
+			File file = new File(filename);
 
 			response.setContentType(new MimetypesFileTypeMap().getContentType(file));
 			response.setContentLength((int) file.length());
@@ -361,17 +363,17 @@ public class AracController {
 				InputStream is = new FileInputStream(file);
 				FileCopyUtils.copy(is, response.getOutputStream());
 				System.out.println("dosya indirildi");
+				try {
+					file.delete();
+					System.out.println("dosya silindi");
+				} catch (Exception e) {
+					// TODO: handle exception
+					System.out.println("dosya silinemedi.. " + e);
+				}
 
 			} catch (Exception e) {
 				// TODO: handle exception
 				System.out.println("dosya indirilemedi.. " + e);
-			}
-			try {
-				file.delete();
-				System.out.println("dosya silindi");
-			} catch (Exception e) {
-				// TODO: handle exception
-				System.out.println("dosya silinemedi.. " + e);
 			}
 
 			return null;

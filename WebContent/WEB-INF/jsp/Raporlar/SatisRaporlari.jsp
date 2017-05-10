@@ -364,7 +364,7 @@
 		document.body.innerHTML = oldPage;
 	}
 
-	function printDiv2(box2) {
+	function printDiv2() {
 		//Get the HTML of div
 		var divElements = document.getElementById('tableDiv2').innerHTML;
 		//Get the HTML of whole page
@@ -618,6 +618,5 @@
 	</table>
 </div>
 <input type="button" id="btnExport" class="btn btn-success"
-	value="Yazdır - PDF Olarak Kaydet">
+	value="Yazdır - PDF Olarak Kaydet" onclick="javascript:printDiv3()">
 
-<span>onclick="javascript:printDiv3('box2')"</span>

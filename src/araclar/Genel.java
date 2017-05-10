@@ -30,27 +30,9 @@ public class Genel {
 
 	public static Kullanici kullaniciBean = null;
 
-	public static Kullanici getKullaniciBean() {
-		return kullaniciBean;
-	}
-
-	/**
-	 * @param kullaniciBean
-	 *            the kullaniciBean to set
-	 */
-	public static void setKullaniciBean(Kullanici kullaniciBean) {
-		Genel.kullaniciBean = kullaniciBean;
-	}
+	public static Kullanici kullaniciLoginInfo = null;
 
 	private static Integer a = 0;
-
-	public static Integer getA() {
-		return a;
-	}
-
-	public static void setA(Integer a) {
-		Genel.a = a;
-	}
 
 	private static Integer kayitSayisi = 15;
 
@@ -545,6 +527,41 @@ public class Genel {
 	 */
 	public static void setErrorMessage(String errorMessage) {
 		Genel.errorMessage = errorMessage;
+	}
+
+	public static Kullanici getKullaniciBean() {
+		return kullaniciBean;
+	}
+
+	/**
+	 * @param kullaniciBean
+	 *            the kullaniciBean to set
+	 */
+	public static void setKullaniciBean(Kullanici kullaniciBean) {
+		Genel.kullaniciBean = kullaniciBean;
+	}
+
+	public static Integer getA() {
+		return a;
+	}
+
+	public static void setA(Integer a) {
+		Genel.a = a;
+	}
+
+	/**
+	 * @return the kullaniciLoginInfo
+	 */
+	public static Kullanici getKullaniciLoginInfo() {
+		return kullaniciLoginInfo;
+	}
+
+	/**
+	 * @param kullaniciLoginInfo
+	 *            the kullaniciLoginInfo to set
+	 */
+	public static void setKullaniciLoginInfo(Kullanici kullaniciLoginInfo) {
+		Genel.kullaniciLoginInfo = kullaniciLoginInfo;
 	}
 
 }

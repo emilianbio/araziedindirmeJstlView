@@ -51,9 +51,31 @@ select {
 
 	
 
-	function gidilenYer(deger) {
-		alert(deger);
+	function formControl(deger) {
+		
+	
+		if(jq('#slctMarka').val()==0)
+			{
+			 alert("Mahalle Seçiniz..");
+		return true;
+	}else{
+		
+		arac.submit();
 	}
+	};
+	
+	function raporAlFormControl() {
+		
+		if(jq('#personelID').val()==0)
+			{
+			 alert("Personel Seçiniz....");
+		return true;
+	}else{
+		
+		jq('#raporAl').submit();
+	}
+	};
+	
 </script>
 <table style="width: 500px !important; text-align: center;"
 	class="table">
@@ -94,11 +116,6 @@ select {
 					<form:options items="${ilceListesi}" itemValue="id"
 						itemLabel="isim" />
 				</form:select></td>
-
-
-
-
-
 			<td><form:select path="mahalle.id" id="slctMarka">
 					<form:option value="0">Seçiniz</form:option>
 					<form:options items="${markaListesi}" itemValue="id"
@@ -152,14 +169,41 @@ select {
 			<td><form:input path="aciklama" type="text" /></td>
 		</tr>
 		<tr>
-			<td colspan="9" align="right"><input type="submit"
-				class="btn btn-primary" value="Ekle" /></td>
+			<td colspan="9" align="right"><input type="button"
+				onclick="formControl();" class="btn btn-primary" value="Ekle" /></td>
 		</tr>
 	</form:form>
 </table>
 
-<table class="table table-striped" style="width: 100% !important; text-align: center;">
+<table class="table table-striped"
+	style="width: 100% !important; text-align: center;">
 
+	<tr>
+		<td colspan="12"><form:form action="raporAl" method="get"
+				id="raporAl">
+				<tr>
+					<td><select name="id" id="personelID">
+
+							<option value="0">Seç----</option>
+							<c:forEach items="${girisYapanKullanici}" var="kullanici">
+								<option value="${kullanici.id}">${kullanici.adi }</option>
+							</c:forEach>
+					</select></td>
+					<td><input type="button" value="Rapor Al"
+						onclick="raporAlFormControl();"></td>
+					<td colspan="10"><a href="../arazi-cikislari/raporAl">TÜM
+							ÇIKIŞ RAPORLARI</a></td>
+					<%-- 	
+			<c:if test="${!empty download }">
+				<td colspan="4"><a href="../arazi-cikislari/raporAl">TÜM
+						ÇIKIŞ RAPORLARI</a></td>
+				<td colspan="6" style="text-align: right;">${dosyaDurumu}</td>
+				<td colspan="2" style="text-align: right;"><a
+					href="../arazi-cikislari/download?id=1">İNDİR</a></td>
+			</c:if> --%>
+				</tr>
+			</form:form></td>
+	</tr>
 	<tr>
 		<th>Sil</th>
 		<th>Edit</th>
@@ -190,11 +234,9 @@ select {
 			<c:if test="${!empty cikis.ozelPlaka}">
 				<td>Ö-${cikis.ozelPlaka }</td>
 			</c:if>
-
 			<c:if test="${!empty cikis.resmiPlaka }">
 				<td>R-${cikis.resmiPlaka }</td>
 			</c:if>
-
 			<td>${cikis.ilce.isim}-${cikis.mahalle.isim}</td>
 			<td>${cikis.tarih}</td>
 			<td>${cikis.cikisSaati}</td>
@@ -204,22 +246,7 @@ select {
 			<td>${cikis.islemZamani}</td>
 		</tr>
 	</c:forEach>
-	<form:form action="raporAl">
-		<tr>
 
-			<c:if test="${empty download }">
-				<td colspan="12"><a href="../arazi-cikislari/raporAl">TÜM
-						ÇIKIŞ RAPORLARI</a></td>
-			</c:if>
-			<c:if test="${!empty download }">
-				<td colspan="4"><a href="../arazi-cikislari/raporAl">TÜM
-						ÇIKIŞ RAPORLARI</a></td>
-				<td colspan="6" style="text-align: right;">${dosyaDurumu}</td>
-				<td colspan="2" style="text-align: right;"><a
-					href="../arazi-cikislari/download">İNDİR</a></td>
-			</c:if>
-		</tr>
-	</form:form>
 </table>
 
 

@@ -10,6 +10,7 @@ import java.util.Date;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import araclar.Genel;
 import forms.Kullanici;
 import service.KullaniciService;
 
@@ -52,17 +54,22 @@ public class HomeController {
 		modelAndView.addObject("girisBasarili", giris);
 		modelAndView.addObject("title", "GİRİŞ ");
 		modelAndView.addObject("kullanici", kullanici);
+
+		Genel.kullaniciLoginInfo = null;
 		return modelAndView;
 	}
 
 	@RequestMapping(value = "/cikis")
-	public ModelAndView cikis(ModelMap model, HttpServletResponse response, HttpServletRequest request)
-			throws UnsupportedEncodingException {
+	public ModelAndView cikis(ModelMap model, HttpServletResponse response, HttpServletRequest request,
+			HttpSession session) throws UnsupportedEncodingException {
 		if (kullanici == null) {
 			kullanici = new Kullanici();
 
 		}
 
+		session = request.getSession();
+		session.invalidate();
+		Genel.kullaniciLoginInfo = null;
 		Cookie cookie1 = new Cookie("id", "");
 		Cookie cookie2 = new Cookie("isim", "");
 		// cookie.setValue("");
@@ -142,6 +149,9 @@ public class HomeController {
 			System.out.println("Giriş Yapılamadı" + " " + new Date());
 			return new ModelAndView("redirect:/");
 		} else {
+			Genel.kullaniciLoginInfo = kayitliKullanici;
+			Genel.kullaniciLoginInfo.setId(kayitliKullanici.getId());
+			Genel.kullaniciLoginInfo.setIsimSoyisim(kayitliKullanici.getIsimSoyisim());
 
 			Cookie cookieId = new Cookie("id", Long.toString(kayitliKullanici.getId()));
 			Cookie cookieIsim = new Cookie("isim", kayitliKullanici.getIsimSoyisim());

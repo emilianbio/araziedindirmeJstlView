@@ -120,7 +120,7 @@ label {
 							//	jq(tblRow).insertAfter(".ayirici :nth-child(n)");//#islemTablosu tr:last-child
 
 							jq(tblRow).appendTo("#islemTablosu").last().show();
-						//	hide().toggle(2250);
+							//	hide().toggle(2250);
 
 							toplamDevriIstenenParselSayisi += data[i].devriIstenenParselSayisi;
 							toplamDevriIstenenParselAlani += data[i].devriIstenenParselAlani;
@@ -163,6 +163,11 @@ label {
 	}) */
 	function ekle() {
 
+		if (jq("#date").val() == "" || jq("#date").val() == null) {
+			alert("! Tarih Seçiniz")
+			return true;
+		}
+
 		if (jq("#izinVerilenParselSayisi").val() == ""
 				|| jq("#izinVerilenParselSayisi").val() == null) {
 			jq("#izinVerilenParselSayisi").val("0")
@@ -185,7 +190,8 @@ label {
 				"#devriIstenenParselSayisi").val())
 				|| parseInt(jq("#izinVerilenParselAlani").val())
 						+ parseInt(jq("#izinVerilmeyenParselAlani").val()) != parseInt(jq(
-						"#devriIstenenParselAlani").val())) {
+						"#devriIstenenParselAlani").val())
+				|| jq("#date").val() == "" || jq("#date").val() == null) {
 			console.log("------------");
 			console.log(jq("#devriIstenenParselSayisi").val());
 			console.log(parseInt(jq("#izinVerilenParselSayisi").val())
@@ -193,7 +199,6 @@ label {
 			jq("#yanlisBilgi").show();
 			return false;
 		}
-
 		console.log(new Date());
 		var form = jq('#myForm').serialize();
 		if (!confirm("Eklemek İstediğinize Emin misiniz?"))
@@ -355,6 +360,13 @@ label {
 			jq("#nitelik").val("Satış");
 			jq("#chartContainer").show("fade");
 		}
+
+		if (jq("#tipSelect").val() == "İFRAZ") {
+			jq("#tipLabelTxt").text("İFRAZ");
+			jq("#satisTipi").val("İFRAZ");
+			jq("#nitelik").val("Satış");
+			jq("#chartContainer").show("fade");
+		}
 	}
 
 	function kapat() {
@@ -371,6 +383,7 @@ label {
 	<option value="VASIF">VASIF</option>
 	<option value="MİRAS">MİRAS</option>
 	<option value="3083">3083</option>
+	<option value="İFRAZ">İFRAZ</option>
 </select>
 
 
@@ -388,9 +401,10 @@ label {
 					<td><img width="50px" src="../assets/images/loading.gif"></td>
 				</tr>
 			</thead>
+
 			<tr>
-				<td>Girilen Parsel Sayıları veya Alanları Birbirini
-					Tutmuyor....!!!!</td>
+				<td>--Girilen parsel sayıları veya alanları birbirini tutmuyor
+					olabilir</td>
 			</tr>
 			<tr>
 				<td>Lütfen Kontrol Ederek Tekrar Deneyiniz...</td>

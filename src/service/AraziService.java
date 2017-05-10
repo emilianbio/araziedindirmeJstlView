@@ -16,6 +16,8 @@ public interface AraziService {
 
 	public JSONArray islemTipineGöreListele(String islemTipi);
 
+	public JSONArray islemTipineVePersoneleGöreListele(String islemTipi, Long id);
+
 	public Long sonIdGetir();
 
 	public JSONArray ilceyeGöreListele(String ilce);

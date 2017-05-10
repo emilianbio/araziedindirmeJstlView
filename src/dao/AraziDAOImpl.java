@@ -218,4 +218,59 @@ public class AraziDAOImpl implements AraziDAO {
 		return (donecek);
 
 	}
+
+	/* (non-Javadoc)
+	 * @see dao.AraziDAO#islemTipineVePersoneleGöreListele(java.lang.String, java.lang.Long)
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional
+	public JSONArray islemTipineVePersoneleGöreListele(String islemTipi, Long id) {
+		Criteria criteriaDemirbas = sessionFactory.getCurrentSession()
+				.createCriteria(AraziİslemHareketleri.class);
+		criteriaDemirbas.addOrder(Order.desc("islemZamani"));
+		criteriaDemirbas.add(Restrictions.eq("islemTipi", islemTipi));
+		criteriaDemirbas.add(Restrictions.eq("id", id));
+		// criteriaDemirbas.setMaxResults(5);
+		JSONArray donecek = new JSONArray();
+		List<AraziİslemHareketleri> araziIslemListesi = new ArrayList<AraziİslemHareketleri>();
+		araziIslemListesi = criteriaDemirbas.list();
+		Iterator<AraziİslemHareketleri> iterator = araziIslemListesi.iterator();
+		while (iterator.hasNext()) {
+			JSONObject jsonObject = new JSONObject();
+			AraziİslemHareketleri tip = iterator.next();
+			jsonObject.put("id", tip.getId());
+			jsonObject.put("tarih", tip.getTarih());
+			jsonObject.put("ilce", tip.getIlce());
+			jsonObject.put("evrakNo", tip.getEvrakNo());
+			jsonObject.put("mahalle", tip.getMahalle());
+			jsonObject.put("devriIstenenParselSayisi",
+					tip.getDevriIstenenParselSayisi());
+			jsonObject.put("devriIstenenParselAlani",
+					tip.getDevriIstenenParselAlani());
+			jsonObject.put("izinVerilenParselSayisi",
+					tip.getIzinVerilenParselSayisi());
+			jsonObject.put("izinVerilenParselAlani",
+					tip.getIzinVerilenParselAlani());
+			jsonObject.put("izinVerilmeyenParselSayisi",
+					tip.getIzinVerilmeyenParselSayisi());
+			jsonObject.put("izinVerilmeyenParselAlani",
+					tip.getIzinVerilmeyenParselAlani());
+			jsonObject.put("nitelik", tip.getNitelik());
+			if (tip.getIslemTipi() == "SATIŞ") {
+				jsonObject.put("islemTipi", tip.getIslemTipi() + " (5403)");
+			} else {
+				jsonObject.put("islemTipi", tip.getIslemTipi());
+			}
+
+			// donecek.add(tip.getAlisFiyati());
+			// donecek.add(tip.getHisseFiyati());
+			// donecek.add(tip.getSatisFiyati());
+			// donecek.add(tip.getHayvanNo());
+			donecek.add(jsonObject);
+		}
+
+		return (donecek);
+
+	}
 }

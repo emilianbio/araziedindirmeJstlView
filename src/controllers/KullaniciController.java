@@ -40,6 +40,7 @@ public class KullaniciController {
 		modelAndView.addObject("kullaniciListesi", kullaniciService.kullanici());
 		modelAndView.addObject("title", "Kullanici Bilgileri");
 		modelAndView.addObject("roller", userRolesService.roleList());
+		//Genel.kullaniciBean =null;
 		return modelAndView;
 	}
 
@@ -65,24 +66,30 @@ public class KullaniciController {
 		return "redirect:/kullanici-islemleri/kullanici";
 	}
 
-	@SuppressWarnings("null")
 	@RequestMapping(value = "/kullaniciVazgec")
 	public String kullaniciVazgec() {
 		// if (Genel.kullaniciBean != null) {
-
-		Genel.kullaniciBean.setId(0);
+		System.out.println("kullaniciVazgeç e basıldı...");
+		//Genel.kullaniciBean.setId(0);
 		// Genel.kullaniciBean.setBirim(null);
 
-		Genel.kullaniciBean.setCepTelefonu(0);
-		Genel.kullaniciBean.setDurum((Character) null);
-		Genel.kullaniciBean.setePosta(null);
-		Genel.kullaniciBean.setIsimSoyisim(null);
-		Genel.kullaniciBean.setSicilNo(null);
-		Genel.kullaniciBean.setSifre(null);
-		Genel.kullaniciBean.setRoles(null);
+//		Genel.kullaniciBean.setCepTelefonu(0);
+//		Genel.kullaniciBean.setDurum((Character) '9');
+//		Genel.kullaniciBean.setePosta(null);
+//		Genel.kullaniciBean.setIsimSoyisim(null);
+//		Genel.kullaniciBean.setSicilNo(null);
+//		Genel.kullaniciBean.setSifre(null);
+//		Genel.kullaniciBean.setRoles(null);
+//		Genel.kullaniciBean.setAdi(null);
+//		Genel.kullaniciBean.setUnvan(null);
+//		Genel.kullaniciBean.setBirim(null);
+//		;
+
 		// Genel.kullaniciBean.setUnvan(null);
 		// }
-		return "redirect:/kullanici-islemleri/kullanici";
+		
+		Genel.kullaniciBean=null;
+		return "redirect:/anasayfa";
 	}
 
 }

@@ -84,19 +84,37 @@ public class RaporlarController {
 			if (!(araziList.get(i).getDevriIstenenParselAlani() == araziList.get(i).getIzinVerilenParselAlani()
 					+ araziList.get(i).getIzinVerilmeyenParselAlani())) {
 
-				System.out.println("==================VERİTABANI HATALI VERİLER==================");
-				System.out.println(araziList.get(i).getTarih() + "-----");
+				System.out.println(i+". Hata "+"==================VERİTABANI HATALI VERİLER==================");
 
-				System.out.print(araziList.get(i).getId() + "---");
-				System.out.print(araziList.get(i).getDevriIstenenParselAlani() + "---");
-				System.out.print(araziList.get(i).getIzinVerilenParselAlani() + "---");
-				System.out.print(araziList.get(i).getIzinVerilmeyenParselAlani() + "---");
-				System.out.print(araziList.get(i).getIzinVerilenParselAlani()
-						+ araziList.get(i).getIzinVerilmeyenParselAlani() + "---");
+				System.out.println("İşlemi Yapan: " + araziList.get(i).getKullanici().getAdi());
+				System.out.println("İşlemi Tarihi: " + araziList.get(i).getIslemZamani());
+				System.out.println("İşlem Detayları: ");
+
+				System.out.print("ID: " + araziList.get(i).getId() + "---");
+
+				System.out.println(araziList.get(i).getTarih() + "-----");
+				System.out.print(
+						"Devri istenen parsel sayısı: " + araziList.get(i).getDevriIstenenParselSayisi() + "----");
+				System.out.println("Devri istenen parsel alanı: " + araziList.get(i).getDevriIstenenParselAlani());
+
+				System.out.print("İzin verilen parsel sayısı: " + araziList.get(i).getIzinVerilenParselSayisi() + "---");
+				System.out.println("İzin verilen parsel alanı: " + araziList.get(i).getIzinVerilenParselAlani());
+
+				System.out.print(
+						"İzin verilmeyen parsel sayısı: " + araziList.get(i).getIzinVerilmeyenParselSayisi() + "---");
 				System.out.println(
-						araziList.get(i).getDevriIstenenParselAlani() == araziList.get(i).getIzinVerilenParselAlani()
+						"İzin verilmeyen parsel alanı: " + araziList.get(i).getIzinVerilmeyenParselAlani() + "---");
+				System.out.println("Fark: ");
+				System.out.print("Sayı: ");
+				System.out.println((int) araziList.get(i).getDevriIstenenParselSayisi()
+						- (int) araziList.get(i).getIzinVerilenParselSayisi()
+						+ (int) araziList.get(i).getIzinVerilmeyenParselSayisi());
+				System.out.print("Alan: ");
+				System.out.println(
+						araziList.get(i).getDevriIstenenParselAlani() - araziList.get(i).getIzinVerilenParselAlani()
 								+ araziList.get(i).getIzinVerilmeyenParselAlani());
-				System.out.println("==================VERİTABANI HATALI VERİLER SON==================");
+			
+				System.out.println(i+". Hata "+"==================VERİTABANI HATALI VERİLER SON==================");
 			}
 
 		}
@@ -109,7 +127,7 @@ public class RaporlarController {
 		modelAndView.addObject("izinVerilmeyenParselAlani", izinVerilmeyenParselAlaniToplami);
 		modelAndView.addObject("ilceler", araclar.Genel.ilcelers());
 		modelAndView.addObject("aylar", araclar.Genel.aylar());
-		
+
 		return modelAndView;
 	}
 

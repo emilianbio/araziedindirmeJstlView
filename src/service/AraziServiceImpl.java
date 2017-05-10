@@ -47,4 +47,13 @@ public class AraziServiceImpl implements AraziService {
 		return araziDAO.ilceyeGöreListele(ilce);
 	}
 
+	/* (non-Javadoc)
+	 * @see service.AraziService#islemTipineVePersoneleGöreListele(java.lang.String, java.lang.Long)
+	 */
+	@Override
+	public JSONArray islemTipineVePersoneleGöreListele(String islemTipi, Long id) {
+		// TODO Auto-generated method stub
+		return araziDAO.islemTipineVePersoneleGöreListele(islemTipi, id);
+	}
+
 }

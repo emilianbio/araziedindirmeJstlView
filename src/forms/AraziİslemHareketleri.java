@@ -189,4 +189,21 @@ public class AraziİslemHareketleri implements java.io.Serializable {
 		this.islemTipi = islemTipi;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "AraziİslemHareketleri [id=" + id + ", kullanici=" + kullanici + ", tarih=" + tarih + ", ilce=" + ilce
+				+ ", evrakNo=" + evrakNo + ", mahalle=" + mahalle + ", devriIstenenParselSayisi="
+				+ devriIstenenParselSayisi + ", devriIstenenParselAlani=" + devriIstenenParselAlani
+				+ ", izinVerilenParselSayisi=" + izinVerilenParselSayisi + ", izinVerilenParselAlani="
+				+ izinVerilenParselAlani + ", izinVerilmeyenParselSayisi=" + izinVerilmeyenParselSayisi
+				+ ", izinVerilmeyenParselAlani=" + izinVerilmeyenParselAlani + ", nitelik=" + nitelik + ", islemTipi="
+				+ islemTipi + ", islemZamani=" + islemZamani + "]";
+	}
+
+	
+
+	
 }

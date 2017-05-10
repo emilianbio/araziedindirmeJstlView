@@ -3,11 +3,6 @@
  */
 package controllers;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
@@ -138,10 +133,17 @@ public class AraziİslemHareketleriController {
 
 	@RequestMapping(value = "/islemTipineGöreListeGetir", method = RequestMethod.GET)
 	public @ResponseBody String islemTipineGöreListeGetir(
-			@RequestParam(value = "islemTipi", required = true) String islemTipi) {
+			@RequestParam(value = "islemTipi", required = true) String islemTipi,
+			@CookieValue(value = "id", required = false) Long id) {
 		Gson gson = new Gson();
 
-		return gson.toJson(araziService.islemTipineGöreListele(islemTipi));
+		if (id == 1 || id == 7) {
+			return gson.toJson(araziService.islemTipineGöreListele(islemTipi));
+
+		} else {
+
+			return gson.toJson(araziService.islemTipineVePersoneleGöreListele(islemTipi, id));
+		}
 	}
 
 	@RequestMapping(value = "/id", method = RequestMethod.GET)
