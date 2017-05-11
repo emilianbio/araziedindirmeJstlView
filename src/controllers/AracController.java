@@ -86,7 +86,7 @@ public class AracController {
 
 		model.put("url", url);
 		model.put("arac", arac);
-		model.put("title", Genel.getKullaniciLoginInfo().getAdi());
+		model.put("title", "Arazi Çıkışları");
 		model.put("kullaniciListesi", kullaniciService.aktifKullaniciListesi('1'));
 		model.put("ilceListesi", yerEklemeService.altTipGetir(2l, true));
 		model.put("download", download);
