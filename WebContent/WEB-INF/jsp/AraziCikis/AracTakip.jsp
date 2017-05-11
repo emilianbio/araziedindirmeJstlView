@@ -99,7 +99,7 @@ select {
 		<form:hidden path="id" />
 		<tr>
 			<td style="width: 200px;"><form:select path="kullanici.id"
-					multiple="multiple" id="slctAltTip">
+				 id="slctAltTip">
 					<form:option value="0">Seçiniz</form:option>
 					<form:options items="${girisYapanKullanici}" itemValue="id"
 						itemLabel="adi" />
@@ -182,7 +182,7 @@ select {
 		<td colspan="12"><form:form action="raporAl" method="get"
 				id="raporAl">
 				<tr>
-					<td><select name="id" id="personelID" multiple="multiple">
+					<td><select name="id" id="personelID" >
 
 							<option value="0">Seç----</option>
 							<c:forEach items="${girisYapanKullanici}" var="kullanici">

@@ -67,7 +67,7 @@ public class AracController {
 	private Arac arac;
 	public String dosyaDurumu = null;
 	public String download = "";
-
+	public Kullanici raporAlinanPersonelBilgileri = null;
 	public List<Arac> cikisListesi1 = null;
 
 	@RequestMapping(value = "/arac-islemleri")
@@ -207,10 +207,12 @@ public class AracController {
 		List<Arac> cikisListesi = null;
 		if (id == null) {
 			cikisListesi = aracService.tumAracCikislari();
+		
 
 		} else {
 
 			cikisListesi1 = aracService.kullaniciyaGoreCikisListesi(id);
+			raporAlinanPersonelBilgileri = kullaniciService.kullaniciGetirr(id);
 			return "redirect:/arazi-cikislari/araziCikislari";
 		}
 
@@ -412,9 +414,10 @@ public class AracController {
 
 	@RequestMapping(value = "/araziCikislari")
 	public String raporAlmaSayasi(ModelMap model) {
-System.out.println(cikisListesi1);
-		model.put("aracCikisListesi", cikisListesi1);
+		System.out.println(cikisListesi1);
 
+		model.put("aracCikisListesi", cikisListesi1);
+		model.put("kullanici", raporAlinanPersonelBilgileri);
 		return "Raporlar/AraziCikis";
 	}
 

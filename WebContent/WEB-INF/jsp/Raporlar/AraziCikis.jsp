@@ -48,24 +48,25 @@ table tbody tr td {
 					src="${pageContext.request.contextPath}/assets/gthbLogo.png"
 					width="35px"></td>
 				<td align="right"></td>
-				<td align="right">Personel Adı: ${userDetails }</td>
+				<td align="right">Personel Adı: ${kullanici.adi }</td>
 			</tr>
 			<tr>
 				<td colspan="4">GIDA TARIM VE HAYVANCILIK BAKANLIĞI</td>
 				<td align="right"></td>
-				<td align="right">Personel Unvan: ${userUnvan }</td>
+				<td align="right">Personel Unvan: ${kullanici.unvan }</td>
 			</tr>
 			<tr>
 				<td colspan="4"><span style="margin-left: 35px;">ADNA İL
 						MÜDÜRLÜĞÜ</span></td>
 				<td align="right"></td>
-				<td align="right">Personel SicilNo: ${userSicilNo }</td>
+				<td align="right">Personel SicilNo: ${kullanici.sicilNo }</td>
 			</tr>
 			<tr>
 				<td align="right" colspan="4"></td>
 				<td align="right"></td>
-				<td align="right">Dönem: <select style="border: none;-webkit-appearance: none;"
-					name="birinciAy" id="birinciAy" onchange="ucAylikToplam()">
+				<td align="right">Dönem: <select
+					style="border: none; -webkit-appearance: none;" name="birinciAy"
+					id="birinciAy" onchange="ucAylikToplam()">
 						<option value="" label="--- Seçiniz ---" />
 						<option value="01" label="Ocak"></option>
 						<option value="02" label="Şubat"></option>
@@ -135,8 +136,9 @@ table tbody tr td {
 				<td style="border: none; height: 125px;" colspan="6"></td>
 			</tr>
 			<tr>
-				<td colspan="3">Arazi Gün Sayısı ${fn:length(comment_value)}
-					gün</td>
+				<td colspan="3">Arazi Gün Sayısı <b>
+						${fn:length(comment_value)}</b> gün
+				</td>
 				<td colspan="3" align="right">Tasdik Olunur</td>
 			</tr>
 			<tr>
@@ -148,7 +150,7 @@ table tbody tr td {
 				<td colspan="6" style="height: 20px;"></td>
 			</tr>
 			<tr>
-				<td align="center" colspan="2"><b>${userDetails}</b></td>
+				<td align="center" colspan="2"><b>${kullanici.adi}</b></td>
 				<td></td>
 				<td></td>
 				<td></td>
@@ -156,7 +158,7 @@ table tbody tr td {
 			</tr>
 
 			<tr>
-				<td align="center" colspan="2"><b>${userUnvan}</b></td>
+				<td align="center" colspan="2"><b>${kullanici.unvan}</b></td>
 				<td></td>
 				<td></td>
 				<td></td>
