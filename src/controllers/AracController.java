@@ -43,7 +43,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import araclar.Genel;
 import forms.Arac;
 import forms.Kullanici;
 import forms.Yerler;
@@ -83,6 +82,13 @@ public class AracController {
 
 			model.put("dosyaDurumu", dosyaDurumu);
 		}
+		List<Arac> aracCikis = aracService.tumAracCikislari();
+
+		for (int i = 0; i < aracCikis.size(); i++) {
+			System.out.println("araz; " + aracCikis.get(i).getId());
+			System.out.println("index: " + i);
+
+		}
 
 		model.put("url", url);
 		model.put("arac", arac);
@@ -94,7 +100,12 @@ public class AracController {
 		dosyaDurumu = null;
 
 		if (id == 1 || id == 9 || id == 7) {
-			model.put("aracCikisListesi", aracService.tumAracCikislari());
+			String araziCikislari = null;
+			for (int i = 0; i < aracService.tumAracCikislari().size(); i++) {
+				araziCikislari += aracService.tumAracCikislari().get(i).toString();
+			}
+
+			model.put("aracCikisListesi", araziCikislari);
 			model.put("girisYapanKullanici", kullaniciService.kullanici());
 		} else {
 			model.put("girisYapanKullanici", kullaniciService.kullanGetir(id));
@@ -107,8 +118,22 @@ public class AracController {
 
 	@RequestMapping(value = "/araziCikisEkle")
 	public String araziCikisEkle(@ModelAttribute("arac") Arac arac, @CookieValue(value = "id", required = true) Long id,
-			HttpServletRequest request) {
+			HttpServletRequest request, @RequestParam(value = "kullaniciList") Long[] personelID) {
+		List<Kullanici> kullaniciListesi = new ArrayList<>();
+		Kullanici personel = new Kullanici();
+		System.out.println("personel: " + personel);
+		Long[] arrayList = new Long[] {};
+		for (int i = 0; i < personelID.length; i++) {
+			personel = kullaniciService.kullaniciGetirr(personelID[i]);
+			// personel.setId(personelID[i]);
+			System.out.println("seçilen personel: " + personel.getAdi());
+			kullaniciListesi.add(personel);
 
+		}
+
+		System.out.println("kullanıcı listesi: " + kullaniciListesi.iterator().next());
+		arac.setKullaniciList(kullaniciListesi);
+		// arac.setKullanici(personel);
 		Kullanici islemyapan = new Kullanici();
 		islemyapan.setId(id);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
@@ -207,7 +232,6 @@ public class AracController {
 		List<Arac> cikisListesi = null;
 		if (id == null) {
 			cikisListesi = aracService.tumAracCikislari();
-		
 
 		} else {
 
@@ -421,4 +445,16 @@ public class AracController {
 		return "Raporlar/AraziCikis";
 	}
 
+	@RequestMapping(value = "/tipsil", method = RequestMethod.POST)
+	public @ResponseBody String tipsil(@RequestParam(value = "id", required = true) Long id,
+			@CookieValue(value = "hitCounter", defaultValue = "0") Long hitCounter, HttpServletResponse response) {
+		aracService.delete(id);
+		response.setCharacterEncoding("UTF-8");
+
+		hitCounter++;
+
+		// create cookie and set it in response
+
+		return "{}";
+	}
 }

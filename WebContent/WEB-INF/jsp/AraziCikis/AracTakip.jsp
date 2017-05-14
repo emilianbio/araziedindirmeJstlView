@@ -79,6 +79,7 @@ select {
 </script>
 <table style="width: 500px !important; text-align: center;"
 	class="table">
+
 	<tr>
 		<td rowspan="2">PERSONEL</td>
 		<td rowspan="2">ARAÇ PLAKASI</td>
@@ -98,12 +99,24 @@ select {
 	<form:form commandName="arac" method="post" action="araziCikisEkle">
 		<form:hidden path="id" />
 		<tr>
-			<td style="width: 200px;"><form:select path="kullanici.id"
-				 id="slctAltTip">
+			<td style="width: 200px;">
+				<%-- <select name="kullanici.id"
+				multiple="multiple" id="slctAltTip">
+					<option value="0">Seçiniz</option>
+					<c:forEach items="${girisYapanKullanici}" var="kullanici">
+						<option value="${kullanici.id }">${kullanici.adi }</option>
+					</c:forEach>
+
+			</select> --%> <form:select path="kullaniciList" name="kullaniciList">
 					<form:option value="0">Seçiniz</form:option>
 					<form:options items="${girisYapanKullanici}" itemValue="id"
 						itemLabel="adi" />
-				</form:select></td>
+				</form:select>
+				<%--  <form:checkboxes items="${girisYapanKullanici}"
+					path="kullaniciList" itemLabel="id" itemValue="id"
+					name="kullaniciList" id="kullaniciList" /> --%>
+
+			</td>
 			<td><form:select path="resmiPlaka" id="resmiPlaka">
 					<form:option value="01R9567">01 R 9567</form:option>
 				</form:select></td>
@@ -168,6 +181,7 @@ select {
 				</form:select></td>
 			<td><form:input path="aciklama" type="text" /></td>
 		</tr>
+
 		<tr>
 			<td colspan="9" align="right"><input type="button"
 				onclick="formControl();" class="btn btn-primary" value="Ekle" /></td>
@@ -178,32 +192,25 @@ select {
 <table class="table table-striped"
 	style="width: 100% !important; text-align: center;">
 
-	<tr>
-		<td colspan="12"><form:form action="raporAl" method="get"
-				id="raporAl">
-				<tr>
-					<td><select name="id" id="personelID" >
+	<form:form action="raporAl" method="get" id="raporAl">
+		<tr>
+			<td colspan="">
+			<td><select name="id" id="personelID">
 
-							<option value="0">Seç----</option>
-							<c:forEach items="${girisYapanKullanici}" var="kullanici">
-								<option value="${kullanici.id}">${kullanici.adi }</option>
-							</c:forEach>
-					</select></td>
-					<td><input type="button" value="Rapor Al"
-						onclick="raporAlFormControl();"></td>
-					<td colspan="10"><a href="../arazi-cikislari/raporAl">TÜM
-							ÇIKIŞ RAPORLARI</a></td>
+					<option value="0">Seç----</option>
+					<c:forEach items="${girisYapanKullanici}" var="kullanici">
+						<option value="${kullanici.id}">${kullanici.adi }</option>
+					</c:forEach>
+			</select></td>
+			<td><input type="button" value="Rapor Al"
+				onclick="raporAlFormControl();"></td>
+			<td colspan="10"><a href="../arazi-cikislari/raporAl">TÜM
+					ÇIKIŞ RAPORLARI</a></td>
 
-					<c:if test="${!empty download }">
-						<td colspan="4"><a href="../arazi-cikislari/raporAl">TÜM
-								ÇIKIŞ RAPORLARI</a></td>
-						<td colspan="6" style="text-align: right;">${dosyaDurumu}</td>
-						<td colspan="2" style="text-align: right;"><a
-							href="../arazi-cikislari/download?id=1">İNDİR</a></td>
-					</c:if>
-				</tr>
-			</form:form></td>
-	</tr>
+
+			</td>
+		</tr>
+	</form:form>
 	<tr>
 		<th>Sil</th>
 		<th>Edit</th>
@@ -217,12 +224,12 @@ select {
 		<th>İşin Özeti</th>
 		<th>Kaydeden</th>
 		<th>Kayıt Zamani</th>
-	</tr>
-	<c:forEach items="${aracCikisListesi}" var="cikis" varStatus="sira">
-		<tr>
+	
+	 <c:forEach items="${aracCikisListesi}" var="cikis" varStatus="sira">
+		<tr class="satirno${cikis.id}">
 
 			<td><img src="<c:url value="/assets/images/Delete-32.png" />"
-				width="21px" onclick="tipsil(${sabitTips.id})"
+				width="21px" onclick="tipsil(${cikis.id})"
 				title="Silmek İçin Tıklayın" /></td>
 			<td><a href="./duzenle/${cikis.id}"><img
 					src="<c:url value="/assets/images/duzenle.png" />" width="21px"
@@ -230,7 +237,7 @@ select {
 
 
 			<td>${sira.count }</td>
-			<td>${cikis.kullanici.adi}</td>
+			<td>${cikis.kullaniciList[sira.index].adi}</td>
 			<c:if test="${!empty cikis.ozelPlaka}">
 				<td>Ö-${cikis.ozelPlaka }</td>
 			</c:if>
@@ -245,7 +252,7 @@ select {
 			<td>${cikis.islemyapan.adi}</td>
 			<td>${cikis.islemZamani}</td>
 		</tr>
-	</c:forEach>
+	</c:forEach> 
 
 </table>
 

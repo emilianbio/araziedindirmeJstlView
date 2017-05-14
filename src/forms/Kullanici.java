@@ -94,7 +94,7 @@ public class Kullanici implements Serializable {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -184,4 +184,37 @@ public class Kullanici implements Serializable {
 		this.izinHakki = izinHakki;
 	}
 
+	/**
+	 * @param isimSoyisim
+	 * @param sifre
+	 * @param adi
+	 * @param unvan
+	 * @param birim
+	 * @param roles
+	 * @param sicilNo
+	 * @param cepTelefonu
+	 * @param ePosta
+	 * @param durum
+	 * @param izinHakki
+	 */
+	public Kullanici(String isimSoyisim, String sifre, String adi, String unvan, String birim, UserRoles roles,
+			String sicilNo, long cepTelefonu, String ePosta, char durum, Integer izinHakki) {
+		this.isimSoyisim = isimSoyisim;
+		this.sifre = sifre;
+		this.adi = adi;
+		this.unvan = unvan;
+		this.birim = birim;
+		this.roles = roles;
+		this.sicilNo = sicilNo;
+		this.cepTelefonu = cepTelefonu;
+		this.ePosta = ePosta;
+		this.durum = durum;
+		this.izinHakki = izinHakki;
+	}
+/**
+ * 
+ */
+public Kullanici() {
+	// TODO Auto-generated constructor stub
+}
 }
