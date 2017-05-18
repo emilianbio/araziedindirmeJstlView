@@ -11,10 +11,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import org.hibernate.annotations.NotFound;
 
 /**
  * @author Emrah Denizer
@@ -34,6 +37,7 @@ public class Yerler implements java.io.Serializable {
 	@Column(name = "isim")
 	private String isim;
 
+	
 	@Column(name = "durum")
 	private Boolean durum;
 
@@ -43,6 +47,7 @@ public class Yerler implements java.io.Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "katid")
+	@OrderBy(value="isim")
 	private Yerler tip;
 
 	public Yerler getTip() {

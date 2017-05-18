@@ -2,7 +2,6 @@ package forms;
 
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,7 +13,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.springframework.format.annotation.DateTimeFormat;
+import org.hibernate.validator.constraints.NotEmpty;
+
+
 
 @Entity
 @Table(name = "arazi_cikislari3", schema = "public")
@@ -35,6 +36,7 @@ public class Arac implements java.io.Serializable {
 	@JoinColumn(name = "islemyapan")
 	private Kullanici islemyapan;
 
+	@NotEmpty(message = "tarih boş bırakamazsınız")
 	@Column(name = "tarih")
 	private String tarih;
 
@@ -71,6 +73,13 @@ public class Arac implements java.io.Serializable {
 
 	@Column(name = "islemzamani")
 	private Date islemZamani;
+	
+	@Column(name = "donemay")
+	private int donemAy;
+	
+	@Column(name = "donemyil")
+	private int donemYil;
+	
 
 	public long getId() {
 		return id;
@@ -178,10 +187,6 @@ public class Arac implements java.io.Serializable {
 		return serialVersionUID;
 	}
 
-
-	
-	
-	
 	public Kullanici getIslemyapan() {
 		return islemyapan;
 	}
@@ -190,11 +195,42 @@ public class Arac implements java.io.Serializable {
 		this.islemyapan = islemyapan;
 	}
 
+	
+
+	/**
+	 * @return the donemAy
+	 */
+	public int getDonemAy() {
+		return donemAy;
+	}
+
+	/**
+	 * @param donemAy the donemAy to set
+	 */
+	public void setDonemAy(int donemAy) {
+		this.donemAy = donemAy;
+	}
+
+	/**
+	 * @return the donemYil
+	 */
+	public int getDonemYil() {
+		return donemYil;
+	}
+
+	/**
+	 * @param donemYil the donemYil to set
+	 */
+	public void setDonemYil(int donemYil) {
+		this.donemYil = donemYil;
+	}
+
 	@Override
 	public String toString() {
-		return "Arac [id=" + id + ", kullanici=" + kullanici.getAdi() + ", tarih=" + tarih + ", resmiPlaka=" + resmiPlaka
-				+ ", ozelPlaka=" + ozelPlaka + ", ilce=" + ilce + ", mahalle=" + mahalle + ", cikisSaati=" + cikisSaati
-				+ ", girisSaati=" + girisSaati + ", aciklama=" + aciklama + ", islemZamani=" + islemZamani + "]";
+		return "Arac [id=" + id + ", kullanici=" + kullanici + ", tarih=" + tarih + ", resmiPlaka="
+				+ resmiPlaka + ", ozelPlaka=" + ozelPlaka + ", ilce=" + ilce + ", mahalle=" + mahalle + ", cikisSaati="
+				+ cikisSaati + ", girisSaati=" + girisSaati + ", aciklama=" + aciklama + ", islemZamani=" + islemZamani
+				+ "]";
 	}
 
 }

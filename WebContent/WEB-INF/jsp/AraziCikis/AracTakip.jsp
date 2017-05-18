@@ -17,6 +17,11 @@ select {
 #date {
 	width: 10em;
 }
+
+.error {
+	color: red;
+	font-weight: bold;
+}
 </style>
 
 <%-- <c:if test="${ arac.mahalle.id != 0}">
@@ -52,13 +57,34 @@ select {
 	
 
 	function formControl(deger) {
-		
-	
-		if(jq('#slctMarka').val()==0)
+		if(jq('#personel').val()==0){
+			
+			alert("Personel Seçiniz...");
+
+			return true;
+		}
+		else if(jq('#slctMarka').val()==0)
 			{
-			 alert("Mahalle Seçiniz..");
-		return true;
-	}else{
+			 
+			alert("Mahalle Seçiniz..");
+			 
+			 return true;
+	}else if(jq('#date').val()==''||jq('#date').val()==null)
+	{
+		 
+		alert("Tarih Seçiniz..");
+		 
+		 return true;
+}	
+		else if(jq('#aciklama').val()==0)
+	{
+		 
+		alert("Açıklama giriniz..");
+		 
+		 return true;
+}
+		
+		else{
 		
 		arac.submit();
 	}
@@ -82,7 +108,7 @@ select {
 	<tr>
 		<td rowspan="2">PERSONEL</td>
 		<td rowspan="2">ARAÇ PLAKASI</td>
-		<td rowspan="2">ÖZEL ARAÇ <input type="checkbox" id="ozelChckBox"></td>
+		<td rowspan="2">ÖZEL ARAÇ</td>
 		<td colspan="2" style="text-align: center;">GİDİLEN YER</td>
 		<td ROWspan="2">TARİH</td>
 		<td rowspan="2">ÇIKIŞ SAATİ</td>
@@ -99,9 +125,9 @@ select {
 		<form:hidden path="id" />
 		<tr>
 			<td style="width: 200px;"><form:select path="kullanici.id"
-				 id="slctAltTip">
+					id="personel">
 					<form:option value="0">Seçiniz</form:option>
-					<form:options items="${girisYapanKullanici}" itemValue="id"
+					<form:options items="${kullaniciListesi}" itemValue="id"
 						itemLabel="adi" />
 				</form:select></td>
 			<td><form:select path="resmiPlaka" id="resmiPlaka">
@@ -122,7 +148,8 @@ select {
 						itemLabel="isim" />
 				</form:select></td>
 
-			<td><form:input path="tarih" type="date" id="date" /></td>
+			<td><form:input path="tarih" type="date" id="date" /> <form:errors
+					path="tarih" cssClass="error" class="error" /></td>
 
 			<td><form:select path="cikisSaati">
 					<form:option value="08:00">08:00</form:option>
@@ -166,10 +193,10 @@ select {
 					<form:option value="15:30">16:30</form:option>
 					<form:option value="15:00">17:00</form:option>
 				</form:select></td>
-			<td><form:input path="aciklama" type="text" /></td>
+			<td><form:input path="aciklama" type="text" id="aciklama" /></td>
 		</tr>
 		<tr>
-			<td colspan="9" align="right"><input type="button"
+			<td colspan="12" align="right"><input type="button"
 				onclick="formControl();" class="btn btn-primary" value="Ekle" /></td>
 		</tr>
 	</form:form>
@@ -178,32 +205,64 @@ select {
 <table class="table table-striped"
 	style="width: 100% !important; text-align: center;">
 
-	<tr>
-		<td colspan="12"><form:form action="raporAl" method="get"
-				id="raporAl">
-				<tr>
-					<td><select name="id" id="personelID" >
+	<form:form action="donemeGoreGetir" method="get">
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>Yıl<select style="border: none;" name="donemYil" id="yil">
+					<option value="" label="--- Seçiniz ---" />
 
-							<option value="0">Seç----</option>
-							<c:forEach items="${girisYapanKullanici}" var="kullanici">
-								<option value="${kullanici.id}">${kullanici.adi }</option>
-							</c:forEach>
-					</select></td>
-					<td><input type="button" value="Rapor Al"
-						onclick="raporAlFormControl();"></td>
-					<td colspan="10"><a href="../arazi-cikislari/raporAl">TÜM
-							ÇIKIŞ RAPORLARI</a></td>
+					<c:forEach items="${yillar }" var="yil">
+						<option value="${yil}" label="${yil }"></option>
+					</c:forEach>
 
-					<c:if test="${!empty download }">
-						<td colspan="4"><a href="../arazi-cikislari/raporAl">TÜM
-								ÇIKIŞ RAPORLARI</a></td>
-						<td colspan="6" style="text-align: right;">${dosyaDurumu}</td>
-						<td colspan="2" style="text-align: right;"><a
-							href="../arazi-cikislari/download?id=1">İNDİR</a></td>
-					</c:if>
-				</tr>
-			</form:form></td>
-	</tr>
+			</select></td>
+
+			<td>Ay<select style="border: none;" name="donemAy" id="donem">
+					<option value="" label="--- Seçiniz ---" />
+					<!-- <option value="1" label="Ocak"></option>
+					<option value="2" label="Şubat"></option>
+					<option value="3" label="Mart"></option>
+					<option value="4" label="Nisan"></option>
+					<option value="5" label="Mayıs"></option>
+					<option value="6" label="Haziran"></option>
+					<option value="7" label="Temmuz"></option>
+					<option value="8" label="Ağustos"></option>
+					<option value="9" label="Eylül"></option>
+					<option value="10" label="Ekim"></option>
+					<option value="11" label="Kasım"></option>
+					<option value="12" label="Aralık"></option> -->
+
+					<c:forEach items="${aylar }" var="ay">
+						<option value="${ay}" label="${ay}. Ay"></option>
+					</c:forEach>
+			</select></td>
+
+			<td>Personel<select name="id">
+					<option value="">Seç----</option>
+					<c:forEach items="${girisYapanKullanici}" var="kullanici">
+						<option value="${kullanici.id}">${kullanici.adi }</option>
+					</c:forEach>
+			</select></td>
+
+			<td colspan="9"><input type="submit" value="Getir"
+				class="btn btn-default"></td>
+		</tr>
+	</form:form>
+	<%-- <form:form action="raporAl" method="get" id="raporAl">
+		<tr>
+			<td><select name="id" id="personelID">
+
+					<option value="">Seç----</option>
+					<c:forEach items="${girisYapanKullanici}" var="kullanici">
+						<option value="${kullanici.id}">${kullanici.adi }</option>
+					</c:forEach>
+			</select></td>
+			<td><input type="button" value="Rapor Al"
+				onclick="raporAlFormControl();"></td>
+		</tr>
+	</form:form> --%>
 	<tr>
 		<th>Sil</th>
 		<th>Edit</th>
@@ -218,34 +277,41 @@ select {
 		<th>Kaydeden</th>
 		<th>Kayıt Zamani</th>
 	</tr>
-	<c:forEach items="${aracCikisListesi}" var="cikis" varStatus="sira">
-		<tr>
+	<c:if test="${empty massage}">
+		<c:forEach items="${aracCikisListesi}" var="cikis" varStatus="sira">
+			<tr id="satirno${cikis.id}">
 
-			<td><img src="<c:url value="/assets/images/Delete-32.png" />"
-				width="21px" onclick="tipsil(${sabitTips.id})"
-				title="Silmek İçin Tıklayın" /></td>
-			<td><a href="./duzenle/${cikis.id}"><img
-					src="<c:url value="/assets/images/duzenle.png" />" width="21px"
-					title="Değiştirmek İçin Tıklayın" /></a></td>
+				<td><img src="<c:url value="/assets/images/Delete-32.png" />"
+					width="21px" onclick="tipsil(${cikis.id})"
+					title="Silmek İçin Tıklayın" /></td>
+				<td><a href="./duzenle/${cikis.id}"><img
+						src="<c:url value="/assets/images/duzenle.png" />" width="21px"
+						title="Değiştirmek İçin Tıklayın" /></a></td>
 
 
-			<td>${sira.count }</td>
-			<td>${cikis.kullanici.adi}</td>
-			<c:if test="${!empty cikis.ozelPlaka}">
-				<td>Ö-${cikis.ozelPlaka }</td>
-			</c:if>
-			<c:if test="${!empty cikis.resmiPlaka }">
-				<td>R-${cikis.resmiPlaka }</td>
-			</c:if>
-			<td>${cikis.ilce.isim}-${cikis.mahalle.isim}</td>
-			<td>${cikis.tarih}</td>
-			<td>${cikis.cikisSaati}</td>
-			<td>${cikis.girisSaati}</td>
-			<td>${cikis.aciklama}</td>
-			<td>${cikis.islemyapan.adi}</td>
-			<td>${cikis.islemZamani}</td>
-		</tr>
-	</c:forEach>
+				<td>${sira.count }</td>
+				<td>${cikis.kullanici.adi}</td>
+				<c:if test="${!empty cikis.ozelPlaka}">
+					<td>Ö-${cikis.ozelPlaka }</td>
+				</c:if>
+				<c:if test="${!empty cikis.resmiPlaka }">
+					<td>R-${cikis.resmiPlaka }</td>
+				</c:if>
+				<td>${cikis.ilce.isim}-${cikis.mahalle.isim}</td>
+				<td>${cikis.tarih}</td>
+				<td>${cikis.cikisSaati}</td>
+				<td>${cikis.girisSaati}</td>
+				<td>${cikis.aciklama}</td>
+				<td>${cikis.islemyapan.adi}</td>
+				<td>${cikis.islemZamani}</td>
+			</tr>
+		</c:forEach>
+	</c:if>
+
+
+	<tr>
+		<td colspan="12"><h2>${errorMessage}</h2></td>
+	</tr>
 
 </table>
 

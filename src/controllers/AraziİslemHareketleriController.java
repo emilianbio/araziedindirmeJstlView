@@ -4,12 +4,15 @@
 package controllers;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -27,7 +30,9 @@ import com.google.gson.Gson;
 import araclar.Genel;
 import forms.AraziİslemHareketleri;
 import forms.Kullanici;
+import forms.Yerler;
 import service.AraziService;
+import service.YerEklemeService;
 
 /**
  * @author Emrah Denizer
@@ -39,6 +44,9 @@ import service.AraziService;
 public class AraziİslemHareketleriController {
 	@Autowired
 	AraziService araziService;
+	@Autowired
+	YerEklemeService yerEklemeService;
+
 	public AraziİslemHareketleri arazi;
 	public String tusYazisi = "Kaydet";
 	public List<AraziİslemHareketleri> islemTipineGöreListe;
@@ -56,6 +64,8 @@ public class AraziİslemHareketleriController {
 		ModelAndView modelAndView = new ModelAndView("SatisCesitleri/Satis");
 
 		modelAndView.addObject("tusYazisi", tusYazisi);
+		model.put("ilceListesi", yerEklemeService.altTipGetir(2l, true));
+
 		modelAndView.addObject("ilceler", araclar.Genel.ilcelers());
 		modelAndView.addObject("title", "Satış Yoluyla Devir");
 		modelAndView.addObject("islemListesi", araziService.islemHareketleriListesi());
@@ -76,7 +86,6 @@ public class AraziİslemHareketleriController {
 		Kullanici kullanici = new Kullanici();
 		kullanici.setId(id);
 
-		System.out.println(islemHareketleri.getTarih());
 		islemHareketleri.setKullanici(kullanici);
 		islemHareketleri.setIslemZamani(new Date());
 		araziService.save(islemHareketleri);
@@ -99,7 +108,6 @@ public class AraziİslemHareketleriController {
 		islemHareketleri.setTarih(null);
 		arazi = null;
 
-		System.out.println(arazi + "güncellendi");
 		modelAndView.addObject("araziIslem", arazi);
 		tusYazisi = "Kaydet";
 		modelAndView.addObject("tusYazisi", tusYazisi);
@@ -110,7 +118,6 @@ public class AraziİslemHareketleriController {
 	public String düzenle(@PathVariable("id") Long id) {
 		arazi = araziService.araziİslemGetir(id);
 		tusYazisi = "Güncelle";
-		System.out.println(arazi.getIlce());
 
 		return "redirect:/satis-cesitleri/satis";
 	}
@@ -126,7 +133,6 @@ public class AraziİslemHareketleriController {
 		// islemHareketleri.setIzinVerilmeyenParselSayisi((Integer) null);
 		islemHareketleri.setId(0);
 		arazi = islemHareketleri;
-		System.out.println(islemHareketleri.getIlce());
 
 		return "redirect:/satis-cesitleri/satis";
 	}
@@ -134,6 +140,7 @@ public class AraziİslemHareketleriController {
 	@RequestMapping(value = "/islemTipineGöreListeGetir", method = RequestMethod.GET)
 	public @ResponseBody String islemTipineGöreListeGetir(
 			@RequestParam(value = "islemTipi", required = true) String islemTipi,
+			@RequestParam(value = "cookieID", required = false) Long cookieID,
 			@CookieValue(value = "id", required = false) Long id) {
 		Gson gson = new Gson();
 
@@ -141,16 +148,29 @@ public class AraziİslemHareketleriController {
 			return gson.toJson(araziService.islemTipineGöreListele(islemTipi));
 
 		} else {
-
-			return gson.toJson(araziService.islemTipineVePersoneleGöreListele(islemTipi, id));
+			return gson.toJson(araziService.islemTipineVePersoneleGöreListele(islemTipi, Long.valueOf(cookieID)));
 		}
 	}
 
 	@RequestMapping(value = "/id", method = RequestMethod.GET)
 	public @ResponseBody Long sonIdNo() {
-		System.out.println("id çalıştı");
 
 		return araziService.sonIdGetir().longValue();
 	}
 
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/markageti", method = RequestMethod.POST)
+	@ResponseBody
+	public byte[] markaGetir(@RequestParam(value = "altTipId", required = true) Long altTipId,
+			HttpServletResponse response) throws Exception {
+		JSONObject jsonObject = new JSONObject();
+		List<Yerler> altTipListesi = new ArrayList<Yerler>();
+		altTipListesi = yerEklemeService.altTipGetir(altTipId, true);
+		Iterator<Yerler> iterator = altTipListesi.iterator();
+		while (iterator.hasNext()) {
+			Yerler tip = iterator.next();
+			jsonObject.put(tip.getId(), tip.getIsim());
+		}
+		return jsonObject.toJSONString().getBytes("UTF-8");
+	}
 }

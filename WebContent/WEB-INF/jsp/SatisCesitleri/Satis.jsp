@@ -57,7 +57,9 @@ label {
 
 			});
 
-	function islemTipineGöreTabloGetir(islemTipi) {
+	function islemTipineGöreTabloGetir(islemTipi, cookieID) {
+		var cookieID = parseInt('${cookie.id.value}');
+		console.log("cookie ID: " + cookieID);
 
 		jq("#islemTablosu").find("tr:gt(6)").empty();//toggle(1000).empty();
 		jq
@@ -66,7 +68,8 @@ label {
 					url : '${pageContext.request.contextPath}/satis-cesitleri/islemTipineGöreListeGetir.json',
 					contentType : "application/x-www-form-urlencoded;charset=UTF-8",
 					data : {
-						islemTipi : islemTipi
+						islemTipi : islemTipi,
+						cookieID : cookieID
 					},
 					success : function(data) {
 						var toplamDevriIstenenParselAlani = 0;
@@ -77,8 +80,9 @@ label {
 						var toplamIzinVerilmeyenParselAlani = 0;
 						// vtden silmesi için ne yaptın
 						// alert("buraya kadar hata olacaK mı?");
-
+						console.log("islemtipineGoreTablo: " + data);
 						for (var i = 0; i < data.length; i++) {
+
 							var tblRow = "<tr class="+"xx id="+"satirno"+data[i].id +" >"
 									+ "<td>"
 									+ "<a href="+"${pageContext.request.contextPath}/satis-cesitleri/araziIslemDuzelt/" + data[i].id+">"
@@ -214,8 +218,6 @@ label {
 					},
 					success : function(content) {
 						alert("Bilgiler Başarıyla Kaydedildi...");
-					},
-					complete : function(data) {
 
 						jq
 								.ajax({
@@ -280,11 +282,12 @@ label {
 										jq(girilenDegerler)
 												.insertAfter(
 														"#islemTablosu tr:nth-child(7)")
-												.hide().fadeIn(2000);
+												.show();
 
-										jq("#islemTablosu tr:nth-child(n+7)")
-												.hide().fadeIn(2000);
-
+										jq("#islemTablosu").find("tr:gt(7)")
+												.remove();
+										/* 			jq("#islemTablosu tr:nth-child(7)")
+															.show(); */
 										console
 												.log("Ekleme Başarılı"
 														+ " // "
@@ -292,7 +295,6 @@ label {
 																'#tipSelect option:selected')
 																.text());/* jq('#list option:selected').text() */
 										jq("#myForm")[0].reset();
-										//jq("#devriIstenenParselAlani").val("");
 										jq("#satisTipi")
 												.val(
 														jq(
@@ -302,12 +304,27 @@ label {
 												null);
 										jq("#izinVerilmeyenParselSayisi").val(
 												null);
+										jq("#evrakNo").val(null);
+										jq("#devriIstenenParselSayisi").val(
+												null);
+										jq("#izinVerilenParselSayisi")
+												.val(null);
+										jq("#izinVerilmeyenParselSayisi").val(
+												null);
 
+									},
+									complete : function(data) {
+										islemTipineGöreTabloGetir(jq(
+												'#tipSelect').val());
 									},
 									error : function(xhr, textStatus,
 											errorThrown) {
-										alert(textStatus + " /" + xhr + "/ "
-												+ errorThrown);
+
+										alert("!!HATA!! "
+												+ "Bilgiler Kaydedilmedi!"
+												+ "\n" + "Yeniden Deneyin...."
+												+ "\n" + textStatus, xhr,
+												errorThrown);
 									}
 								})
 
@@ -463,11 +480,19 @@ label {
 				<td><form:select style="border: none;" path="ilce" id="ilce">
 						<form:option value="NONE" label="--- Seçiniz ---" />
 						<form:options items="${ilceler}" />
-					</form:select></td>
+					</form:select> <%-- <form:select path="ilceID.id" id="slctAltTip"
+					onChange="ikisibiradamarkala(this.value)">
+					<form:option value="0">Seçiniz</form:option>
+					<form:options items="${ilceListesi}" itemValue="id"
+						itemLabel="isim" />
+				</form:select> --%></td>
 				<td><form:input id="evrakNo" style="border: none;"
 						placeholder="Evrak No" path="evrakNo" /></td>
-				<td><form:input id="mahalle" style="border: none;"
-						placeholder="Mahalle" path="mahalle" /></td>
+				<td><form:input path="mahalle" /> <%-- <form:select path="mahalleID.id" id="slctMarka">
+					<form:option value="0">Seçiniz</form:option>
+					<form:options items="${markaListesi}" itemValue="id"
+						itemLabel="isim" />
+				</form:select> --%></td>
 				<td><form:input id="devriIstenenParselSayisi"
 						style="border: none;" placeholder="Parsel Sayısı"
 						path="devriIstenenParselSayisi" /></td>

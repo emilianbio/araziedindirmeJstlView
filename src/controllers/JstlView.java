@@ -57,6 +57,7 @@ public class JstlView extends InternalResourceView {
 		request.setAttribute("modelListesi", model.get("modelListesi"));
 
 		request.setAttribute("aylar", model.get("aylar"));
+		request.setAttribute("yillar", model.get("yillar"));
 
 		request.setAttribute("arac", model.get("arac"));
 
@@ -78,16 +79,19 @@ public class JstlView extends InternalResourceView {
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/template.jsp");
 		requestDispatcher.include(request, response);
 
-//		if (Genel.kullaniciLoginInfo != null) {
-//			HttpSession session = request.getSession(true); // create a new
-//			// session
-//
-//			// put the UserDetails object here.
-//			session.setAttribute("userDetails", Genel.kullaniciLoginInfo.getAdi());
-//			session.setAttribute("userUnvan", Genel.kullaniciLoginInfo.getUnvan());
-//			session.setAttribute("userSicilNo", Genel.kullaniciLoginInfo.getSicilNo());
-//
-//		}
+		// if (Genel.kullaniciLoginInfo != null) {
+		// HttpSession session = request.getSession(true); // create a new
+		// // session
+		//
+		// // put the UserDetails object here.
+		// session.setAttribute("userDetails",
+		// Genel.kullaniciLoginInfo.getAdi());
+		// session.setAttribute("userUnvan",
+		// Genel.kullaniciLoginInfo.getUnvan());
+		// session.setAttribute("userSicilNo",
+		// Genel.kullaniciLoginInfo.getSicilNo());
+		//
+		// }
 
 	}
 
