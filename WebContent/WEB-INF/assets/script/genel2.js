@@ -129,7 +129,7 @@ function tipsil(id) {
 			},
 			success : function(gelen) { // vtden silmesi için ne yaptın
 				// alert("buraya kadar hata olacaK mı?");
-				jq('#satirno' + id).remove();
+				jq('.satirno' + id).remove();
 			},
 			error : function(xhr, textStatus, errorThrown) {
 				alert(textStatus);

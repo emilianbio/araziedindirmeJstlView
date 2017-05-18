@@ -90,7 +90,7 @@ public class AracDAOImpl implements AracDAO {
 	@Transactional
 	public List<Arac> kullaniciyaGoreCikisListesi(Long kullaniciID) {
 		Criteria criteriaArac = sessionFactory.getCurrentSession().createCriteria(Arac.class);
-		criteriaArac.add(Restrictions.eq("kullanici.id", kullaniciID));
+		criteriaArac.add(Restrictions.eq("kullaniciList[i].id", kullaniciID));
 		List<Arac> aracCikisListesi = criteriaArac.list();
 
 		return aracCikisListesi;
