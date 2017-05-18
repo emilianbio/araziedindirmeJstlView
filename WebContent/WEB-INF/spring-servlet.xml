@@ -15,8 +15,6 @@
 	<context:component-scan base-package="dao" />
 	<context:component-scan base-package="service" />
 	<context:component-scan base-package="araclar" />
-	<mvc:annotation-driven />
-	
 	<bean
 		class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
 
@@ -73,13 +71,6 @@
 	</bean>
 
 	<mvc:resources mapping="/assets/**" location="/WEB-INF/assets/" />
-	
-	<bean id="messageSource"
-		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
-
-		<property name="basename" value="/WEB-INF/messages" />
-
-	</bean>
-
+	<mvc:annotation-driven />
 
 </beans>

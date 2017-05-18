@@ -12,13 +12,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.activation.MimetypesFileTypeMap;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -35,8 +35,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,6 +43,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import araclar.Genel;
 import forms.Arac;
 import forms.Kullanici;
 import forms.Yerler;
@@ -70,7 +69,6 @@ public class AracController {
 	public String download = "";
 	public Kullanici raporAlinanPersonelBilgileri = null;
 	public List<Arac> cikisListesi1 = null;
-	public String donem = "bos";
 
 	@RequestMapping(value = "/arac-islemleri")
 	public String aracTakip(ModelMap model, @CookieValue(value = "id") Long id, HttpServletRequest request) {
@@ -92,55 +90,48 @@ public class AracController {
 		model.put("kullaniciListesi", kullaniciService.aktifKullaniciListesi('1'));
 		model.put("ilceListesi", yerEklemeService.altTipGetir(2l, true));
 		model.put("download", download);
-		model.put("aylar", aracService.donemAyGetir());
-		model.put("yillar", aracService.donemYilGetir());
 		download = "";
 		dosyaDurumu = null;
 
-		if (id == 1 || id == 7||id==9) {
+		if (id == 1 || id == 9 || id == 7) {
 			model.put("aracCikisListesi", aracService.tumAracCikislari());
-			model.put("kullaniciListesi", kullaniciService.aktifKullaniciListesi('1'));
-			model.put("girisYapanKullanici", aracService.cikisYapanPersonelListesi());
+			model.put("girisYapanKullanici", kullaniciService.kullanici());
 		} else {
 			model.put("girisYapanKullanici", kullaniciService.kullanGetir(id));
-			model.put("kullaniciListesi", kullaniciService.kullanGetir(id));
-			if (donem != "bos") {
-
-				model.put("aracCikisListesi", cikisListesi1);
-
-			} else {
-				model.put("aracCikisListesi", aracService.kullaniciyaGoreCikisListesi(id));
-
-			}
+			model.put("aracCikisListesi", aracService.kullaniciyaGoreCikisListesi(id));
 		}
-
-		donem = "";
 		arac = null;
 
 		return "AraziCikis/AracTakip";
 	}
 
-	@RequestMapping(value = "/araziCikisEkle", method = RequestMethod.POST)
-	public String araziCikisEkle(@Validated @ModelAttribute("arac") Arac arac, BindingResult bind,
-			@CookieValue(value = "id", required = true) Long id, HttpServletRequest request) {
-
-		String[] tarih = arac.getTarih().split("-");
-		String tarihtekiYil = tarih[0];
-		if (bind.hasErrors()) {
-
-			return "AraziCikis/AracTakip";
-		}
+	@RequestMapping(value = "/araziCikisEkle")
+	public String araziCikisEkle(@ModelAttribute("arac") Arac arac, @CookieValue(value = "id", required = true) Long id,
+			HttpServletRequest request) {
 
 		Kullanici islemyapan = new Kullanici();
 		islemyapan.setId(id);
-
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+		// String girilenTarih = (arac.getTarih());
+		System.out.println("girilen tarih : " + sdf);
+		// arac.getKullanici().getAdi();
+		// arac.getOzelPlaka();
+		// arac.getResmiPlaka();
+		// arac.getIlce();
+		// arac.getMahalle();
+		// arac.getCikisSaati();
+		// arac.getGirisSaati();
+		// arac.getAciklama();
+		// arac.setIslemZamani(new Date());
+		// System.out.println("arayüzden girilen bilgiler: " + arac);
 		try {
 
 			if (!arac.getOzelPlaka().equals("")) {
 
 				arac.setResmiPlaka(null);
 			}
-			arac.setDonemYil(Integer.valueOf(tarihtekiYil));
+			System.out.println("ekleme başlangıç");
+			System.out.println("işlem yapan : " + islemyapan.getAdi());
 			arac.setIslemyapan(islemyapan);
 			arac.setIslemZamani(new Date());
 			// arac.setOzelPlaka("01R9669");
@@ -151,6 +142,7 @@ public class AracController {
 			// arac.setCikisSaati("08.00");
 			// arac.setTarih(girilenTarih);
 			// arac.setAciklama("Deneme");
+			System.out.println("girilen bilgiler = " + arac);
 
 			aracService.save(arac);
 
@@ -167,8 +159,9 @@ public class AracController {
 				connection.setRequestMethod("GET");
 				connection.connect();
 				int code = connection.getResponseCode();
-				System.out.println("code: " + code);
+				System.out.println("hata kodu : " + code);
 			} catch (IOException e1) {
+				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 
@@ -200,6 +193,7 @@ public class AracController {
 	@RequestMapping(value = "/duzenle/{id}")
 	public String duzenle(@PathVariable("id") Long id) {
 		arac = aracService.aracCikisGetir(id);
+		System.out.println(arac.getMahalle().getIsim());
 		return "redirect:/arazi-cikislari/arac-islemleri";
 	}
 
@@ -208,9 +202,12 @@ public class AracController {
 	public String personelAraCikisRaporu(@RequestParam(value = "id", required = false) Long id,
 			@CookieValue(value = "isim", required = true) String isim, HttpServletResponse response)
 			throws ParseException, InvalidFormatException, IOException {
+		System.out.println("ID = " + id);
+		System.out.println("bilinmeyen karakter" + "\0 dsfgdfgdfg");
 		List<Arac> cikisListesi = null;
 		if (id == null) {
 			cikisListesi = aracService.tumAracCikislari();
+		
 
 		} else {
 
@@ -222,7 +219,8 @@ public class AracController {
 		String[] isimAyrac = isim.split("\\.");
 		String ayrilanIsim = isimAyrac[0];
 		String ayrilanSoyIsim = isimAyrac[1];
-		// String path = "D:\\evraklar\\";
+		System.out.println("çıkış listesi uzunluğu " + cikisListesi.size());
+		String path = "D:\\evraklar\\";
 
 		String filename = ayrilanIsim.toUpperCase() + " " + ayrilanSoyIsim.toUpperCase()
 				+ ".docx"/* path to a file */;
@@ -291,6 +289,8 @@ public class AracController {
 
 			tableRowTwo.getCell(5).setText(cikisListesi.get(i).getAciklama());
 
+			System.out.println(i + ". kayıt girildi");
+			System.out.println(cikisListesi.get(i).getTarih());
 		}
 
 		for (int i = 0; i < 18 - cikisListesi.size(); i++) {
@@ -307,8 +307,8 @@ public class AracController {
 			tableRowTwo.setHeight(5);
 			System.out.println("boş satırlar eklendi...");
 		}
-		// XWPFParagraph paragraph2 = document.createParagraph();
-		// XWPFRun run2 = paragraph2.createRun();
+		XWPFParagraph paragraph2 = document.createParagraph();
+		XWPFRun run2 = paragraph2.createRun();
 
 		// create table
 		XWPFTable tableAlt = document.createTable();
@@ -344,8 +344,10 @@ public class AracController {
 
 		// tablo çizgilerini siler
 		tableAlt.getCTTbl().getTblPr().unsetTblBorders();
-		// SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-		// Date tarih = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+		System.out.println(isim);
+		Date tarih = new Date();
+		System.out.println(sdf.format(tarih));
 		// path +
 		try {
 			FileOutputStream out = new FileOutputStream(filename);
@@ -353,6 +355,7 @@ public class AracController {
 			out.close();
 			dosyaDurumu = "Dosya Başarıyla Oluşturuldu...";
 			download = "DOLU";
+			System.out.println("dosya oluşturuldu...");
 
 			// oluşturulan dosyayı indirme linki
 			File file = new File(filename);
@@ -369,10 +372,12 @@ public class AracController {
 					file.delete();
 					System.out.println("dosya silindi");
 				} catch (Exception e) {
+					// TODO: handle exception
 					System.out.println("dosya silinemedi.. " + e);
 				}
 
 			} catch (Exception e) {
+				// TODO: handle exception
 				System.out.println("dosya indirilemedi.. " + e);
 			}
 
@@ -409,108 +414,11 @@ public class AracController {
 
 	@RequestMapping(value = "/araziCikislari")
 	public String raporAlmaSayasi(ModelMap model) {
-		switch (donem) {
-		case "1":
-			model.put("aylar", "Ocak");
-			break;
-		case "2":
-			model.put("aylar", "Şubat");
-			break;
-		case "3":
-			model.put("aylar", "Mart");
-			break;
-		case "4":
-			model.put("aylar", "Nisan");
-			break;
-		case "5":
-			model.put("aylar", "Mayıs");
-			break;
-		case "6":
-			model.put("aylar", "Haziran");
-			break;
-		case "7":
-			model.put("aylar", "Temmuz");
-			break;
-		case "8":
-			model.put("aylar", "Ağustos");
-			break;
-		case "9":
-			model.put("aylar", "Eylül");
-			break;
-		case "10":
-			model.put("aylar", "Ekim");
-			break;
-		case "11":
-			model.put("aylar", "Kasım");
-			break;
-		case "12":
-			model.put("aylar", "Aralık");
-			break;
+		System.out.println(cikisListesi1);
 
-		default:
-			model.put("aylar", "Dönem Seçiniz..");
-
-			break;
-		}
 		model.put("aracCikisListesi", cikisListesi1);
 		model.put("kullanici", raporAlinanPersonelBilgileri);
 		return "Raporlar/AraziCikis";
-	}
-
-	@RequestMapping(value = "/donemeGoreGetir", method = RequestMethod.GET)
-	public String donemeGoreAracCikisi(@CookieValue(value = "id") Long id, ModelMap model,
-			@RequestParam(value = "id") Long kullaniciID, @RequestParam(value = "donemAy") Integer donemAy,
-			@RequestParam(value = "donemYil") Integer donemYil) {
-
-		List<Arac> donemeGoreAracCikislari = aracService.kullaniciyaGoreCikisListesi(kullaniciID, donemAy, donemYil);
-		if (!donemeGoreAracCikislari.isEmpty()) {
-
-			cikisListesi1 = donemeGoreAracCikislari;
-			model.put("kullanici", raporAlinanPersonelBilgileri = kullaniciService.kullaniciGetirr(kullaniciID));
-			model.put("aracCikisListesi", cikisListesi1);
-
-			System.out.println("cikislistesi1: " + cikisListesi1);
-
-			donem = donemAy.toString();
-			model.put("arac", new Arac());
-			// return "AraziCikis/AracTakip";
-			return "redirect:/arazi-cikislari/araziCikislari";
-		} else {
-
-			if (id == 1 || id == 7||id==9) {
-				model.put("kullaniciListesi", kullaniciService.aktifKullaniciListesi('1'));
-				model.put("girisYapanKullanici", aracService.cikisYapanPersonelListesi());
-			} else {
-
-				model.put("kullaniciListesi", kullaniciService.kullanGetir(id));
-				model.put("girisYapanKullanici", kullaniciService.kullanGetir(id));
-
-			}
-
-			model.put("title", "Hata");
-			model.put("arac", new Arac());
-			model.put("aylar", aracService.donemAyGetir());
-			model.put("yillar", aracService.donemYilGetir());
-			model.put("errorMessage", "Aradığınız Kayıt Bulunamadı..");
-
-			return "AraziCikis/AracTakip";
-		}
-	}
-
-	@RequestMapping(value = "/tipsil", method = RequestMethod.POST)
-	public @ResponseBody String tipsil(@RequestParam(value = "id", required = true) Long id,
-			@CookieValue(value = "hitCounter", defaultValue = "0") Long hitCounter, HttpServletResponse response,
-			@CookieValue(value = "id", required = true) Long cookieId) {
-		aracService.delete(id);
-		response.setCharacterEncoding("UTF-8");
-
-		hitCounter++;
-
-		// create cookie and set it in response
-		Cookie cookie = new Cookie("hitCounter", hitCounter.toString());
-		response.addCookie(cookie);
-
-		return "{}";
 	}
 
 }

@@ -9,7 +9,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Dönemlik Çıkış Listesi</title>
+<title>Insert title here</title>
 <style type="text/css">
 * {
 	margin: 0px;
@@ -56,16 +56,15 @@ table tbody tr td {
 				<td align="right">Personel Unvan: ${kullanici.unvan }</td>
 			</tr>
 			<tr>
-				<td colspan="4"><span style="margin-left: 35px;">ADANA
-						İL MÜDÜRLÜĞÜ</span></td>
+				<td colspan="4"><span style="margin-left: 35px;">ADNA İL
+						MÜDÜRLÜĞÜ</span></td>
 				<td align="right"></td>
 				<td align="right">Personel SicilNo: ${kullanici.sicilNo }</td>
 			</tr>
 			<tr>
 				<td align="right" colspan="4"></td>
 				<td align="right"></td>
-
-				<td align="right">Dönem:${aylar}<!--  <select
+				<td align="right">Dönem: <select
 					style="border: none; -webkit-appearance: none;" name="birinciAy"
 					id="birinciAy" onchange="ucAylikToplam()">
 						<option value="" label="--- Seçiniz ---" />
@@ -81,7 +80,7 @@ table tbody tr td {
 						<option value="10" label="Ekim"></option>
 						<option value="11" label="Kasım"></option>
 						<option value="12" label="Aralık"></option>
-				</select> --></td>
+				</select></td>
 			</tr>
 
 			<tr>
@@ -96,7 +95,6 @@ table tbody tr td {
 				<th>Geliş Saati</th>
 				<th>Araç Plakası</th>
 				<th width="40%">Yapılan İşin Özeti</th>
-
 			</tr>
 			<c:forEach items="${aracCikisListesi}" var="cikis">
 
@@ -121,7 +119,7 @@ table tbody tr td {
 				<tr>
 			</c:forEach>
 			<c:set var="comment_value" value="${aracCikisListesi}"></c:set>
-			<c:forEach begin="1" end="${20-fn:length(comment_value) }">
+			<c:forEach begin="1" end="${22-fn:length(comment_value) }">
 				<tr>
 					<td style="height: 15px;"></td>
 					<td></td>
@@ -144,8 +142,8 @@ table tbody tr td {
 				<td colspan="3" align="right">Tasdik Olunur</td>
 			</tr>
 			<tr>
-				<td colspan="4">2017/${aylar} Döneminde Tarafımdan Yapılan
-					Arazi Çalışmalarına Ait Rapordur</td>
+				<td colspan="4">2017/4 Döneminde Tarafımdan Yapılan Arazi
+					Çalışmalarına Ait Rapordur</td>
 				<td align="right" colspan="2">../.../2017</td>
 			</tr>
 			<tr>

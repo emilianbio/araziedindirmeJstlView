@@ -189,9 +189,7 @@ public class AraziİslemHareketleri implements java.io.Serializable {
 		this.islemTipi = islemTipi;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -205,4 +203,7 @@ public class AraziİslemHareketleri implements java.io.Serializable {
 				+ islemTipi + ", islemZamani=" + islemZamani + "]";
 	}
 
+	
+
+	
 }

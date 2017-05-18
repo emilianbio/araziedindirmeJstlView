@@ -494,23 +494,22 @@ public class Genel {
 
 	public static Map<String, String> ilcelers() {
 		Map<String, String> ilceler = new LinkedHashMap<String, String>();
-
-		ilceler.put("Aladağ", "Aladağ");
-		ilceler.put("Ceyhan", "Ceyhan");
+		ilceler.put("Yüreğir", "Yüreğir");
 		ilceler.put("Çukurova", "Çukurova");
+		ilceler.put("Sarıçam", "Sarıçam");
+		ilceler.put("Tufanbeyli", "Tufanbeyli");
+		ilceler.put("Saimbeyli", "Saimbeyli");
 		ilceler.put("Feke", "Feke");
+		ilceler.put("Aladağ", "Aladağ");
+		ilceler.put("Kozan", "Kozan");
 		ilceler.put("İmamoğlu", "İmamoğlu");
 		ilceler.put("Karaisalı", "Karaisalı");
-		ilceler.put("Karataş", "Karataş");
-		ilceler.put("Kozan", "Kozan");
 		ilceler.put("Pozantı", "Pozantı");
-		ilceler.put("Saimbeyli", "Saimbeyli");
-		ilceler.put("Sarıçam", "Sarıçam");
-		ilceler.put("Seyhan", "Seyhan");
-		ilceler.put("Tufanbeyli", "Tufanbeyli");
+		ilceler.put("Karataş", "Karataş");
+		ilceler.put("Ceyhan", "Ceyhan");
 		ilceler.put("Yumurtalık", "Yumurtalık");
-		ilceler.put("Yüreğir", "Yüreğir");
-		
+		ilceler.put("Seyhan", "Seyhan");
+
 		return ilceler;
 
 	}

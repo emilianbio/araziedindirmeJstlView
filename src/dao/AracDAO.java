@@ -19,18 +19,11 @@ public interface AracDAO {
 	public Arac aracCikisGetir(Long id);
 
 	public List<Arac> tumAracCikislari();
-	public List<Arac> kullaniciyaGoreCikisListesi(Long kullaniciID);
 
-	public List<Arac> kullaniciyaGoreCikisListesi(Long kullaniciID,Integer donemAy,Integer donemYil);
+	public List<Arac> kullaniciyaGoreCikisListesi(Long kullaniciID);
 
 	public List<Arac> ozelPlakayaGoreCikisListesi(String plaka);
 
 	public List<Arac> resmiPlakayaGoreCikisListesi(String plaka);
-	
-	public List<Arac> donemAyGetir();
-	
-	public List<Arac> donemYilgetir();
-	
-	public List<Arac> cikisYapanPersonelListesi();
 
 }

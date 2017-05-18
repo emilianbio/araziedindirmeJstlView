@@ -84,7 +84,7 @@ public class RaporlarController {
 			if (!(araziList.get(i).getDevriIstenenParselAlani() == araziList.get(i).getIzinVerilenParselAlani()
 					+ araziList.get(i).getIzinVerilmeyenParselAlani())) {
 
-				System.out.println(i + ". Hata " + "==================VERİTABANI HATALI VERİLER==================");
+				System.out.println(i+". Hata "+"==================VERİTABANI HATALI VERİLER==================");
 
 				System.out.println("İşlemi Yapan: " + araziList.get(i).getKullanici().getAdi());
 				System.out.println("İşlemi Tarihi: " + araziList.get(i).getIslemZamani());
@@ -97,8 +97,7 @@ public class RaporlarController {
 						"Devri istenen parsel sayısı: " + araziList.get(i).getDevriIstenenParselSayisi() + "----");
 				System.out.println("Devri istenen parsel alanı: " + araziList.get(i).getDevriIstenenParselAlani());
 
-				System.out
-						.print("İzin verilen parsel sayısı: " + araziList.get(i).getIzinVerilenParselSayisi() + "---");
+				System.out.print("İzin verilen parsel sayısı: " + araziList.get(i).getIzinVerilenParselSayisi() + "---");
 				System.out.println("İzin verilen parsel alanı: " + araziList.get(i).getIzinVerilenParselAlani());
 
 				System.out.print(
@@ -114,8 +113,8 @@ public class RaporlarController {
 				System.out.println(
 						araziList.get(i).getDevriIstenenParselAlani() - araziList.get(i).getIzinVerilenParselAlani()
 								+ araziList.get(i).getIzinVerilmeyenParselAlani());
-
-				System.out.println(i + ". Hata " + "==================VERİTABANI HATALI VERİLER SON==================");
+			
+				System.out.println(i+". Hata "+"==================VERİTABANI HATALI VERİLER SON==================");
 			}
 
 		}
@@ -227,8 +226,8 @@ public class RaporlarController {
 			String secondM = ayKismi[1];
 			String thirdM = ayKismi[1];
 			System.out.println("rarporlar TOPLAM sys :" + year + "/" + firstM + "/" + secondM + "/" + thirdM);
-			System.out.println("true-false :" + year.equals(yil));
-			System.out.println("true-false :" + firstM.equals(ayKismi[1]));
+			System.out.println("true-false :" + year.equals("2016"));
+			System.out.println("true-false :" + firstM.equals("10"));
 
 			if (year.equals(yil)) {
 				if (firstM.equals(birinciAy)) {
