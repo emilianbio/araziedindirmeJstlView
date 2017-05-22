@@ -1,17 +1,17 @@
 package forms;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -53,12 +53,6 @@ public class Arac implements java.io.Serializable {
 	@JoinColumn(name = "mahalle")
 	private Yerler mahalle;
 
-	// @Column(name = "ilce")
-	// private String ilce;
-	//
-	// @Column(name = "mahalle")
-	// private String mahalle;
-
 	@Column(name = "cikis_saati")
 	private String cikisSaati;
 
@@ -69,12 +63,17 @@ public class Arac implements java.io.Serializable {
 	private String aciklama;
 
 	@Temporal(TemporalType.TIMESTAMP)
-
 	@Column(name = "islemzamani")
 	private Date islemZamani;
 
-	@OneToMany(fetch = FetchType.EAGER, targetEntity = Kullanici.class, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.EAGER, targetEntity = Kullanici.class)
 	private List<Kullanici> kullaniciList;
+
+	@Column(name = "donemyil")
+	private int donemYil;
+
+	@Column(name = "donemay")
+	private int donemAy;
 
 	public Long getId() {
 		return id;
@@ -84,34 +83,6 @@ public class Arac implements java.io.Serializable {
 		this.id = id;
 	}
 
-	// public Kullanici getKullanici() {
-	//
-	// if (kullanici == null) {
-	//
-	// kullanici = new Kullanici();
-	// }
-	//
-	// return kullanici;
-	// }
-	//
-	// public void setKullanici(Kullanici kullanici) {
-	// this.kullanici = kullanici;
-	// }
-
-	/**
-	 * @param id
-	 * @param islemyapan
-	 * @param tarih
-	 * @param resmiPlaka
-	 * @param ozelPlaka
-	 * @param ilce
-	 * @param mahalle
-	 * @param cikisSaati
-	 * @param girisSaati
-	 * @param aciklama
-	 * @param islemZamani
-	 * @param kullaniciList
-	 */
 	public Arac(Long id, Kullanici islemyapan, String tarih, String resmiPlaka, String ozelPlaka, Yerler ilce,
 			Yerler mahalle, String cikisSaati, String girisSaati, String aciklama, Date islemZamani,
 			List<Kullanici> kullaniciList) {
@@ -280,11 +251,30 @@ public class Arac implements java.io.Serializable {
 		this.kullaniciList = kullaniciList;
 	}
 
-	/**
-	 * 
-	 */
 	public Arac() {
-		// TODO Auto-generated constructor stub
+	}
+
+	public int getDonemYil() {
+		return donemYil;
+	}
+
+	public void setDonemYil(int donemYil) {
+		this.donemYil = donemYil;
+	}
+
+	/**
+	 * @return the donemAy
+	 */
+	public int getDonemAy() {
+		return donemAy;
+	}
+
+	/**
+	 * @param donemAy
+	 *            the donemAy to set
+	 */
+	public void setDonemAy(int donemAy) {
+		this.donemAy = donemAy;
 	}
 
 }

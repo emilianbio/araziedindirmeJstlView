@@ -44,7 +44,6 @@ public class KullaniciController {
 		return modelAndView;
 	}
 
-	@SuppressWarnings("null")
 	@RequestMapping(value = "/kullaniciEkle", method = RequestMethod.GET)
 	public String kullaniciEkle(Kullanici kullanici) {
 

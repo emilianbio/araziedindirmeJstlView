@@ -230,7 +230,7 @@ public class AraziDAOImpl implements AraziDAO {
 				.createCriteria(AraziİslemHareketleri.class);
 		criteriaDemirbas.addOrder(Order.desc("islemZamani"));
 		criteriaDemirbas.add(Restrictions.eq("islemTipi", islemTipi));
-		criteriaDemirbas.add(Restrictions.eq("id", id));
+		criteriaDemirbas.add(Restrictions.eq("kullanici.id", id));
 		// criteriaDemirbas.setMaxResults(5);
 		JSONArray donecek = new JSONArray();
 		List<AraziİslemHareketleri> araziIslemListesi = new ArrayList<AraziİslemHareketleri>();

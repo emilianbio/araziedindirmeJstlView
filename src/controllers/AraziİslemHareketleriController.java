@@ -28,6 +28,7 @@ import araclar.Genel;
 import forms.AraziİslemHareketleri;
 import forms.Kullanici;
 import service.AraziService;
+import service.KullaniciService;
 
 /**
  * @author Emrah Denizer
@@ -39,6 +40,8 @@ import service.AraziService;
 public class AraziİslemHareketleriController {
 	@Autowired
 	AraziService araziService;
+	@Autowired
+	KullaniciService kullaniciService;
 	public AraziİslemHareketleri arazi;
 	public String tusYazisi = "Kaydet";
 	public List<AraziİslemHareketleri> islemTipineGöreListe;
@@ -137,7 +140,10 @@ public class AraziİslemHareketleriController {
 			@CookieValue(value = "id", required = false) Long id) {
 		Gson gson = new Gson();
 
-		if (id == 1 || id == 7) {
+		Kullanici kullanici = kullaniciService.kullaniciGetirr(id);
+
+		if (kullanici.getRoles().getRollAdi().equals(araclar.RolesEnum.ROLE_SUPER_ADMIN.toString())
+				|| kullanici.getRoles().getRollAdi().equals(araclar.RolesEnum.ROLE_AUTHORIZED_USER.toString())) {
 			return gson.toJson(araziService.islemTipineGöreListele(islemTipi));
 
 		} else {

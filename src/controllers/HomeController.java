@@ -114,7 +114,7 @@ public class HomeController {
 			some += i;
 			System.out.println(some);
 
-			PrintWriter out = new PrintWriter(new FileWriter(giris3 + ".doc", true), true);
+			PrintWriter out = new PrintWriter(new FileWriter(giris3 + ".docx", true), true);
 			out.write((Integer.toString(i) + " " + Integer.toString(some)));
 			out.write(System.getProperty("line.separator"));
 			out.close();

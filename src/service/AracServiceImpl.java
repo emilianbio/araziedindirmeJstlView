@@ -68,11 +68,12 @@ public class AracServiceImpl implements AracService {
 		return aracDao.tumAracCikislari();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see service.AracService#kullaniciyaGoreCikisListesi(java.lang.Long)
-	 */
+	@Override
+	public List<Arac> kullaniciyaGoreCikisListesi(Long kullaniciID, Integer donemAy, Integer donemYil) {
+		// TODO Auto-generated method stub
+		return aracDao.kullaniciyaGoreCikisListesi(kullaniciID, donemAy, donemYil);
+	}
+
 	@Override
 	public List<Arac> kullaniciyaGoreCikisListesi(Long kullaniciID) {
 		// TODO Auto-generated method stub
@@ -100,5 +101,19 @@ public class AracServiceImpl implements AracService {
 		// TODO Auto-generated method stub
 		return aracDao.resmiPlakayaGoreCikisListesi(plaka);
 	}
+	@Override
+	public List<Arac> donemAyGetir() {
+		return aracDao.donemAyGetir();
+	}
 
+	@Override
+	public List<Arac> donemYilGetir() {
+		return aracDao.donemYilGetir();
+	}
+
+	@Override
+	public List<Arac> cikisYapanPersonelListesi() {
+
+		return aracDao.cikisYapanPersonelListesi();
+	}
 }

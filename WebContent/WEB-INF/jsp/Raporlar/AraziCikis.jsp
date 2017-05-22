@@ -64,7 +64,7 @@ table tbody tr td {
 			<tr>
 				<td align="right" colspan="4"></td>
 				<td align="right"></td>
-				<td align="right">Dönem: <select
+				<td align="right">Dönem:${aylar}<!--  <select
 					style="border: none; -webkit-appearance: none;" name="birinciAy"
 					id="birinciAy" onchange="ucAylikToplam()">
 						<option value="" label="--- Seçiniz ---" />
@@ -80,7 +80,7 @@ table tbody tr td {
 						<option value="10" label="Ekim"></option>
 						<option value="11" label="Kasım"></option>
 						<option value="12" label="Aralık"></option>
-				</select></td>
+				</select> --></td>
 			</tr>
 
 			<tr>
@@ -142,7 +142,7 @@ table tbody tr td {
 				<td colspan="3" align="right">Tasdik Olunur</td>
 			</tr>
 			<tr>
-				<td colspan="4">2017/4 Döneminde Tarafımdan Yapılan Arazi
+				<td colspan="4">2017/${aylar} Döneminde Tarafımdan Yapılan Arazi
 					Çalışmalarına Ait Rapordur</td>
 				<td align="right" colspan="2">../.../2017</td>
 			</tr>

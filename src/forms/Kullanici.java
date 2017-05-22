@@ -184,6 +184,14 @@ public class Kullanici implements Serializable {
 		this.izinHakki = izinHakki;
 	}
 
+	public Kullanici() {
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	
 	/**
 	 * @param isimSoyisim
 	 * @param sifre
@@ -199,6 +207,7 @@ public class Kullanici implements Serializable {
 	 */
 	public Kullanici(String isimSoyisim, String sifre, String adi, String unvan, String birim, UserRoles roles,
 			String sicilNo, long cepTelefonu, String ePosta, char durum, Integer izinHakki) {
+		super();
 		this.isimSoyisim = isimSoyisim;
 		this.sifre = sifre;
 		this.adi = adi;
@@ -211,10 +220,13 @@ public class Kullanici implements Serializable {
 		this.durum = durum;
 		this.izinHakki = izinHakki;
 	}
-/**
- * 
- */
-public Kullanici() {
-	// TODO Auto-generated constructor stub
-}
+
+	@Override
+	public String toString() {
+		return "Kullanici [id=" + id + ", isimSoyisim=" + isimSoyisim + ", sifre=" + sifre + ", adi=" + adi + ", unvan="
+				+ unvan + ", birim=" + birim + ", roles=" + roles + ", sicilNo=" + sicilNo
+				+ ", cepTelefonu=" + cepTelefonu + ", ePosta=" + ePosta + ", durum=" + durum + ", izinHakki="
+				+ izinHakki + "]";
+	}
+
 }

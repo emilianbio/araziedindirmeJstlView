@@ -9,6 +9,9 @@ import javax.transaction.Transactional;
 
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.CriteriaSpecification;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -33,7 +36,6 @@ public class AracDAOImpl implements AracDAO {
 	@Override
 	@Transactional
 	public void save(Arac arac) {
-		// TODO Auto-generated method stub
 		sessionFactory.getCurrentSession().saveOrUpdate(arac);
 
 	}
@@ -46,7 +48,6 @@ public class AracDAOImpl implements AracDAO {
 	@Override
 	@Transactional
 	public void delete(Long id) {
-		// TODO Auto-generated method stub
 		sessionFactory.getCurrentSession().delete(aracCikisGetir(id));
 	}
 
@@ -58,7 +59,6 @@ public class AracDAOImpl implements AracDAO {
 	@Override
 	@Transactional
 	public Arac aracCikisGetir(Long id) {
-		// TODO Auto-generated method stub
 		Arac arac = (Arac) sessionFactory.getCurrentSession().get(Arac.class, id);
 
 		arac.getId();
@@ -71,36 +71,46 @@ public class AracDAOImpl implements AracDAO {
 	 * 
 	 * @see dao.AracDAO#tumAracCikislari()
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional
 	public List<Arac> tumAracCikislari() {
 		Criteria criteriaArac = sessionFactory.getCurrentSession().createCriteria(Arac.class);
-
+		criteriaArac.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 		List<Arac> aracCikisListesi = criteriaArac.list();
 
 		return aracCikisListesi;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see dao.AracDAO#kullaniciyaGoreCikisListesi(java.lang.Long)
-	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional
+	public List<Arac> kullaniciyaGoreCikisListesi(Long kullaniciID, Integer donemAy, Integer donemYil) {
+		Criteria criteriaArac = sessionFactory.getCurrentSession().createCriteria(Arac.class);
+		criteriaArac.createAlias("kullaniciList", "kullanici");
+		criteriaArac.add(Restrictions.eq("kullanici.id", kullaniciID));
+		criteriaArac.add(Restrictions.eq("donemAy", donemAy));
+		criteriaArac.add(Restrictions.eq("donemYil", donemYil));
+		criteriaArac.addOrder(Order.asc("tarih"));
+		List<Arac> aracCikisListesi = criteriaArac.list();
+
+		return aracCikisListesi;
+	}
+
+	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional
 	public List<Arac> kullaniciyaGoreCikisListesi(Long kullaniciID) {
+		System.out.println("kullaniciID: " + kullaniciID);
 		Criteria criteriaArac = sessionFactory.getCurrentSession().createCriteria(Arac.class);
-		criteriaArac.add(Restrictions.eq("kullaniciList[i].id", kullaniciID));
+		criteriaArac.createAlias("kullaniciList", "kullanici");
+		criteriaArac.add(Restrictions.eq("kullanici.id", kullaniciID));
 		List<Arac> aracCikisListesi = criteriaArac.list();
 
 		return aracCikisListesi;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see dao.AracDAO#plakayaGoreCikisListesi(java.lang.String)
-	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional
 	public List<Arac> resmiPlakayaGoreCikisListesi(String plaka) {
@@ -111,11 +121,7 @@ public class AracDAOImpl implements AracDAO {
 		return aracCikisListesi;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see dao.AracDAO#ozelPlakayaGoreCikisListesi(java.lang.String)
-	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional
 	public List<Arac> ozelPlakayaGoreCikisListesi(String plaka) {
@@ -124,6 +130,41 @@ public class AracDAOImpl implements AracDAO {
 		List<Arac> aracCikisListesi = criteriaArac.list();
 
 		return aracCikisListesi;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional
+	public List<Arac> donemAyGetir() {
+
+		Criteria criteriaAy = sessionFactory.getCurrentSession().createCriteria(Arac.class);
+		criteriaAy.setProjection(Projections.distinct(Projections.property("donemAy")));
+		return criteriaAy.list();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Transactional
+	@Override
+	public List<Arac> donemYilGetir() {
+		Criteria criteriaYil = sessionFactory.getCurrentSession().createCriteria(Arac.class);
+		criteriaYil.setProjection(Projections.distinct(Projections.property("donemYil")));
+		return criteriaYil.list();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see dao.AracDAO#cikisYapanPersonelListesi()
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional
+	public List<Arac> cikisYapanPersonelListesi() {
+		Criteria criteriaPersonel = sessionFactory.getCurrentSession().createCriteria(Arac.class);
+
+		criteriaPersonel.setProjection(Projections.distinct(Projections.property("kullaniciList")));
+
+		return criteriaPersonel.list();
 	}
 
 }

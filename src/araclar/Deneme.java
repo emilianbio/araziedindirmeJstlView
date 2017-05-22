@@ -48,6 +48,9 @@ public class Deneme {
 
 		Kullanici personel3 = new Kullanici("mehmet.ogultekin", "1234", "Mehmet Oğultekin", "Mühendis",
 				"tarazi edindrme", userRole, "2013-152", 5312650065l, "emrah.denizer@tarim.gov.tr", '1', 20);
+		Kullanici personel4 = new Kullanici("mehmet", "1234", "Mehmet Oğultekin", "Mühendis", "tarazi edindrme",
+				userRole, "2013-152", 5312650065l, "emrah.denizer@tarim.gov.tr", '1', 20);
+
 		Yerler ulke = new Yerler();
 		ulke.setIsim("Türkiye");
 		ulke.setDurum(true);
@@ -60,7 +63,7 @@ public class Deneme {
 		il.setEklemezamani(new Date());
 		Yerler ilce = new Yerler();
 		ilce.setIsim("Seyhan");
-		ilce.setTip(ilce);
+		ilce.setTip(il);
 		ilce.setDurum(true);
 		ilce.setEklemezamani(new Date());
 		Yerler mahalle = new Yerler();
@@ -73,24 +76,40 @@ public class Deneme {
 		kullaniciList.add(personel1);
 		kullaniciList.add(personel2);
 		kullaniciList.add(personel3);
-		Arac arac1 = new Arac(islemyapan, "2017-05-05", null, null, ilce, mahalle, "09:30", "15:30", "denee deneme ",
+		Arac arac1 = new Arac(islemyapan, "2017-05-05", "01R1963", null, ilce, mahalle, "09:30", "15:30", "1 deneme ",
+				new Date(), kullaniciList);
+
+		Arac arac2 = new Arac(islemyapan, "2017-05-05", "01R1963", null, ilce, mahalle, "09:30", "15:30", "2 deneme ",
+				new Date(), kullaniciList);
+
+		Arac arac3 = new Arac(islemyapan, "2017-05-05", "01R1963", null, ilce, mahalle, "09:30", "15:30", "3 deneme ",
+				new Date(), kullaniciList);
+
+		Arac arac4 = new Arac(islemyapan, "2017-05-05", "01R1963", null, ilce, mahalle, "09:30", "15:30", "4 deneme ",
 				new Date(), kullaniciList);
 
 		SessionFactory sessionFactory = new Configuration().configure("hibernate.cfg2.xml").buildSessionFactory();
 
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
-		session.save(userRole);
-		session.save(islemyapan);
-		session.save(personel1);
-		session.save(personel2);
-		session.save(personel3);
-		session.save(ulke);
-		session.save(il);
-		session.save(ilce);
-		session.save(mahalle);
-		session.save(arac1);
-
+//		session.save(userRole);
+//		session.save(islemyapan);
+//		session.save(personel1);
+//		session.save(personel2);
+//		session.save(personel3);
+//		session.save(personel4);
+//		session.save(ulke);
+//		session.save(il);
+//		session.save(ilce);
+//		session.save(mahalle);
+//		session.save(arac1);
+//		session.save(arac2);
+//		session.save(arac3);
+//		session.save(arac4);
+//		System.out.println("arac1: " + arac1);
+//		System.out.println("arac2: " + arac2);
+//		System.out.println("arac3: " + arac3);
+//		System.out.println("arac4: " + arac4);
 		session.getTransaction().commit();
 		session.close();
 

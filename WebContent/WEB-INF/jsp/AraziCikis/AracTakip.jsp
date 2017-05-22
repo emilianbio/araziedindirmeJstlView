@@ -75,7 +75,14 @@ select {
 		jq('#raporAl').submit();
 	}
 	};
-	
+	jq(document).ready(function () {
+		jq(".personelGoster").hide();
+		
+	});
+	jq(document).ready(function () {
+	jq( '#goster' ).click(function() {
+		jq(".personelGoster").toggle(1000);
+		});});
 </script>
 <table style="width: 500px !important; text-align: center;"
 	class="table">
@@ -85,7 +92,7 @@ select {
 		<td rowspan="2">ARAÇ PLAKASI</td>
 		<td rowspan="2">ÖZEL ARAÇ <input type="checkbox" id="ozelChckBox"></td>
 		<td colspan="2" style="text-align: center;">GİDİLEN YER</td>
-		<td ROWspan="2">TARİH</td>
+		<td rowspan="2" style="text-align: center;">TARİH</td>
 		<td rowspan="2">ÇIKIŞ SAATİ</td>
 		<td rowspan="2">GİRİŞ SAATİ</td>
 		<td rowspan="2">İŞİN ÖZETİ</td>
@@ -95,27 +102,19 @@ select {
 		<td style="text-align: center;">İLÇE</td>
 		<td style="text-align: center;">MAHALLE</td>
 
+
 	</tr>
 	<form:form commandName="arac" method="post" action="araziCikisEkle">
 		<form:hidden path="id" />
 		<tr>
 			<td style="width: 200px;">
-				<%-- <select name="kullanici.id"
-				multiple="multiple" id="slctAltTip">
-					<option value="0">Seçiniz</option>
-					<c:forEach items="${girisYapanKullanici}" var="kullanici">
-						<option value="${kullanici.id }">${kullanici.adi }</option>
-					</c:forEach>
-
-			</select> --%> <form:select path="kullaniciList" name="kullaniciList">
-					<form:option value="0">Seçiniz</form:option>
+				<%-- 		<form:checkboxes
+					items="${girisYapanKullanici}" path="kullaniciList" itemValue="id"
+					itemLabel="adi" />  --%> <form:select path="kullaniciList"
+					style="height:200px;" name="kullaniciList">
 					<form:options items="${girisYapanKullanici}" itemValue="id"
 						itemLabel="adi" />
 				</form:select>
-				<%--  <form:checkboxes items="${girisYapanKullanici}"
-					path="kullaniciList" itemLabel="id" itemValue="id"
-					name="kullaniciList" id="kullaniciList" /> --%>
-
 			</td>
 			<td><form:select path="resmiPlaka" id="resmiPlaka">
 					<form:option value="01R9567">01 R 9567</form:option>
@@ -136,7 +135,6 @@ select {
 				</form:select></td>
 
 			<td><form:input path="tarih" type="date" id="date" /></td>
-
 			<td><form:select path="cikisSaati">
 					<form:option value="08:00">08:00</form:option>
 					<form:option value="08:30">08:30</form:option>
@@ -192,30 +190,68 @@ select {
 <table class="table table-striped"
 	style="width: 100% !important; text-align: center;">
 
-	<form:form action="raporAl" method="get" id="raporAl">
+	<form:form action="donemeGoreGetir" method="get">
 		<tr>
-			<td colspan="">
-			<td><select name="id" id="personelID">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>Yıl<select style="border: none;" name="donemYil" id="yil">
+					<option value="" label="--- Seçiniz ---" />
 
-					<option value="0">Seç----</option>
+					<c:forEach items="${yillar }" var="yil">
+						<option value="${yil}" label="${yil }"></option>
+					</c:forEach>
+
+			</select></td>
+
+			<td>Ay<select style="border: none;" name="donemAy" id="donem">
+					<option value="" label="--- Seçiniz ---" />
+					<!-- <option value="1" label="Ocak"></option>
+					<option value="2" label="Şubat"></option>
+					<option value="3" label="Mart"></option>
+					<option value="4" label="Nisan"></option>
+					<option value="5" label="Mayıs"></option>
+					<option value="6" label="Haziran"></option>
+					<option value="7" label="Temmuz"></option>
+					<option value="8" label="Ağustos"></option>
+					<option value="9" label="Eylül"></option>
+					<option value="10" label="Ekim"></option>
+					<option value="11" label="Kasım"></option>
+					<option value="12" label="Aralık"></option> -->
+
+					<c:forEach items="${aylar }" var="ay">
+						<option value="${ay}" label="${ay}. Ay"></option>
+					</c:forEach>
+			</select></td>
+
+			<td>Personel<select name="id">
+					<option value="">Seç----</option>
+					<c:forEach items="${kullaniciListesi}" var="kullanici">
+						<option value="${kullanici.id}">${kullanici.adi }</option>
+					</c:forEach>
+			</select></td>
+
+			<td colspan="9"><input type="submit" value="Getir"
+				class="btn btn-default"></td>
+		</tr>
+	</form:form>
+	<%-- <form:form action="raporAl" method="get" id="raporAl">
+		<tr>
+			<td><select name="id" id="personelID">
+					<option value="">Seç----</option>
 					<c:forEach items="${girisYapanKullanici}" var="kullanici">
 						<option value="${kullanici.id}">${kullanici.adi }</option>
 					</c:forEach>
 			</select></td>
 			<td><input type="button" value="Rapor Al"
 				onclick="raporAlFormControl();"></td>
-			<td colspan="10"><a href="../arazi-cikislari/raporAl">TÜM
-					ÇIKIŞ RAPORLARI</a></td>
-
-
-			</td>
 		</tr>
-	</form:form>
+	</form:form> --%>
 	<tr>
 		<th>Sil</th>
 		<th>Edit</th>
 		<th>Sıra</th>
-		<th>Personel</th>
+		<th width="150px" id="goster">Personel</th>
 		<th>Plaka</th>
 		<th>Gidilen Yer</th>
 		<th>Çıkış Tarihi</th>
@@ -224,36 +260,47 @@ select {
 		<th>İşin Özeti</th>
 		<th>Kaydeden</th>
 		<th>Kayıt Zamani</th>
-	
-	 <c:forEach items="${aracCikisListesi}" var="cikis" varStatus="sira">
-		<tr class="satirno${cikis.id}">
+	</tr>
+	<c:forEach items="${aracCikisListesi}" var="cikis" varStatus="sira">
 
-			<td><img src="<c:url value="/assets/images/Delete-32.png" />"
-				width="21px" onclick="tipsil(${cikis.id})"
-				title="Silmek İçin Tıklayın" /></td>
-			<td><a href="./duzenle/${cikis.id}"><img
-					src="<c:url value="/assets/images/duzenle.png" />" width="21px"
-					title="Değiştirmek İçin Tıklayın" /></a></td>
+		<c:if test="${!empty cikis.kullaniciList }">
+			<tr class="satirno${cikis.id}">
+
+				<td><img src="<c:url value="/assets/images/Delete-32.png" />"
+					width="21px" onclick="tipsil(${cikis.id})"
+					title="Silmek İçin Tıklayın" /></td>
+				<td><a href="./duzenle/${cikis.id}"><img
+						src="<c:url value="/assets/images/duzenle.png" />" width="21px"
+						title="Değiştirmek İçin Tıklayın" /></a></td>
 
 
-			<td>${sira.count }</td>
-			<td>${cikis.kullaniciList[sira.index].adi}</td>
-			<c:if test="${!empty cikis.ozelPlaka}">
-				<td>Ö-${cikis.ozelPlaka }</td>
-			</c:if>
-			<c:if test="${!empty cikis.resmiPlaka }">
-				<td>R-${cikis.resmiPlaka }</td>
-			</c:if>
-			<td>${cikis.ilce.isim}-${cikis.mahalle.isim}</td>
-			<td>${cikis.tarih}</td>
-			<td>${cikis.cikisSaati}</td>
-			<td>${cikis.girisSaati}</td>
-			<td>${cikis.aciklama}</td>
-			<td>${cikis.islemyapan.adi}</td>
-			<td>${cikis.islemZamani}</td>
-		</tr>
-	</c:forEach> 
+				<td>${sira.count }</td>
+				<td width="150px"><c:forEach items="${cikis.kullaniciList}"
+						var="kullanici" varStatus="index">
+						<span class="personelGoster">${index.count}-${kullanici.adi}</span>
+					</c:forEach><span id="goster">Göster</span></td>
 
+
+
+
+				<c:if test="${!empty cikis.ozelPlaka}">
+
+
+					<td>Ö-${cikis.ozelPlaka }</td>
+				</c:if>
+				<c:if test="${!empty cikis.resmiPlaka }">
+					<td>R-${cikis.resmiPlaka }</td>
+				</c:if>
+				<td>${cikis.ilce.isim}-${cikis.mahalle.isim}</td>
+				<td>${cikis.tarih}</td>
+				<td>${cikis.cikisSaati}</td>
+				<td>${cikis.girisSaati}</td>
+				<td>${cikis.aciklama}</td>
+				<td>${cikis.islemyapan.adi}</td>
+				<td>${cikis.islemZamani}</td>
+			</tr>
+		</c:if>
+	</c:forEach>
 </table>
 
 

@@ -64,14 +64,14 @@ public class KullaniciDAOImpl implements KullaniciDAO {
 		Criteria critKullanici = sessionFactory.getCurrentSession().createCriteria(Kullanici.class);
 
 		critKullanici.add(Restrictions.eq("id", id));
-//		ProjectionList projList = Projections.projectionList();
-//		projList.add(Projections.property("isimSoyisim"));
-//		projList.add(Projections.property("sicilNo"));
-//		projList.add(Projections.property("birim"));
-//		projList.add(Projections.property("unvan"));
-//		projList.add(Projections.property("cepTelefonu"));
-//		projList.add(Projections.property("ePosta"));
-//		critKullanici.setProjection(Projections.distinct(projList));
+		// ProjectionList projList = Projections.projectionList();
+		// projList.add(Projections.property("isimSoyisim"));
+		// projList.add(Projections.property("sicilNo"));
+		// projList.add(Projections.property("birim"));
+		// projList.add(Projections.property("unvan"));
+		// projList.add(Projections.property("cepTelefonu"));
+		// projList.add(Projections.property("ePosta"));
+		// critKullanici.setProjection(Projections.distinct(projList));
 
 		return critKullanici.list();
 	}
@@ -108,6 +108,21 @@ public class KullaniciDAOImpl implements KullaniciDAO {
 		List<Kullanici> kullaniciListe = critKullanici.list();
 
 		return kullaniciListe;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see dao.KullaniciDAO#kullaniciBul(java.lang.Long)
+	 */
+	@Transactional
+	@Override
+	public Kullanici kullaniciBul(Long id) {
+		Criteria crtKullanici = sessionFactory.getCurrentSession().createCriteria(Kullanici.class);
+
+		Kullanici kullanici = (Kullanici) sessionFactory.getCurrentSession().load(Kullanici.class, id);
+		kullanici.getId();
+		return kullanici;
 	}
 
 }
