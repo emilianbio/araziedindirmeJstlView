@@ -70,6 +70,7 @@ public class AracController {
 	public Kullanici raporAlinanPersonelBilgileri = null;
 	public List<Arac> cikisListesi1 = null;
 	public String donem = "bos";
+	public String tusYazisi = "Kaydet";
 
 	@RequestMapping(value = "/arac-islemleri")
 	public String aracTakip(ModelMap model, @CookieValue(value = "id", required = false) Long id,
@@ -77,7 +78,7 @@ public class AracController {
 		String url = request.getRequestURI().toString();
 		System.out.println("adres satırı :" + url);
 		if (result.hasErrors()) {
-
+			System.out.println("arac sayasında hata var...");
 			return "redirect:/anasayfa";
 
 		}
@@ -94,23 +95,43 @@ public class AracController {
 		model.put("url", url);
 		model.put("arac", arac);
 		model.put("title", "Arazi Çıkışları");
-		model.put("kullaniciListesi", kullaniciService.aktifKullaniciListesi('1'));
+		// model.put("kullaniciListesi",
+		// kullaniciService.aktifKullaniciListesi('1'));
+
 		model.put("ilceListesi", yerEklemeService.altTipGetir(2l, true));
 		model.put("download", download);
+		model.put("saatler", araclar.Genel.saatler());
 		model.put("aylar", aracService.donemAyGetir());
 		model.put("yillar", aracService.donemYilGetir());
+		model.put("tusYazisi", tusYazisi);
+		model.put("girisYapanKullanici", kullaniciService.aktifKullaniciListesi('1'));
 		download = "";
 		dosyaDurumu = null;
-		
 		if (id != null) {
 			Kullanici kullanici = kullaniciService.kullaniciGetirr(id);
-			if (kullanici.getRoles().getRollAdi().equals(araclar.RolesEnum.ROLE_SUPER_ADMIN.toString())) {
+			if (kullanici.getRoles().getRollAdi().equals(araclar.RolesEnum.ROLE_SUPER_ADMIN.toString())
+					|| kullanici.getRoles().getRollAdi().equals(araclar.RolesEnum.ROLE_AUTHORIZED_USER.toString()) ||
+
+					kullanici.getRoles().getRollAdi().equals(araclar.RolesEnum.ROLE_ADMIN.toString())) {
 
 				model.put("aracCikisListesi", aracService.tumAracCikislari());
-				model.put("girisYapanKullanici", kullaniciService.aktifKullaniciListesi('1'));
+				model.put("kullaniciListesi", aracService.cikisYapanPersonelListesi());
+				for (int i = 0; i < aracService.cikisYapanPersonelListesi().size(); i++) {
+
+					System.out.println(i + ". ID: " + aracService.cikisYapanPersonelListesi().get(i));
+				}
+
+				// model.put("kullaniciListesi", kullaniciListesi);
+				// List<Arac> xxx=(Arac)
+				// aracService.cikisYapanPersonelListesi();
+				// Arac arac2= new Arac();
+				// for (int i =0; i<xxx.size();i++) {
+				// System.out.println("Cikis Yapan Personel Listesi: " +
+				// xxx.get(i).getKullaniciList());
+				// }
+
 			} else {
-				model.put("girisYapanKullanici", kullaniciService.aktifKullaniciListesi('1'));
-				model.put("kullaniciListesi", kullaniciService.kullanGetir(id));
+				model.put("kullaniciListesi2", kullaniciService.kullanGetir(id));
 				if (donem != "bos") {
 
 					model.put("aracCikisListesi", cikisListesi1);
@@ -118,12 +139,12 @@ public class AracController {
 				} else {
 					model.put("aracCikisListesi", aracService.kullaniciyaGoreCikisListesi(id));
 
-				}}
+				}
+			}
 			arac = null;
-
+			tusYazisi = "Kaydet";
 			return "AraziCikis/AracTakip";
 		} else {
-
 			return "redirect:/anasayfa";
 
 		}
@@ -221,6 +242,7 @@ public class AracController {
 	@RequestMapping(value = "/duzenle/{id}")
 	public String duzenle(@PathVariable("id") Long id) {
 		arac = aracService.aracCikisGetir(id);
+		tusYazisi = "Güncelle";
 		return "redirect:/arazi-cikislari/arac-islemleri";
 	}
 
@@ -504,16 +526,18 @@ public class AracController {
 			return "redirect:/arazi-cikislari/araziCikislari";
 		} else {
 
-			if (id == 1 || id == 7||id==9) {
-				model.put("kullaniciListesi", kullaniciService.aktifKullaniciListesi('1'));
-				model.put("girisYapanKullanici", aracService.cikisYapanPersonelListesi());
+			if (id == 1 || id == 7 || id == 9) {
+				// model.put("girisYapanKullanici",
+				// kullaniciService.aktifKullaniciListesi('1'));
+				// model.put("kullaniciListesi",
+				// aracService.cikisYapanPersonelListesi());
 			} else {
 
 				model.put("kullaniciListesi", kullaniciService.kullanGetir(id));
 				model.put("girisYapanKullanici", kullaniciService.kullanGetir(id));
 
 			}
-
+			model.put("tusYazisi", tusYazisi);
 			model.put("title", "Hata");
 			model.put("arac", new Arac());
 			model.put("aylar", aracService.donemAyGetir());
@@ -536,4 +560,13 @@ public class AracController {
 
 		return "{}";
 	}
+
+	@RequestMapping(value = "/vacgec")
+	public String vazgec(@ModelAttribute("arac") Arac arac) {
+
+		arac.setId(0l);
+		arac.setMahalle(null);
+		return "redirect:/arazi-cikislari/arac-islemleri";
+	}
+
 }

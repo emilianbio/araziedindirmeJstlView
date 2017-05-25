@@ -28,6 +28,18 @@
 <link rel="stylesheet"
 	href="<c:url value="/assets/css/jquery.dataTables.min.css" />"
 	type="text/css">
+
+
+<link rel="stylesheet"
+	href="<c:url value="/assets/script/chsosenJS/chosen.css" />"
+	type="text/css">
+
+<link rel="stylesheet"
+	href="<c:url value="/assets/script/chsosenJS/chosen.min.css"/>"
+	type="text/css">
+
+
+
 <!-- scripts -->
 <script src="<c:url value="/assets/script/jquery-3.1.0.min.js" />"
 	type="text/javascript"></script>
@@ -46,6 +58,16 @@
 	src='<c:url value="/assets/script/jquery.table2excel.js"  ></c:url>'></script>
 
 <script src='<c:url value="/assets/script/genel2.js"  ></c:url>'></script>
+
+
+<script
+	src='<c:url value="/assets/script/chsosenJS/chosen.jquery.js"  ></c:url>'></script>
+<script
+	src='<c:url value="/assets/script/chsosenJS/chosen.jquery.min.js" ></c:url>'></script>
+<script
+	src='<c:url value="/assets/script/chsosenJS/chosen.proto.js"  ></c:url>'></script>
+<script
+	src='<c:url value="/assets/script/chsosenJS/chosen.proto.min.js"  ></c:url>'></script>
 <script>
 	var pathname = window.location.pathname; // Returns path only
 	var url = window.location.href;

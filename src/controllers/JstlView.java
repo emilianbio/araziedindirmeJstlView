@@ -12,11 +12,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.web.servlet.view.InternalResourceView;
-
-import araclar.Genel;
 
 public class JstlView extends InternalResourceView {
 	@Override
@@ -49,6 +46,7 @@ public class JstlView extends InternalResourceView {
 		request.setAttribute("izinFormu", model.get("izinFormu"));
 
 		request.setAttribute("kullaniciListesi", model.get("kullaniciListesi"));
+		request.setAttribute("kullaniciListesi2", model.get("kullaniciListesi2"));
 
 		request.setAttribute("izinListesi", model.get("izinListesi"));
 		request.setAttribute("tips", model.get("tips"));
@@ -57,6 +55,7 @@ public class JstlView extends InternalResourceView {
 		request.setAttribute("markaListesi", model.get("markaListesi"));
 		request.setAttribute("modelListesi", model.get("modelListesi"));
 
+		request.setAttribute("saatler", model.get("saatler"));
 		request.setAttribute("aylar", model.get("aylar"));
 		request.setAttribute("yillar", model.get("yillar"));
 

@@ -17,15 +17,37 @@ select {
 #date {
 	width: 10em;
 }
-</style>
 
-<%-- <c:if test="${ arac.mahalle.id != 0}">
-	<script type="text/javascript">
-		alert("${arac.mahalle.id}")
-		ikisibiradamarkala("${arac.ilce.id}")
-	</script>
-</c:if> --%>
+.alert {
+	outline-color: red;
+	border-color: red;
+	display: none;
+}
+
+.uyariYazisi {
+	font: bold;
+	color: red;
+}
+</style>
 <script type="text/javascript">
+
+var today = new Date();
+var dd = today.getDate();
+var mm = today.getMonth()+1; //January is 0!
+var yyyy = today.getFullYear();
+jq(document).ready(function(){
+ if(dd<10){
+        dd='0'+dd
+    } 
+    if(mm<10){
+        mm='0'+mm
+    } 
+
+today = yyyy+'-'+mm+'-'+dd;
+document.getElementById("date").setAttribute("max", today);
+});
+
+
 	jq(document).ready(function() {
 		jq('#ozelPlaka').keypress(function(e) {
 			var regex = new RegExp("^[a-zA-Z0-9-]+$");
@@ -53,36 +75,102 @@ select {
 
 	function formControl(deger) {
 		
-	
-		if(jq('#slctMarka').val()==0)
+	console.log("tarih: "+jq('#date').val());
+	console.log("ilceID"+jq('#slctMarka').val());
+		if(jq('#slctMarka').val()==null||jq('#slctMarka').val()==""||jq('#slctMarka').val()==0||jq('#date').val()==""||jq('#kullaniciList').val()==0||jq('#kullaniciList').val()==""||jq('#aciklama').val()==""
+			||jq('#aciklama').val()==null)
 			{
-			 alert("Mahalle Seçiniz..");
-		return true;
-	}else{
+			if(jq('#kullaniciList').val()==0||jq('#kullaniciList').val()==""){
+				jq('.personel').addClass('alert');
+				jq('.personel>.uyariYazisi').text("En az '1' en fazla '5' personel seçebilirsiniz");
+				jq('.alert').show();
+				}else{
+					
+					jq('.personel').removeClass('alert');
+					jq('.personel>.uyariYazisi').remove();
+					
+				}
+				
+			if(jq('#slctMarka').val()==null){
+				jq('.mahalle').addClass('alert');
+				jq('.mahalle>.uyariYazisi').text("Mahalle seçiniz");
+				jq('.alert').show();				
+				}else{
+					jq('.mahalle>.uyariYazisi').remove();
+					jq('.mahalle').removeClass('alert');
+				}
+			
+			if(jq('#date').val()==""){
+				jq('.tarih').addClass('alert');
+				jq('.tarih>.uyariYazisi').text("Eksik yada yanlış tarih girdiniz!");
+				jq('.alert').show();
+				}else{
+					jq('.tarih>.uyariYazisi').remove();
+					jq('.tarih').removeClass('alert');
+					
+				}
+			
+			if(jq('#aciklama').val()==""){
+				jq('.aciklama').addClass('alert');
+				jq('.aciklama>.uyariYazisi').text("Lütfen açıklama giriniz..");
+				jq('.alert').show();
+				}else{
+					
+					jq('.aciklama>.uyariYazisi').remove();
+					jq('.aciklama').removeClass('alert');
+				}
+
+			//jq('.uyariYazisi').text("asdasdad");
+			//alert("Eksik Bilgileri Tamamlayınız....");
+	
+	return true;}
+	else{
 		
 		arac.submit();
 	}
 	};
 	
-	function raporAlFormControl() {
-		
-		if(jq('#personelID').val()==0)
-			{
-			 alert("Personel Seçiniz....");
-		return true;
-	}else{
-		
-		jq('#raporAl').submit();
-	}
-	};
+
 	jq(document).ready(function () {
 		jq(".personelGoster").hide();
 		
 	});
+	
+	
 	jq(document).ready(function () {
+		
 	jq( '#goster' ).click(function() {
 		jq(".personelGoster").toggle(1000);
-		});});
+		
+		});
+	});
+	
+	jq(document).ready(function () {	
+		
+		var guncellenecekID=parseInt('${arac.id}');
+		var ilceID=parseInt('${arac.ilce.id}');
+		var mahalleID=parseInt('${arac.mahalle.id}');
+		
+		/*alert(!isNaN(guncellenecekID))*/
+	if(!isNaN(guncellenecekID)){
+		console.log("ilceID: "+ilceID);
+			ikisibiradamarkala(ilceID);
+			
+			jq("#slctMarka").attr("itemValue", mahalleID);
+			jq("#slctMarka").attr("itemLable", '${arac.mahalle.isim}');
+	}
+		
+	jq(".chosen-select").chosen({max_selected_options: 5,
+	no_results_text: "Kayıt Yok!",width: "200px"}
+	
+	);
+	
+	jq("#slctAltTip,.donem").chosen({
+		no_results_text: "Kayıt Yok!",width: "100px"}
+	
+	);
+	});
+	
 </script>
 <table style="width: 500px !important; text-align: center;"
 	class="table">
@@ -107,82 +195,73 @@ select {
 	<form:form commandName="arac" method="post" action="araziCikisEkle">
 		<form:hidden path="id" />
 		<tr>
-			<td style="width: 200px;">
-				<%-- 		<form:checkboxes
-					items="${girisYapanKullanici}" path="kullaniciList" itemValue="id"
-					itemLabel="adi" />  --%> <form:select path="kullaniciList"
-					style="height:200px;" name="kullaniciList">
-					<form:options items="${girisYapanKullanici}" itemValue="id"
-						itemLabel="adi" />
-				</form:select>
-			</td>
+
+			<td style="width: 200px;"><div class="personel">
+					<form:select data-placeholder="Personel Seç." path="kullaniciList"
+						style="height:200px;" name="kullaniciList"
+						class="chosen-select chosen-ltr">
+						<form:options items="${girisYapanKullanici}" itemValue="id"
+							itemLabel="adi" />
+					</form:select>
+					<span class="uyariYazisi"></span>
+				</div></td>
+
 			<td><form:select path="resmiPlaka" id="resmiPlaka">
 					<form:option value="01R9567">01 R 9567</form:option>
 				</form:select></td>
 			<td><form:input path="ozelPlaka" type="text" id="ozelPlaka"
 					onkeyup="buyukHarf();" /></td>
 			<!--ilce-->
-			<td><form:select path="ilce.id" id="slctAltTip"
-					onChange="ikisibiradamarkala(this.value)">
-					<form:option value="0">Seçiniz</form:option>
-					<form:options items="${ilceListesi}" itemValue="id"
-						itemLabel="isim" />
-				</form:select></td>
-			<td><form:select path="mahalle.id" id="slctMarka">
-					<form:option value="0">Seçiniz</form:option>
-					<form:options items="${markaListesi}" itemValue="id"
-						itemLabel="isim" />
-				</form:select></td>
+			<td>
+				<div class="ilce">
+					<form:select path="ilce.id" id="slctAltTip" class="ilceSec"
+						onChange="ikisibiradamarkala(this.value)">
+						<form:option value=""></form:option>
+						<form:options items="${ilceListesi}" itemValue="id"
+							itemLabel="isim" />
 
-			<td><form:input path="tarih" type="date" id="date" /></td>
-			<td><form:select path="cikisSaati">
-					<form:option value="08:00">08:00</form:option>
-					<form:option value="08:30">08:30</form:option>
-					<form:option value="09:00">09:00</form:option>
-					<form:option value="09:30">09:30</form:option>
-					<form:option value="10:00">10:00</form:option>
-					<form:option value="10:30">10:30</form:option>
-					<form:option value="11:00">11:00</form:option>
-					<form:option value="11:30">11:30</form:option>
-					<form:option value="12:00">12:00</form:option>
-					<form:option value="12:30">12:30</form:option>
-					<form:option value="13:00">13:00</form:option>
-					<form:option value="13:30">13:30</form:option>
-					<form:option value="14:00">14:00</form:option>
-					<form:option value="14:30">14:30</form:option>
-					<form:option value="15:00">15:00</form:option>
-					<form:option value="15:30">15:30</form:option>
-					<form:option value="15:00">16:00</form:option>
-					<form:option value="15:30">16:30</form:option>
-					<form:option value="15:00">17:00</form:option>
+					</form:select>
+				</div>
+			</td>
+			<td>
+				<div class="mahalle">
+					<form:select path="mahalle.id" id="slctMarka" class="mahalleSec">
+
+						<form:options items="${markaListesi}" itemValue="id"
+							itemLabel="isim" />
+					</form:select>
+					<span class="uyariYazisi"></span>
+				</div>
+			</td>
+
+			<td><div class="tarih">
+
+					<form:input path="tarih" type="date" onkeydown="return false"
+						id="date" />
+					<span class="uyariYazisi"></span>
+				</div></td>
+			<td><form:select path="cikisSaati" items="${saatler}">
+
 				</form:select></td>
-			<td><form:select path="girisSaati">
-					<form:option value="08:00">08:00</form:option>
-					<form:option value="08:30">08:30</form:option>
-					<form:option value="09:00">09:00</form:option>
-					<form:option value="09:30">09:30</form:option>
-					<form:option value="10:00">10:00</form:option>
-					<form:option value="10:30">10:30</form:option>
-					<form:option value="11:00">11:00</form:option>
-					<form:option value="11:30">11:30</form:option>
-					<form:option value="12:00">12:00</form:option>
-					<form:option value="12:30">12:30</form:option>
-					<form:option value="13:00">13:00</form:option>
-					<form:option value="13:30">13:30</form:option>
-					<form:option value="14:00">14:00</form:option>
-					<form:option value="14:30">14:30</form:option>
-					<form:option value="15:00">15:00</form:option>
-					<form:option value="15:30">15:30</form:option>
-					<form:option value="15:00">16:00</form:option>
-					<form:option value="15:30">16:30</form:option>
-					<form:option value="15:00">17:00</form:option>
+			<td><form:select path="girisSaati" items="${saatler}">
 				</form:select></td>
-			<td><form:input path="aciklama" type="text" /></td>
+			<td><div class="aciklama">
+					<form:input path="aciklama" type="text" id="aciklama" />
+					<span class="uyariYazisi"></span>
+				</div></td>
 		</tr>
 
 		<tr>
-			<td colspan="9" align="right"><input type="button"
-				onclick="formControl();" class="btn btn-primary" value="Ekle" /></td>
+			<td colspan="8" align="right"><input type="button"
+				onclick="formControl();" class="btn btn-primary"
+				value="${tusYazisi}" /></td>
+
+			<c:if test="${tusYazisi=='Güncelle' }">
+
+				<td><button class="btn btn-danger"
+						onclick="javascript:location.href='./vazgec'">Vazgeç</button></td>
+
+			</c:if>
 		</tr>
 	</form:form>
 </table>
@@ -190,63 +269,57 @@ select {
 <table class="table table-striped"
 	style="width: 100% !important; text-align: center;">
 
-	<form:form action="donemeGoreGetir" method="get">
+	<form:form action="donemeGoreGetir" method="get" >
 		<tr>
 			<td></td>
 			<td></td>
 			<td></td>
-			<td>Yıl<select style="border: none;" name="donemYil" id="yil">
+			<td>Yıl<select data-placeholder="Yıl Seç." style="border: none;"
+				name="donemYil" id="donemYil" class="donem">
 					<option value="" label="--- Seçiniz ---" />
-
 					<c:forEach items="${yillar }" var="yil">
-						<option value="${yil}" label="${yil }"></option>
+						<option value="${yil}" label="">${yil }</option>
 					</c:forEach>
 
 			</select></td>
 
-			<td>Ay<select style="border: none;" name="donemAy" id="donem">
+			<td>Ay<select data-placeholder="Ay Seç." style="border: none;"
+				name="donemAy" id="donemAy" class="donem">
 					<option value="" label="--- Seçiniz ---" />
-					<!-- <option value="1" label="Ocak"></option>
-					<option value="2" label="Şubat"></option>
-					<option value="3" label="Mart"></option>
-					<option value="4" label="Nisan"></option>
-					<option value="5" label="Mayıs"></option>
-					<option value="6" label="Haziran"></option>
-					<option value="7" label="Temmuz"></option>
-					<option value="8" label="Ağustos"></option>
-					<option value="9" label="Eylül"></option>
-					<option value="10" label="Ekim"></option>
-					<option value="11" label="Kasım"></option>
-					<option value="12" label="Aralık"></option> -->
-
 					<c:forEach items="${aylar }" var="ay">
-						<option value="${ay}" label="${ay}. Ay"></option>
+						<option value="${ay}" label="">${ay}.&nbsp;Ay</option>
 					</c:forEach>
 			</select></td>
 
-			<td>Personel<select name="id">
-					<option value="">Seç----</option>
-					<c:forEach items="${kullaniciListesi}" var="kullanici">
-						<option value="${kullanici.id}">${kullanici.adi }</option>
-					</c:forEach>
+			<td>Personel<select data-placeholder="Personel Seç." name="id"
+				class="chosen-select">
+					<option value=""></option>
+					<c:if
+						test="${!empty kullaniciListesi}">
+						<c:forEach items="${kullaniciListesi}" var="kullanici"
+							varStatus="sira">
+							<option value="${kullanici[0]}">${kullanici[1]}</option>
+
+						</c:forEach>
+					</c:if>
+
+					<c:if test="${!empty kullaniciListesi2}">
+						<c:forEach items="${kullaniciListesi2}" var="kullanici"
+							varStatus="sira">
+							<option value="${kullanici.id}">${kullanici.adi}</option>
+
+						</c:forEach>
+					</c:if>
+
+
+
 			</select></td>
 
 			<td colspan="9"><input type="submit" value="Getir"
 				class="btn btn-default"></td>
 		</tr>
 	</form:form>
-	<%-- <form:form action="raporAl" method="get" id="raporAl">
-		<tr>
-			<td><select name="id" id="personelID">
-					<option value="">Seç----</option>
-					<c:forEach items="${girisYapanKullanici}" var="kullanici">
-						<option value="${kullanici.id}">${kullanici.adi }</option>
-					</c:forEach>
-			</select></td>
-			<td><input type="button" value="Rapor Al"
-				onclick="raporAlFormControl();"></td>
-		</tr>
-	</form:form> --%>
+
 	<tr>
 		<th>Sil</th>
 		<th>Edit</th>
@@ -274,7 +347,7 @@ select {
 						title="Değiştirmek İçin Tıklayın" /></a></td>
 
 
-				<td>${sira.count }</td>
+				<td>${sira.count-114}</td>
 				<td width="150px"><c:forEach items="${cikis.kullaniciList}"
 						var="kullanici" varStatus="index">
 						<span class="personelGoster">${index.count}-${kullanici.adi}</span>

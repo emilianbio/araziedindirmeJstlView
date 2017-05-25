@@ -15,6 +15,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -177,9 +178,43 @@ public class Genel {
 		aylar.put("08", "Ağustos");
 		aylar.put("09", "Eylül");
 		aylar.put("10", "Ekim");
-
 		aylar.put("12", "Aralık");
 		return aylar;
+	}
+
+	@SuppressWarnings("rawtypes")
+	public static Map saatler() {
+		Map<String, String> saatler = new HashMap<String, String>();
+
+		saatler.put("08.00", "08.00");
+		saatler.put("09.00", "09.00");
+		saatler.put("08.30", "08.30");
+		saatler.put("09.30", "09.30");
+		saatler.put("10.00", "10.00");
+		saatler.put("10.30", "10.30");
+		saatler.put("11.00", "11.00");
+		saatler.put("11.30", "11.30");
+		saatler.put("12.00", "12.00");
+		saatler.put("12.30", "12.30");
+		saatler.put("13.00", "13.00");
+		saatler.put("13.30", "13.30");
+		saatler.put("14.00", "14.00");
+		saatler.put("14.30", "14.30");
+		saatler.put("15.00", "15.00");
+		saatler.put("15.30", "15.30");
+		saatler.put("16.00", "16.00");
+		saatler.put("16.30", "16.30");
+		saatler.put("17.00", "17.00");
+
+		Map<String, String> treeMap = new TreeMap<String, String>(saatler);
+System.err.println(treeMap);
+		return treeMap;
+	}
+
+	public static <K, V> void printMap(Map<K, V> map) {
+		for (Map.Entry<K, V> entry : map.entrySet()) {
+			System.out.println("Key : " + entry.getKey() + " Value : " + entry.getValue());
+		}
 	}
 
 	public static Integer yil() {

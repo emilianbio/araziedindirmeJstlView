@@ -11,6 +11,7 @@ import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -144,7 +145,7 @@ public class AracDAOImpl implements AracDAO {
 
 	@SuppressWarnings("unchecked")
 	@Transactional
-	@Override
+	@Override 
 	public List<Arac> donemYilGetir() {
 		Criteria criteriaYil = sessionFactory.getCurrentSession().createCriteria(Arac.class);
 		criteriaYil.setProjection(Projections.distinct(Projections.property("donemYil")));
@@ -161,9 +162,15 @@ public class AracDAOImpl implements AracDAO {
 	@Transactional
 	public List<Arac> cikisYapanPersonelListesi() {
 		Criteria criteriaPersonel = sessionFactory.getCurrentSession().createCriteria(Arac.class);
-
-		criteriaPersonel.setProjection(Projections.distinct(Projections.property("kullaniciList")));
-
+		criteriaPersonel.createAlias("kullaniciList", "kullanici");
+		
+		ProjectionList list= Projections.projectionList();
+		list.add((Projections.property("kullanici.id")));
+		list.add((Projections.property("kullanici.adi")));
+		criteriaPersonel.setProjection(Projections.distinct(list));
+		
+		criteriaPersonel.addOrder(Order.asc("kullanici.adi"));
+		System.out.println("aracdao: "+criteriaPersonel.list().toString() );
 		return criteriaPersonel.list();
 	}
 

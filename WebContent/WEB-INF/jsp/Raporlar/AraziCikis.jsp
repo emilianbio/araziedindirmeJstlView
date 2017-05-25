@@ -56,7 +56,7 @@ table tbody tr td {
 				<td align="right">Personel Unvan: ${kullanici.unvan }</td>
 			</tr>
 			<tr>
-				<td colspan="4"><span style="margin-left: 35px;">ADNA İL
+				<td colspan="4"><span style="margin-left: 35px;">ADANA İL
 						MÜDÜRLÜĞÜ</span></td>
 				<td align="right"></td>
 				<td align="right">Personel SicilNo: ${kullanici.sicilNo }</td>

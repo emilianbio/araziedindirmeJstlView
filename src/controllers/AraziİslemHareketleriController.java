@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,8 +49,8 @@ public class AraziİslemHareketleriController {
 	public Long id = null;
 
 	@RequestMapping(value = "/satis")
-	public ModelAndView Satis(ModelMap model, @ModelAttribute("araziIslem") AraziİslemHareketleri islemHareketleri,
-			@CookieValue(value = "id") Long id) {
+	public ModelAndView Satis(ModelMap model, @CookieValue(value = "id") Long id, HttpServletRequest request,
+			@ModelAttribute("araziIslem") AraziİslemHareketleri islemHareketleri, BindingResult result) {
 
 		Genel.setKullaniciBean(null);
 		if (arazi == null) {
@@ -57,18 +58,26 @@ public class AraziİslemHareketleriController {
 		}
 
 		ModelAndView modelAndView = new ModelAndView("SatisCesitleri/Satis");
+		if (!result.hasErrors() || id != null) {
+			modelAndView.addObject("tusYazisi", tusYazisi);
+			modelAndView.addObject("ilceler", araclar.Genel.ilcelers());
+			modelAndView.addObject("title", "Satış Yoluyla Devir");
+			modelAndView.addObject("islemListesi", araziService.islemHareketleriListesi());
+			modelAndView.addObject("araziIslem", arazi);
+			modelAndView.addObject("islemTipineGöreListe", islemTipineGöreListe);
+			modelAndView.addObject("id", araziService.sonIdGetir());
+			tusYazisi = "Kaydet";
+			islemHareketleri.setId(0);
+			arazi = null;
 
-		modelAndView.addObject("tusYazisi", tusYazisi);
-		modelAndView.addObject("ilceler", araclar.Genel.ilcelers());
-		modelAndView.addObject("title", "Satış Yoluyla Devir");
-		modelAndView.addObject("islemListesi", araziService.islemHareketleriListesi());
-		modelAndView.addObject("araziIslem", arazi);
-		modelAndView.addObject("islemTipineGöreListe", islemTipineGöreListe);
-		modelAndView.addObject("id", araziService.sonIdGetir());
-		tusYazisi = "Kaydet";
-		islemHareketleri.setId(0);
-		arazi = null;
-		return modelAndView;
+			return modelAndView;
+
+		} else {
+
+			System.out.println("satiş çeşilerinde hata ....");
+			return new ModelAndView("redirect:/anasayfa");
+
+		}
 	}
 
 	@RequestMapping(value = "/ekle")

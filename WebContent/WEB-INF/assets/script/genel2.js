@@ -39,11 +39,10 @@ function ikisibiradamarkalar(id) {
 	if (id == 0) {
 		ikisibirada(jq("#slctTipler").val());
 	} else {
-		 markaGetir(id);
-		 modelGetir(id);
+		markaGetir(id);
+		modelGetir(id);
 	}
 }
-
 
 function ikisibirad(id) {
 	altTipleriGetir(id);
@@ -179,6 +178,7 @@ function markaGetir(altTipId) {
 			options[options.length] = new Option("Seçiniz", 0);
 			jq.each(gelen, function(id, adi) {
 				options[options.length] = new Option(adi, id);
+
 			});
 		},
 		error : function(xhr, textStatus, errorThrown) {
@@ -188,7 +188,7 @@ function markaGetir(altTipId) {
 
 function markaGeti(altTipId) {
 
-//	alert("merkaGeti çalıştı..");
+	// alert("merkaGeti çalıştı..");
 	jq.ajax({
 		type : "POST",
 		url : "./markageti",
@@ -203,11 +203,13 @@ function markaGeti(altTipId) {
 				var options = select.prop('options');
 			} else {
 				var options = select.attr('options');
+				select.addClass("chosen-select");
 			}
 			jq('option', select).remove();
-			options[options.length] = new Option("Seçiniz", 0);
+		//	options[options.length] = new Option("Seçiniz", 0);
 			jq.each(gelen, function(id, adi) {
 				options[options.length] = new Option(adi, id);
+
 			});
 		},
 		error : function(xhr, textStatus, errorThrown) {

@@ -367,6 +367,15 @@ label {
 			jq("#nitelik").val("Satış");
 			jq("#chartContainer").show("fade");
 		}
+
+		
+
+		if (jq("#tipSelect").val() == "KİRALAMA") {
+			jq("#tipLabelTxt").text("KİRALAMA");
+			jq("#satisTipi").val("KİRALAMA");
+			jq("#nitelik").val("Kiralama");
+			jq("#chartContainer").show("fade");
+		}
 	}
 
 	function kapat() {
@@ -384,6 +393,7 @@ label {
 	<option value="MİRAS">MİRAS</option>
 	<option value="3083">3083</option>
 	<option value="İFRAZ">İFRAZ</option>
+	<option value="KİRALAMA">KİRALAMA</option>
 </select>
 
 
@@ -458,7 +468,7 @@ label {
 				<td><form:input path="islemTipi" id="satisTipi"
 						style="border: none;" readonly="readonly"
 						placeHolder="Satış Tipi..." /></td>
-				<td width="300px"><form:input id="date" type="date"
+				<td width="300px"><form:input id="date" type="date" onkeydown="return false"
 						path="tarih" style="border: none;" placeholder="Tarih......" /></td>
 				<td><form:select style="border: none;" path="ilce" id="ilce">
 						<form:option value="NONE" label="--- Seçiniz ---" />
@@ -490,6 +500,7 @@ label {
 						id="nitelik">
 						<form:option value="Satış">Satış</form:option>
 						<form:option value="İntikal">İntikal</form:option>
+						<form:option value="Kiralama">Kiralama</form:option>
 					</form:select> <!-- <input id="nitelik"
 					style="border: none; size: 5px; margin: 0px; padding: 0px;"
 					placeholder="Nitelik" name="nitelik">--></td>
