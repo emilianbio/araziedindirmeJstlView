@@ -32,4 +32,7 @@ public interface AracService {
 	public List<Arac> donemYilGetir();
 	
 	public List<Arac> cikisYapanPersonelListesi();
+
+	public boolean ayniGorevdenVarMi(long mahalleID,String tarih, String cikisSaati,String girisSaati);
+	public List<Arac> gorevBul(String plaka, String  tarih);
 }

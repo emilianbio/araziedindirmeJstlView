@@ -13,21 +13,30 @@
 <title>{title}</title>
 </head>
 <body>
-	<form:form action="rolEkle" commandName="roll" method="post">
-		<form:hidden path="id" />
-		<table>
-			<tr>
-				<td>Rol Adı</td>
-				<td><form:input path="rollAdi" /></td>
-			<tr>
-				<td><input type="submit" value="Ekle"></td>
-			</tr>
-		</table>
-
-
-
-
-	</form:form>
-
+	<div id="content" class="col-lg-12">
+		<div class="container">
+			<div class="row">
+				<div class="span12">
+					<div class="hero-unit center">
+						<h1>Rol Yönetimi</h1>
+						<div class="col-xs-5">
+						<div class="table-responsive">
+							<form:form action="rolEkle" commandName="roll" method="post">
+								<form:hidden path="id" />
+								<table class="table table-striped bg-info">
+									<tr>
+										<td>Rol Adı</td>
+										<td><form:input path="rollAdi" /></td>
+									<tr>
+										<td><input type="submit" value="Ekle"></td>
+									</tr>
+								</table>
+							</form:form>
+						</div></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

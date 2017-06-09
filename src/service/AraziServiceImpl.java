@@ -47,13 +47,51 @@ public class AraziServiceImpl implements AraziService {
 		return araziDAO.ilceyeGöreListele(ilce);
 	}
 
-	/* (non-Javadoc)
-	 * @see service.AraziService#islemTipineVePersoneleGöreListele(java.lang.String, java.lang.Long)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * service.AraziService#islemTipineVePersoneleGöreListele(java.lang.String,
+	 * java.lang.Long)
 	 */
 	@Override
 	public JSONArray islemTipineVePersoneleGöreListele(String islemTipi, Long id) {
 		// TODO Auto-generated method stub
 		return araziDAO.islemTipineVePersoneleGöreListele(islemTipi, id);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see service.AraziService#sil(java.lang.Long)
+	 */
+	@Override
+	public void sil(Long id) {
+		araziDAO.sil(id);
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see service.AraziService#ilceyeGöreListele2(java.lang.String)
+	 */
+	@Override
+	public List<AraziİslemHareketleri> ilceyeGöreListele2(String ilce, String ilkTarih, String sonTarih) {
+		// TODO Auto-generated method stub
+		return araziDAO.ilceyeGöreListele2(ilce, ilkTarih, sonTarih);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see service.AraziService#ucAylikRapor(java.lang.String,
+	 * java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<AraziİslemHareketleri> ucAylikRapor(String yil, String ilkAy, String sonAy) {
+		// TODO Auto-generated method stub
+		return araziDAO.ucAylikRapor(yil, ilkAy, sonAy);
 	}
 
 }

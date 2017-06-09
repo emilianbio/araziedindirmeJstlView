@@ -12,33 +12,42 @@
 	islemTipineGöreTabloGetir('3083');
 	islemTipineGöreTabloGetir('VASIF');
 	islemlerToplami();
-
 	function islemlerToplami() {
+		jq
+				.ajax({
+					type : "GET",
+					url : '${pageContext.request.contextPath}/raporlar/toplam',
+					contentType : "application/x-www-form-urlencoded;charset=UTF-8",
+					success : function(data) {
+						var tblRow = "<td>"
+								+ numeral(data.devriIstenenParselSayisiToplami)
+										.format('0,0')
+								+ "</td><td>"
+								+ numeral(data.devriIstenenParselAlaniToplami)
+										.format('0,0.00')
+								+ "&nbsp;m<sup>2</sup></td><td>"
+								+ numeral(data.izinVerilenParselSayisiToplami)
+										.format('0,0')
+								+ "</td><td>"
+								+ numeral(data.izinVerilenParselAlaniToplami)
+										.format('0,0.00')
+								+ "&nbsp;m<sup>2</sup></td><td>"
+								+ numeral(
+										data.izinVerilmeyenParselSayisiToplami)
+										.format('0,0')
+								+ "</td><td>"
+								+ numeral(data.izinVerilmeyenParselAlaniToplami)
+										.format('0,0.00')
+								+ " &nbsp;m<sup>2</sup></td>";
+						jq("#toplam td:nth-child(n+2)").remove();
+						jq(tblRow).appendTo("#toplam");
 
-		jq.ajax({
-			type : "GET",
-			url : '${pageContext.request.contextPath}/raporlar/toplam',
-			contentType : "application/x-www-form-urlencoded;charset=UTF-8",
-			success : function(data) {
+					},
+					error : function(xhr, textStatus, errorThrown) {
+						alert(textStatus + "***" + xhr + "***" + errorThrown);
+					}
 
-				var tblRow = "<td>" + data.devriIstenenParselSayisiToplami
-						+ "</td><td>" + data.devriIstenenParselAlaniToplami
-						+ "&nbsp;m<sup>2</sup></td><td>"
-						+ data.izinVerilenParselSayisiToplami + "</td><td>"
-						+ data.izinVerilenParselAlaniToplami
-						+ "&nbsp;m<sup>2</sup></td><td>"
-						+ data.izinVerilmeyenParselSayisiToplami + "</td><td>"
-						+ data.izinVerilmeyenParselAlaniToplami
-						+ " &nbsp;m<sup>2</sup></td>";
-				jq("#toplam td:nth-child(n+2)").remove();
-				jq(tblRow).appendTo("#toplam");
-
-			},
-			error : function(xhr, textStatus, errorThrown) {
-				alert(textStatus + "***" + xhr + "***" + errorThrown);
-			}
-
-		});
+				});
 	}
 	function islemTipineGöreTabloGetir(islemTipi) {
 
@@ -120,17 +129,20 @@
 				});
 	}
 
-	function ilceyeGöreTabloGetir(ilce) {
-
+	function ilceyeGöreTabloGetir() {
 		jq
 				.ajax({
 					type : "GET",
 					url : '${pageContext.request.contextPath}/raporlar/ilceyeGöreListeGetir.json',
 					contentType : "application/x-www-form-urlencoded;charset=UTF-8",
 					data : {
-						ilce : ilce
+						ilceID : jq("#ilceID").val(),
+						ilceBirinciAy : jq("#ilceBirinciAy").val(),
+						ilceIkinciAy : jq("#ilceIkinciAy").val(),
 					},
 					success : function(data) {
+
+						/* console.log(data.devriIstenenParselSayisiToplami);
 						var toplamDevriIstenenParselAlani = 0;
 						var toplamDevriIstenenParselSayisi = 0;
 						var toplamIzinVerilenParselSayisi = 0;
@@ -155,17 +167,31 @@
 							toplamIzinVerilmeyenParselSayisi += data[i].izinVerilmeyenParselSayisi;
 							toplamIzinVerilmeyenParselAlani += data[i].izinVerilmeyenParselAlani;
 
-						}
-						tblRow = "<td>" + toplamDevriIstenenParselSayisi
-								+ "</td><td>" + toplamDevriIstenenParselAlani
-								+ "</td><td>" + toplamIzinVerilenParselSayisi
-								+ "</td><td>" + toplamIzinVerilenParselAlani
+						} */
+						/* 	tblRow = "<td>" + toplamDevriIstenenParselSayisi
+									+ "</td><td>" + toplamDevriIstenenParselAlani
+									+ "</td><td>" + toplamIzinVerilenParselSayisi
+									+ "</td><td>" + toplamIzinVerilenParselAlani
+									+ "</td><td>"
+									+ toplamIzinVerilmeyenParselSayisi
+									+ "</td><td>" + toplamIzinVerilmeyenParselAlani
+									+ "</td>";
+						 */
+						tblRow = "<td>" + data.devriIstenenParselSayisiToplami
 								+ "</td><td>"
-								+ toplamIzinVerilmeyenParselSayisi
-								+ "</td><td>" + toplamIzinVerilmeyenParselAlani
+								+ data.devriIstenenParselAlaniToplami
+								+ "</td><td>"
+								+ data.izinVerilenParselSayisiToplami
+								+ "</td><td>"
+								+ data.izinVerilenParselAlaniToplami
+								+ "</td><td>"
+								+ data.izinVerilmeyenParselSayisiToplami
+								+ "</td><td>"
+								+ data.izinVerilmeyenParselAlaniToplami
 								+ "</td>";
+
 						jq("#ilceToplam td:nth-child(n+2)").remove();
-						jq('label').text(ilce);
+						jq('label').text(jq("#ilceID").val());
 						jq(tblRow).appendTo("#ilceToplam");
 
 					},
@@ -181,16 +207,16 @@
 
 	function ucAylikToplam() {
 
-		if (jq("#ucuncuAy").val() != 0) {
-			if (jq("#birinciAy").val() == jq("#ikinciAy").val()
-					|| jq("#ucuncuAy").val() == jq("#ikinciAy").val()
-					|| jq("#birinciAy").val() == jq("#ucuncuAy").val()) {
+		/* 	if (jq("#ucuncuAy").val() != 0) {
+				if (jq("#birinciAy").val() == jq("#ikinciAy").val()
+						|| jq("#ucuncuAy").val() == jq("#ikinciAy").val()
+						|| jq("#birinciAy").val() == jq("#ucuncuAy").val()) {
 
-				alert("Farklı aylar seçmelisiniz...!!!!")
+					alert("Farklı aylar seçmelisiniz...!!!!")
 
-				return false;
-			}
-		}
+					return false;
+				}
+			} */
 
 		jq
 				.ajax({
@@ -201,7 +227,6 @@
 						yil : jq("#yil").val(),
 						birinciAy : jq("#birinciAy").val(),
 						ikinciAy : jq("#ikinciAy").val(),
-						ucuncuAy : jq("#ucuncuAy").val()
 					},
 					success : function(data) {
 
@@ -349,14 +374,15 @@
 
 	function printDiv(box) {
 		//Get the HTML of div
-		var divElements = document.getElementById('tableDiv').innerHTML;
+		var divElements = jq('#tableDiv').html();
 		//Get the HTML of whole page
 		var oldPage = document.body.innerHTML;
 		var src = "${pageContext.request.contextPath}/assets/gthbLogo.png";
 		//Reset the page's HTML with div's HTML only
-		document.body.innerHTML = "<html><head><title>ADASDASD</title></head><body><table border=0 align='center'> <tr><td align=center> <image src="+src+"/>"
+		var body = "<html><head><title>ADASDASD</title></head><body><table border=0 align='center'> <tr><td align=center> <image src="+src+"/>"
 				+ "</td></tr></table>" + divElements + "</body>";
 
+		jq('body').html(body);
 		//Print Page
 		window.print();
 
@@ -366,13 +392,15 @@
 
 	function printDiv2() {
 		//Get the HTML of div
-		var divElements = document.getElementById('tableDiv2').innerHTML;
+		var divElements = jq('#tableDiv2').html();
 		//Get the HTML of whole page
 		var oldPage = document.body.innerHTML;
-		var src = "../assets/gthbLogo.png";
+		var src = "${pageContext.request.contextPath}/assets/gthbLogo.png";
 		//Reset the page's HTML with div's HTML only
-		document.body.innerHTML = "<html><head><title>ADASDASD</title></head><body><table border=0 align='center'> <tr><td align=center> <image src="+src+"/>"
+		var body = "<html><head><title>ADASDASD</title></head><body><table border=0 align='center'> <tr><td align=center> <image src="+src+"/>"
 				+ "</td></tr></table>" + divElements + "</body>";
+
+		jq('body').html(body);
 
 		//Print Page
 		window.print();
@@ -383,14 +411,16 @@
 
 	function printDiv3(box2) {
 		//Get the HTML of div
-		var divElements = document.getElementById('tableDiv3').innerHTML;
+		var divElements = jq('#tableDiv3').html();
+
 		//Get the HTML of whole page
 		var oldPage = document.body.innerHTML;
 		var src = "${pageContext.request.contextPath}/assets/gthbLogo.png";
 		//Reset the page's HTML with div's HTML only
-		document.body.innerHTML = "<html><head><title>ADASDASD</title></head><body><table border=0 align='center'> <tr><td align=center> <image src="+src+"/>"
+		var body = "<html><head><title>ADASDASD</title></head><body><table border=0 align='center'> <tr><td align=center> <image src="+src+"/>"
 				+ "</td></tr></table>" + divElements + "</body>";
 
+		jq('body').html(body);
 		//Print Page
 		window.print();
 
@@ -398,11 +428,13 @@
 		document.body.innerHTML = oldPage;
 	}
 
-	/* jq(document).ready(function() {
-		jq('div').mousemove(function() {
-			islemTipineGöreTabloGetir(jq('input').val());
+	jq(document).ready(function() {
+		jq('select option').css('background-color', 'rgba(255,0,0,0.0)');
+		jq('table').addClass("table table-striped bg-info");
+		jq('table').css({
+			"opacity" : ".85"
 		});
-	}); */
+	});
 
 	jq("#btnExport").on('click', function(e) {
 
@@ -413,58 +445,87 @@
 </script>
 <br>
 
-<!-- <select id="tipSelect" style="border: none;" name="islemTipi"
-	onchange="islemTipineGöreTabloGetir(this.value);">
-	<option value="0">Lütfen İşlem Tipini Seçiniz..---</option>
-	<option value="SATIŞ (5403)">SATIŞ</option>
-	<option value="VASIF">VASIF</option>
-	<option value="MİRAS">MİRAS</option>
-	<option value="3083">3083</option>
-</select> -->
+<div class="table-responive">
+	<button type="button" class="btn btn-info" data-toggle="collapse"
+		data-target="#demo">TÜM SATIŞ İSTATİSTİKLERİ</button>
+	<div id="demo" class="collapse">
+		<select style="border: none;" name="yil" id="yil"
+			onchange="ucAylikToplam();">
+			<option value="" label="--- Seçiniz ---" />
+			<option value="2016" label="2016" />
+			<option value="2017" label="2017" />
+		</select> <select style="border: none;" name="birinciAy" id="birinciAy"
+			onchange="ucAylikToplam()">
+			<option value="" label="--- Seçiniz ---" />
+			<option value="2017-01-01" label="Ocak"></option>
+			<option value="2017-02-01" label="Şubat"></option>
+			<option value="2017-03-01" label="Mart"></option>
+			<option value="2017-04-01" label="Nisan"></option>
+			<option value="2017-05-01" label="Mayıs"></option>
+			<option value="2017-06-01" label="Haziran"></option>
+			<option value="2017-07-01" label="Temmuz"></option>
+			<option value="2017-08-01" label="Ağustos"></option>
+			<option value="2017-09-01" label="Eylül"></option>
+			<option value="2017-10-01" label="Ekim"></option>
+			<option value="2017-11-01" label="Kasım"></option>
+			<option value="2017-12-01" label="Aralık"></option>
+		</select> <select style="border: none;" name="ikinciAy" id="ikinciAy"
+			onchange="ucAylikToplam()">
+			<option value="" label="--- Seçiniz ---" />
+			<option value="2017-01-31" label="Ocak"></option>
+			<option value="2017-02-31" label="Şubat"></option>
+			<option value="2017-03-31" label="Mart"></option>
+			<option value="2017-04-31" label="Nisan"></option>
+			<option value="2017-05-31" label="Mayıs"></option>
+			<option value="2017-06-31" label="Haziran"></option>
+			<option value="2017-07-31" label="Temmuz"></option>
+			<option value="2017-08-31" label="Ağustos"></option>
+			<option value="2017-09-31" label="Eylül"></option>
+			<option value="2017-10-31" label="Ekim"></option>
+			<option value="2017-11-31" label="Kasım"></option>
+			<option value="2017-12-31" label="Aralık"></option>
+		</select>
+		<div id="tableDiv">
+			<table id="sonuc1" class="table table-striped bg-info">
+				<thead>
+					<tr>
+						<th>İŞLEM</th>
+						<th>Devri İstenen Parsel Sayısı</th>
+						<th>Devri İstenen Parsel Alanı</th>
+						<th>izin Verilen Parsel Sayısı</th>
+						<th>izin Verilen Parsel Alanı</th>
+						<th>İzin Verilmeyen Parsel Sayısı</th>
+						<th>İzin Verilmeyen Parsel Alanı</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr id="satis">
+						<td><input type="text" value="SATIŞ (5403)"
+							style="border: none" readonly="readonly"></td>
+					</tr>
+					<tr id="miras">
+						<td><input type="text" value="MİRAS" style="border: none"
+							readonly="readonly"></td>
+					</tr>
+					<tr id="3083">
+						<td><input type="text" value="3083" style="border: none"
+							readonly="readonly"></td>
+					</tr>
+					<tr id="vasif">
+						<td><input type="text" value="VASIF" style="border: none"
+							readonly="readonly"></td>
+					</tr>
+					<tr id="toplam">
 
+						<td><input type="text" value="TOPLAM" style="border: none"
+							readonly="readonly"></td>
 
+						<td><fmt:formatNumber type="number" maxFractionDigits="3"
+								value="${devriIstenenParselSayis}" /></td>
 
-<div id="tableDiv">
-	<table id="sonuc1" class="table">
-		<thead>
-			<tr>
-				<th>İŞLEM</th>
-				<th>Devri İstenen Parsel Sayısı</th>
-				<th>Devri İstenen Parsel Alanı</th>
-				<th>izin Verilen Parsel Sayısı</th>
-				<th>izin Verilen Parsel Alanı</th>
-				<th>İzin Verilmeyen Parsel Sayısı</th>
-				<th>İzin Verilmeyen Parsel Alanı</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr id="satis">
-				<td><input type="text" value="SATIŞ (5403)"
-					style="border: none" readonly="readonly"></td>
-			</tr>
-			<tr id="miras">
-				<td><input type="text" value="MİRAS" style="border: none"
-					readonly="readonly"></td>
-			</tr>
-			<tr id="3083">
-				<td><input type="text" value="3083" style="border: none"
-					readonly="readonly"></td>
-			</tr>
-			<tr id="vasif">
-				<td><input type="text" value="VASIF" style="border: none"
-					readonly="readonly"></td>
-			</tr>
-			<tr id="toplam">
-
-				<td><input type="text" value="TOPLAM" style="border: none"
-					readonly="readonly"></td>
-
-				<td><fmt:formatNumber type="number" maxFractionDigits="3"
-						value="${devriIstenenParselSayisi}" /></td>
-
-				<td id="devriIstenenParselAlani"><fmt:formatNumber
-						type="number" maxFractionDigits="3" value="" />&nbsp;m<sup>2</sup></td>
-				<%-- 
+						<td id="devriIstenenParselAlani"><fmt:formatNumber
+								type="number" maxFractionDigits="3" value="" />&nbsp;m<sup>2</sup></td>
+						<%-- 
 				<td><fmt:formatNumber type="number" maxFractionDigits="3"
 						value="${izinVerilenParselSayisi}" /></td>
 				<td><fmt:formatNumber type="number" maxFractionDigits="3"
@@ -473,150 +534,186 @@
 						value="${izinVerilmeyenParselSayisi}" /></td>
 				<td><fmt:formatNumber type="number" maxFractionDigits="3"
 						value="${izinVerilmeyenParselAlani}" />&nbsp;m<sup>2</sup></td> --%>
-			</tr>
-		</tbody>
-	</table>
-</div>
-<input type="button" id="toExcel" onclick="javascript:printDiv('box')"
-	class="btn btn-success" value="Yazdır - PDF Olarak Kaydet">
-<br>
-<br>
-<!------------------------------------------------------------------------------------------------------------------>
-<fieldset style="background-color: #d3e7e8">
-	<legend style="background-color: #C3C8E3">Aylara Göre
-		Rarporlama</legend>
-	<form style="background-color: #d3e7e8">
-
-		<select style="border: none;" name="yil" id="yil"
-			onchange="ucAylikToplam();" style="background: rgba(0, 0, 0, 0.3);">
-			<option value="" label="--- Seçiniz ---" />
-			<option value="2016" label="2016" />
-			<option value="2017" label="2017" />
-		</select> <select style="border: none;" name="birinciAy" id="birinciAy"
-			onchange="ucAylikToplam()">
-			<option value="" label="--- Seçiniz ---" />
-			<option value="01" label="Ocak"></option>
-			<option value="02" label="Şubat"></option>
-			<option value="03" label="Mart"></option>
-			<option value="04" label="Nisan"></option>
-			<option value="05" label="Mayıs"></option>
-			<option value="06" label="Haziran"></option>
-			<option value="07" label="Temmuz"></option>
-			<option value="08" label="Ağustos"></option>
-			<option value="09" label="Eylül"></option>
-			<option value="10" label="Ekim"></option>
-			<option value="11" label="Kasım"></option>
-			<option value="12" label="Aralık"></option>
-		</select> <select style="border: none;" name="ikinciAy" id="ikinciAy"
-			onchange="ucAylikToplam()">
-			<option value="" label="--- Seçiniz ---" />
-			<option value="01" label="Ocak"></option>
-			<option value="02" label="Şubat"></option>
-			<option value="03" label="Mart"></option>
-			<option value="04" label="Nisan"></option>
-			<option value="05" label="Mayıs"></option>
-			<option value="06" label="Haziran"></option>
-			<option value="07" label="Temmuz"></option>
-			<option value="08" label="Ağustos"></option>
-			<option value="09" label="Eylül"></option>
-			<option value="10" label="Ekim"></option>
-			<option value="11" label="Kasım"></option>
-			<option value="12" label="Aralık"></option>
-		</select> <select style="border: none;" name="ucuncuAy" id="ucuncuAy"
-			onchange="ucAylikToplam()">
-			<option value="" label="--- Seçiniz ---" />
-			<option value="01" label="Ocak"></option>
-			<option value="02" label="Şubat"></option>
-			<option value="03" label="Mart"></option>
-			<option value="04" label="Nisan"></option>
-			<option value="05" label="Mayıs"></option>
-			<option value="06" label="Haziran"></option>
-			<option value="07" label="Temmuz"></option>
-			<option value="08" label="Ağustos"></option>
-			<option value="09" label="Eylül"></option>
-			<option value="10" label="Ekim"></option>
-			<option value="11" label="Kasım"></option>
-			<option value="12" label="Aralık"></option>
-		</select> <input type="button" onclick="ucAylikToplam()" value="Getir">
-	</form>
-
-	<div id="tableDiv2">
-
-		<table id="sonuc2" class="table">
-			<thead>
-
-				<tr>
-					<th>İŞLEM</th>
-					<th>Devri İstenen Parsel Sayısı</th>
-					<th>Devri İstenen Parsel Alanı</th>
-					<th>izin Verilen Parsel Sayısı</th>
-					<th>izin Verilen Parsel Alanı</th>
-					<th>İzin Verilmeyen Parsel Sayısı</th>
-					<th>İzin Verilmeyen Parsel Alanı</th>
-				</tr>
-			</thead>
-			<tbody>
-
-				<tr id="ucAyToplam">
-					<td><input type="text" value="TOPLAM"
-						style="background-color: #d3e7e8; border: none"
-						readonly="readonly"></td>
-
-				</tr>
-			</tbody>
-		</table>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<button type="button" id="toExcel"
+			onclick="javascript:printDiv('box')" class="btn btn-default"
+			value="Yazdır - PDF Olarak Kaydet">
+			<span class="fa fa-print"></span> &nbsp;Yazdır - PDF Olarak Kaydet
+		</button>
 	</div>
-	<input type="button" id="toExcel"
-		onclick="javascript:printDiv2('box2')" class="btn btn-success"
-		value="Yazdır - PDF Olarak Kaydet">
+	<br> <br>
+	<!------------------------------------------------------------------------------------------------------------------>
+	<hr />
+	<button type="button" class="btn btn-info" data-toggle="collapse"
+		data-target="#demo2">ÜÇ AYLIK RAPOR</button>
+	<div id="demo2" class="collapse">
+		<fieldset class="fsStyle">
+			<legend>Aylara Göre Rarporlama</legend>
+			<form class="form">
+
+				<select style="border: none;" name="yil" id="yil"
+					onchange="ucAylikToplam();">
+					<option value="" label="--- Seçiniz ---" />
+					<option value="2016" label="2016" />
+					<option value="2017" label="2017" />
+				</select> <select style="border: none;" name="birinciAy" id="birinciAy"
+					onchange="ucAylikToplam()">
+					<option value="" label="--- Seçiniz ---" />
+					<option value="2017-01-01" label="Ocak"></option>
+					<option value="2017-02-01" label="Şubat"></option>
+					<option value="2017-03-01" label="Mart"></option>
+					<option value="2017-04-01" label="Nisan"></option>
+					<option value="2017-05-01" label="Mayıs"></option>
+					<option value="2017-06-01" label="Haziran"></option>
+					<option value="2017-07-01" label="Temmuz"></option>
+					<option value="2017-08-01" label="Ağustos"></option>
+					<option value="2017-09-01" label="Eylül"></option>
+					<option value="2017-10-01" label="Ekim"></option>
+					<option value="2017-11-01" label="Kasım"></option>
+					<option value="2017-12-01" label="Aralık"></option>
+				</select> <select style="border: none;" name="ikinciAy" id="ikinciAy"
+					onchange="ucAylikToplam()">
+					<option value="" label="--- Seçiniz ---" />
+					<option value="2017-01-31" label="Ocak"></option>
+					<option value="2017-02-31" label="Şubat"></option>
+					<option value="2017-03-31" label="Mart"></option>
+					<option value="2017-04-31" label="Nisan"></option>
+					<option value="2017-05-31" label="Mayıs"></option>
+					<option value="2017-06-31" label="Haziran"></option>
+					<option value="2017-07-31" label="Temmuz"></option>
+					<option value="2017-08-31" label="Ağustos"></option>
+					<option value="2017-09-31" label="Eylül"></option>
+					<option value="2017-10-31" label="Ekim"></option>
+					<option value="2017-11-31" label="Kasım"></option>
+					<option value="2017-12-31" label="Aralık"></option>
+				</select>
+
+			</form>
+
+			<div id="tableDiv2" class="col-md-12">
+
+				<table id="sonuc2" class="table table-striped">
+					<thead>
+
+						<tr>
+							<th>İŞLEM</th>
+							<th>Devri İstenen Parsel Sayısı</th>
+							<th>Devri İstenen Parsel Alanı</th>
+							<th>izin Verilen Parsel Sayısı</th>
+							<th>izin Verilen Parsel Alanı</th>
+							<th>İzin Verilmeyen Parsel Sayısı</th>
+							<th>İzin Verilmeyen Parsel Alanı</th>
+						</tr>
+					</thead>
+					<tbody>
+
+						<tr id="ucAyToplam">
+							<td><input type="text" value="TOPLAM" style="border: none"
+								readonly="readonly"></td>
+
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<button type="button" id="toExcel"
+				onclick="javascript:printDiv2('box2')" class="btn btn-default"
+				value="Yazdır - PDF Olarak Kaydet">
+				<span class="fa fa-print"></span> &nbsp;Yazdır - PDF Olarak Kaydet
+			</button>
 
 
-</fieldset>
+		</fieldset>
+	</div>
 
 
+	<!------------------------------------------------------------------------------------------------------------------>
+	<br> <br>
+	<hr />
+	<button type="button" class="btn btn-info" data-toggle="collapse"
+		data-target="#demo3">İLÇELERE GÖRE RAPOR</button>
+	<div id="demo3" class="collapse">
+		<form:form commandName="araziIslem">
+			<fieldset>
+				<legend>İlçelere Göre Rapor Alma</legend>
+				<form:select style="border: none;" path="ilce" id="ilceID"
+					onchange="ilceyeGöreTabloGetir();">
+					<form:option value="NONE" label="--- Seçiniz ---" />
+					<form:options items="${ilceler}"></form:options>
+				</form:select>
 
-<!------------------------------------------------------------------------------------------------------------------>
-<br>
-<br>
-<form:form commandName="araziIslem">
-	<fieldset>
-		<legend>İlçe Seçiniz</legend>
-		<form:select style="border: none;" path="ilce" id="ilce"
-			onchange=" ilceyeGöreTabloGetir(this.value)">
-			<form:option value="NONE" label="--- Seçiniz ---" />
-			<form:options items="${ilceler}"></form:options>
-		</form:select>
-	</fieldset>
-</form:form>
+				<select style="border: none;" name="ilceBirinciAy"
+					id="ilceBirinciAy" onchange="ilceyeGöreTabloGetir();">
+					<option value="" label="--- Seçiniz ---" />
+					<option value="2017-01-01" label="Ocak"></option>
+					<option value="2017-02-01" label="Şubat"></option>
+					<option value="2017-03-01" label="Mart"></option>
+					<option value="2017-04-01" label="Nisan"></option>
+					<option value="2017-05-01" label="Mayıs"></option>
+					<option value="2017-06-01" label="Haziran"></option>
+					<option value="2017-07-01" label="Temmuz"></option>
+					<option value="2017-08-01" label="Ağustos"></option>
+					<option value="2017-09-01" label="Eylül"></option>
+					<option value="2017-10-01" label="Ekim"></option>
+					<option value="2017-11-01" label="Kasım"></option>
+					<option value="2017-12-01" label="Aralık"></option>
+				</select> <select style="border: none;" name="ilceIkinciAy" id="ilceIkinciAy"
+					onchange="ilceyeGöreTabloGetir();">
+					<option value="" label="--- Seçiniz ---" />
+					<option value="2017-01-31" label="Ocak"></option>
+					<option value="2017-02-31" label="Şubat"></option>
+					<option value="2017-03-31" label="Mart"></option>
+					<option value="2017-04-31" label="Nisan"></option>
+					<option value="2017-05-31" label="Mayıs"></option>
+					<option value="2017-06-31" label="Haziran"></option>
+					<option value="2017-07-31" label="Temmuz"></option>
+					<option value="2017-08-31" label="Ağustos"></option>
+					<option value="2017-09-31" label="Eylül"></option>
+					<option value="2017-10-31" label="Ekim"></option>
+					<option value="2017-11-31" label="Kasım"></option>
+					<option value="2017-12-31" label="Aralık"></option>
 
-<div id="tableDiv3">
+				</select>
+				<!-- <button type="button" onclick="ilceyeGöreTabloGetir();"
+							class="btn btn-default" value="Getir">
+							<span class="fa fa-print"></span>Yazdır - PDF Olarak Kaydet
+						</button> -->
+			</fieldset>
+		</form:form>
 
-	<table id="sonuc2" class="table">
-		<thead>
-			<!--Tablodan İlçe Seçildikten Sonra Bu Etikete Seçilen İlçe Yazılıyor  -->
-			<!-- 	<tr>
-				<td><label> </label></td>
-			</tr> -->
-			<tr>
-				<th>İŞLEM</th>
-				<th>Devri İstenen Parsel Sayısı</th>
-				<th>Devri İstenen Parsel Alanı</th>
-				<th>izin Verilen Parsel Sayısı</th>
-				<th>izin Verilen Parsel Alanı</th>
-				<th>İzin Verilmeyen Parsel Sayısı</th>
-				<th>İzin Verilmeyen Parsel Alanı</th>
-			</tr>
-		</thead>
-		<tbody>
+		<div id="tableDiv3">
 
-			<tr id="ilceToplam">
-				<td><input type="text" value="TOPLAM" style="border: none"
-					readonly="readonly"></td>
+			<table id="sonuc2" class="table">
+				<thead>
+					<!--Tablodan İlçe Seçildikten Sonra Bu Etikete Seçilen İlçe Yazılıyor  -->
+					<tr>
+						<td><label> </label></td>
+					</tr>
+					<tr>
+						<th>İŞLEM</th>
+						<th>Devri İstenen Parsel Sayısı</th>
+						<th>Devri İstenen Parsel Alanı</th>
+						<th>izin Verilen Parsel Sayısı</th>
+						<th>izin Verilen Parsel Alanı</th>
+						<th>İzin Verilmeyen Parsel Sayısı</th>
+						<th>İzin Verilmeyen Parsel Alanı</th>
+					</tr>
+				</thead>
+				<tbody>
 
-			</tr>
-		</tbody>
-	</table>
+					<tr id="ilceToplam">
+						<td><input type="text" value="TOPLAM" style="border: none"
+							readonly="readonly"></td>
+
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<button type="button" id="btnExport" class="btn btn-default"
+			value="Yazdır - PDF Olarak Kaydet" onclick="javascript:printDiv3()">
+			<span class="fa fa-print"></span>&nbsp;Yazdır - PDF Olarak Kaydet
+		</button>
+	</div>
 </div>
-<input type="button" id="btnExport" class="btn btn-success"
-	value="Yazdır - PDF Olarak Kaydet" onclick="javascript:printDiv3()">
-

@@ -34,8 +34,7 @@ public class AraziDAOImpl implements AraziDAO {
 	@Transactional
 	public List<AraziİslemHareketleri> islemHareketleriListesi() {
 
-		Criteria criteriaDemirbas = sessionFactory.getCurrentSession()
-				.createCriteria(AraziİslemHareketleri.class);
+		Criteria criteriaDemirbas = sessionFactory.getCurrentSession().createCriteria(AraziİslemHareketleri.class);
 		criteriaDemirbas.addOrder(Order.desc("islemZamani"));
 		@SuppressWarnings("unchecked")
 		List<AraziİslemHareketleri> sonuc = criteriaDemirbas.list();
@@ -48,8 +47,8 @@ public class AraziDAOImpl implements AraziDAO {
 	public AraziİslemHareketleri araziİslemGetir(Long id) {
 		@SuppressWarnings("unused")
 		org.hibernate.Session session = sessionFactory.openSession();
-		AraziİslemHareketleri arazi = (AraziİslemHareketleri) sessionFactory
-				.getCurrentSession().get(AraziİslemHareketleri.class, id);
+		AraziİslemHareketleri arazi = (AraziİslemHareketleri) sessionFactory.getCurrentSession()
+				.get(AraziİslemHareketleri.class, id);
 
 		arazi.getId();
 		return arazi;
@@ -59,8 +58,7 @@ public class AraziDAOImpl implements AraziDAO {
 	@Override
 	@Transactional
 	public JSONArray islemTipineGöreListele(String islemTipi) {
-		Criteria criteriaDemirbas = sessionFactory.getCurrentSession()
-				.createCriteria(AraziİslemHareketleri.class);
+		Criteria criteriaDemirbas = sessionFactory.getCurrentSession().createCriteria(AraziİslemHareketleri.class);
 		criteriaDemirbas.addOrder(Order.desc("islemZamani"));
 		criteriaDemirbas.add(Restrictions.eq("islemTipi", islemTipi));
 		// criteriaDemirbas.setMaxResults(5);
@@ -72,22 +70,18 @@ public class AraziDAOImpl implements AraziDAO {
 			JSONObject jsonObject = new JSONObject();
 			AraziİslemHareketleri tip = iterator.next();
 			jsonObject.put("id", tip.getId());
+			jsonObject.put("islemYapan", tip.getKullanici().getAdi());
+			jsonObject.put("islemYapanID", tip.getKullanici().getId());
 			jsonObject.put("tarih", tip.getTarih());
 			jsonObject.put("ilce", tip.getIlce());
 			jsonObject.put("evrakNo", tip.getEvrakNo());
 			jsonObject.put("mahalle", tip.getMahalle());
-			jsonObject.put("devriIstenenParselSayisi",
-					tip.getDevriIstenenParselSayisi());
-			jsonObject.put("devriIstenenParselAlani",
-					tip.getDevriIstenenParselAlani());
-			jsonObject.put("izinVerilenParselSayisi",
-					tip.getIzinVerilenParselSayisi());
-			jsonObject.put("izinVerilenParselAlani",
-					tip.getIzinVerilenParselAlani());
-			jsonObject.put("izinVerilmeyenParselSayisi",
-					tip.getIzinVerilmeyenParselSayisi());
-			jsonObject.put("izinVerilmeyenParselAlani",
-					tip.getIzinVerilmeyenParselAlani());
+			jsonObject.put("devriIstenenParselSayisi", tip.getDevriIstenenParselSayisi());
+			jsonObject.put("devriIstenenParselAlani", tip.getDevriIstenenParselAlani());
+			jsonObject.put("izinVerilenParselSayisi", tip.getIzinVerilenParselSayisi());
+			jsonObject.put("izinVerilenParselAlani", tip.getIzinVerilenParselAlani());
+			jsonObject.put("izinVerilmeyenParselSayisi", tip.getIzinVerilmeyenParselSayisi());
+			jsonObject.put("izinVerilmeyenParselAlani", tip.getIzinVerilmeyenParselAlani());
 			jsonObject.put("nitelik", tip.getNitelik());
 			if (tip.getIslemTipi() == "SATIŞ") {
 				jsonObject.put("islemTipi", tip.getIslemTipi() + " (5403)");
@@ -110,8 +104,7 @@ public class AraziDAOImpl implements AraziDAO {
 	@Override
 	@Transactional
 	public JSONArray ilceyeGöreListele(String ilce) {
-		Criteria criteriaDemirbas = sessionFactory.getCurrentSession()
-				.createCriteria(AraziİslemHareketleri.class);
+		Criteria criteriaDemirbas = sessionFactory.getCurrentSession().createCriteria(AraziİslemHareketleri.class);
 		criteriaDemirbas.addOrder(Order.desc("islemZamani"));
 		criteriaDemirbas.add(Restrictions.eq("ilce", ilce));
 		// criteriaDemirbas.setMaxResults(5);
@@ -127,18 +120,12 @@ public class AraziDAOImpl implements AraziDAO {
 			jsonObject.put("ilce", tip.getIlce());
 			jsonObject.put("evrakNo", tip.getEvrakNo());
 			jsonObject.put("mahalle", tip.getMahalle());
-			jsonObject.put("devriIstenenParselSayisi",
-					tip.getDevriIstenenParselSayisi());
-			jsonObject.put("devriIstenenParselAlani",
-					tip.getDevriIstenenParselAlani());
-			jsonObject.put("izinVerilenParselSayisi",
-					tip.getIzinVerilenParselSayisi());
-			jsonObject.put("izinVerilenParselAlani",
-					tip.getIzinVerilenParselAlani());
-			jsonObject.put("izinVerilmeyenParselSayisi",
-					tip.getIzinVerilmeyenParselSayisi());
-			jsonObject.put("izinVerilmeyenParselAlani",
-					tip.getIzinVerilmeyenParselAlani());
+			jsonObject.put("devriIstenenParselSayisi", tip.getDevriIstenenParselSayisi());
+			jsonObject.put("devriIstenenParselAlani", tip.getDevriIstenenParselAlani());
+			jsonObject.put("izinVerilenParselSayisi", tip.getIzinVerilenParselSayisi());
+			jsonObject.put("izinVerilenParselAlani", tip.getIzinVerilenParselAlani());
+			jsonObject.put("izinVerilmeyenParselSayisi", tip.getIzinVerilmeyenParselSayisi());
+			jsonObject.put("izinVerilmeyenParselAlani", tip.getIzinVerilmeyenParselAlani());
 			jsonObject.put("nitelik", tip.getNitelik());
 			jsonObject.put("evrakTarihi", tip.getTarih());
 			if (tip.getIslemTipi() == "SATIŞ") {
@@ -160,8 +147,7 @@ public class AraziDAOImpl implements AraziDAO {
 	@Transactional
 	public Long sonIdGetir() {
 
-		Criteria crt = sessionFactory.getCurrentSession().createCriteria(
-				AraziİslemHareketleri.class);
+		Criteria crt = sessionFactory.getCurrentSession().createCriteria(AraziİslemHareketleri.class);
 		crt.setProjection(Projections.max("id"));
 		Long id = (Long) crt.uniqueResult();
 		return id;
@@ -170,21 +156,16 @@ public class AraziDAOImpl implements AraziDAO {
 	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional
-	public JSONArray ayalaraGoreToplamGetir(String yil, String birinciAy,
-			String ikinciAy, String ucuncuAy) {
+	public JSONArray ayalaraGoreToplamGetir(String yil, String birinciAy, String ikinciAy, String ucuncuAy) {
 
 		String[] yilKismi = yil.split("-");
 		String year = yilKismi[0];
-				
 
-		Criteria criteriaDemirbas = sessionFactory.getCurrentSession()
-				.createCriteria(AraziİslemHareketleri.class);
+		Criteria criteriaDemirbas = sessionFactory.getCurrentSession().createCriteria(AraziİslemHareketleri.class);
 
-		criteriaDemirbas.add(Restrictions.eq("tarih", year));
-		criteriaDemirbas.add((Restrictions.disjunction().add(Restrictions
-				.or(Restrictions.eq("tarih", birinciAy))
-				.add(Restrictions.eq("tarih", ikinciAy))
-				.add(Restrictions.eq("tarih", ucuncuAy)))));
+		criteriaDemirbas.add(Restrictions.ilike("tarih", "%" + year + "%"));
+		criteriaDemirbas.add((Restrictions.disjunction()
+				.add(Restrictions.or(Restrictions.ge("tarih", birinciAy)).add(Restrictions.le("tarih", ikinciAy)))));
 
 		JSONArray donecek = new JSONArray();
 		List<AraziİslemHareketleri> araziIslemListesi = new ArrayList<AraziİslemHareketleri>();
@@ -194,18 +175,12 @@ public class AraziDAOImpl implements AraziDAO {
 			JSONObject jsonObject = new JSONObject();
 			AraziİslemHareketleri tip = iterator.next();
 
-			jsonObject.put("devriIstenenParselSayisi",
-					tip.getDevriIstenenParselSayisi());
-			jsonObject.put("devriIstenenParselAlani",
-					tip.getDevriIstenenParselAlani());
-			jsonObject.put("izinVerilenParselSayisi",
-					tip.getIzinVerilenParselSayisi());
-			jsonObject.put("izinVerilenParselAlani",
-					tip.getIzinVerilenParselAlani());
-			jsonObject.put("izinVerilmeyenParselSayisi",
-					tip.getIzinVerilmeyenParselSayisi());
-			jsonObject.put("izinVerilmeyenParselAlani",
-					tip.getIzinVerilmeyenParselAlani());
+			jsonObject.put("devriIstenenParselSayisi", tip.getDevriIstenenParselSayisi());
+			jsonObject.put("devriIstenenParselAlani", tip.getDevriIstenenParselAlani());
+			jsonObject.put("izinVerilenParselSayisi", tip.getIzinVerilenParselSayisi());
+			jsonObject.put("izinVerilenParselAlani", tip.getIzinVerilenParselAlani());
+			jsonObject.put("izinVerilmeyenParselSayisi", tip.getIzinVerilmeyenParselSayisi());
+			jsonObject.put("izinVerilmeyenParselAlani", tip.getIzinVerilmeyenParselAlani());
 			jsonObject.put("nitelik", tip.getNitelik());
 
 			// donecek.add(tip.getAlisFiyati());
@@ -219,15 +194,11 @@ public class AraziDAOImpl implements AraziDAO {
 
 	}
 
-	/* (non-Javadoc)
-	 * @see dao.AraziDAO#islemTipineVePersoneleGöreListele(java.lang.String, java.lang.Long)
-	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional
 	public JSONArray islemTipineVePersoneleGöreListele(String islemTipi, Long id) {
-		Criteria criteriaDemirbas = sessionFactory.getCurrentSession()
-				.createCriteria(AraziİslemHareketleri.class);
+		Criteria criteriaDemirbas = sessionFactory.getCurrentSession().createCriteria(AraziİslemHareketleri.class);
 		criteriaDemirbas.addOrder(Order.desc("islemZamani"));
 		criteriaDemirbas.add(Restrictions.eq("islemTipi", islemTipi));
 		criteriaDemirbas.add(Restrictions.eq("kullanici.id", id));
@@ -244,18 +215,12 @@ public class AraziDAOImpl implements AraziDAO {
 			jsonObject.put("ilce", tip.getIlce());
 			jsonObject.put("evrakNo", tip.getEvrakNo());
 			jsonObject.put("mahalle", tip.getMahalle());
-			jsonObject.put("devriIstenenParselSayisi",
-					tip.getDevriIstenenParselSayisi());
-			jsonObject.put("devriIstenenParselAlani",
-					tip.getDevriIstenenParselAlani());
-			jsonObject.put("izinVerilenParselSayisi",
-					tip.getIzinVerilenParselSayisi());
-			jsonObject.put("izinVerilenParselAlani",
-					tip.getIzinVerilenParselAlani());
-			jsonObject.put("izinVerilmeyenParselSayisi",
-					tip.getIzinVerilmeyenParselSayisi());
-			jsonObject.put("izinVerilmeyenParselAlani",
-					tip.getIzinVerilmeyenParselAlani());
+			jsonObject.put("devriIstenenParselSayisi", tip.getDevriIstenenParselSayisi());
+			jsonObject.put("devriIstenenParselAlani", tip.getDevriIstenenParselAlani());
+			jsonObject.put("izinVerilenParselSayisi", tip.getIzinVerilenParselSayisi());
+			jsonObject.put("izinVerilenParselAlani", tip.getIzinVerilenParselAlani());
+			jsonObject.put("izinVerilmeyenParselSayisi", tip.getIzinVerilmeyenParselSayisi());
+			jsonObject.put("izinVerilmeyenParselAlani", tip.getIzinVerilmeyenParselAlani());
 			jsonObject.put("nitelik", tip.getNitelik());
 			if (tip.getIslemTipi() == "SATIŞ") {
 				jsonObject.put("islemTipi", tip.getIslemTipi() + " (5403)");
@@ -272,5 +237,85 @@ public class AraziDAOImpl implements AraziDAO {
 
 		return (donecek);
 
+	}
+
+	@Override
+	@Transactional
+	public void sil(Long id) {
+		sessionFactory.getCurrentSession().delete(araziİslemGetir(id));
+
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional
+	public List<AraziİslemHareketleri> ilceyeGöreListele2(String ilce, String ilkTarih, String sonTarih) {
+		Criteria criteriaDemirbas = sessionFactory.getCurrentSession().createCriteria(AraziİslemHareketleri.class);
+		// criteriaDemirbas.addOrder(Order.desc("islemZamani"));
+		criteriaDemirbas.add(Restrictions.eq("ilce", ilce));
+		criteriaDemirbas.add(Restrictions.ge("tarih", ilkTarih));
+		criteriaDemirbas.add(Restrictions.le("tarih", sonTarih));
+
+		// criteriaDemirbas.add((Restrictions.disjunction()
+		// .add(Restrictions.and(Restrictions.ilike("tarih", "%" + ilceYil +
+		// "%"))
+		// .add(Restrictions.ilike("tarih", "%" + ilceBirinciAy + "%"))
+		// .add(Restrictions.ilike("tarih", "%" + ilceIkinciAy + "%"))
+		// .add(Restrictions.ilike("tarih", "%" + ilceUcuncuAy + "%")))
+		//
+		// ));
+		// ProjectionList p1 = Projections.projectionList();
+		//
+		// p1.add(Projections.sum("devriIstenenParselAlani"));
+		// p1.add(Projections.sum("devriIstenenParselSayisi"));
+		// p1.add(Projections.sum("izinVerilenParselAlani"));
+		// p1.add(Projections.sum("izinVerilenParselSayisi"));
+		// p1.add(Projections.sum("izinVerilmeyenParselAlani"));
+		// p1.add(Projections.sum("izinVerilmeyenParselSayisi"));
+		// criteriaDemirbas.setProjection(p1);
+		// criteriaDemirbas.setProjection(Projections.groupProperty("islemZamani"));
+
+		return criteriaDemirbas.list();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see dao.AraziDAO#ucAylikRapor(java.lang.String, java.lang.String,
+	 * java.lang.String)
+	 */
+	@Override
+	@Transactional
+	public List<AraziİslemHareketleri> ucAylikRapor(String yil, String ilkAy, String sonAy) {
+		Criteria criteriaDemirbas = sessionFactory.getCurrentSession().createCriteria(AraziİslemHareketleri.class);
+		// criteriaDemirbas.addOrder(Order.desc("islemZamani"));
+
+		// System.out.println("seçilen yıl: " + yil);
+		// System.out.println("ilk dönem: " + ilkAy);
+		// System.out.println("son dönem: " + sonAy);
+		criteriaDemirbas.add(Restrictions.like("tarih", "%" + yil + "%"));
+		criteriaDemirbas.add(Restrictions.ge("tarih", ilkAy));
+		criteriaDemirbas.add(Restrictions.le("tarih", sonAy));
+
+		// criteriaDemirbas.add((Restrictions.disjunction()
+		// .add(Restrictions.and(Restrictions.ilike("tarih", "%" + ilceYil +
+		// "%"))
+		// .add(Restrictions.ilike("tarih", "%" + ilceBirinciAy + "%"))
+		// .add(Restrictions.ilike("tarih", "%" + ilceIkinciAy + "%"))
+		// .add(Restrictions.ilike("tarih", "%" + ilceUcuncuAy + "%")))
+		//
+		// ));
+		// ProjectionList p1 = Projections.projectionList();
+		//
+		// p1.add(Projections.sum("devriIstenenParselAlani"));
+		// p1.add(Projections.sum("devriIstenenParselSayisi"));
+		// p1.add(Projections.sum("izinVerilenParselAlani"));
+		// p1.add(Projections.sum("izinVerilenParselSayisi"));
+		// p1.add(Projections.sum("izinVerilmeyenParselAlani"));
+		// p1.add(Projections.sum("izinVerilmeyenParselSayisi"));
+		// criteriaDemirbas.setProjection(p1);
+		// criteriaDemirbas.setProjection(Projections.groupProperty("islemZamani"));
+
+		return criteriaDemirbas.list();
 	}
 }

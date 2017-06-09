@@ -27,10 +27,14 @@ public interface AracDAO {
 	public List<Arac> ozelPlakayaGoreCikisListesi(String plaka);
 
 	public List<Arac> resmiPlakayaGoreCikisListesi(String plaka);
+
 	public List<Arac> donemAyGetir();
 
 	public List<Arac> donemYilGetir();
-	
+
 	public List<Arac> cikisYapanPersonelListesi();
 
+	public boolean ayniGorevdenVarMi(long mahalleID, String tarih, String cikisSaati, String girisSaati);
+
+	public List<Arac> gorevBul(String plaka, String tarih);
 }

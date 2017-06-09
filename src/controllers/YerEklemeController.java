@@ -35,7 +35,7 @@ import service.YerEklemeService;
  *
  */
 @Controller
-@RequestMapping(value = "/yer-ekleme")
+@RequestMapping(value = "/yonetim")
 public class YerEklemeController {
 	@Autowired
 	YerEklemeService yerEklemeService;
@@ -115,14 +115,14 @@ public class YerEklemeController {
 		tips = yer;
 		tips.setId(0);
 		tusYazisi = "Ekle";
-		return "redirect:/yer-ekleme/sabitler";
+		return "redirect:/yonetim/sabitler";
 	}
 
 	@RequestMapping(value = "/edit/{id}")
 	public String sabitEdit(@PathVariable("id") Long Id, @CookieValue(value = "id", required = true) Long id) {
 		tips = yerEklemeService.tipsGetir(Id);
 		tusYazisi = "Güncelle";
-		return "redirect:/yer-ekleme/sabitler";
+		return "redirect:/yonetim/sabitler";
 	}
 
 	@RequestMapping(value = "/vazgec")
@@ -135,7 +135,7 @@ public class YerEklemeController {
 		tips.setDurum(null);
 		// tips=new Sabittips(); //bo�alt�r
 		tusYazisi = "Ekle";
-		return "redirect:/yer-ekleme/sabitler";
+		return "redirect:/yonetim/sabitler";
 	}
 
 	@RequestMapping(value = "/tipsil", method = RequestMethod.POST)

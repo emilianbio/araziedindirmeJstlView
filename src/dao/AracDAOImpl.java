@@ -29,11 +29,6 @@ public class AracDAOImpl implements AracDAO {
 	@Autowired
 	private SessionFactory sessionFactory;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see dao.AracDAO#save(forms.Arac)
-	 */
 	@Override
 	@Transactional
 	public void save(Arac arac) {
@@ -41,22 +36,12 @@ public class AracDAOImpl implements AracDAO {
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see dao.AracDAO#delete(java.lang.Long)
-	 */
 	@Override
 	@Transactional
 	public void delete(Long id) {
 		sessionFactory.getCurrentSession().delete(aracCikisGetir(id));
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see dao.AracDAO#aracCikisGetir(java.lang.Long)
-	 */
 	@Override
 	@Transactional
 	public Arac aracCikisGetir(Long id) {
@@ -67,17 +52,14 @@ public class AracDAOImpl implements AracDAO {
 		return arac;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see dao.AracDAO#tumAracCikislari()
-	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional
 	public List<Arac> tumAracCikislari() {
 		Criteria criteriaArac = sessionFactory.getCurrentSession().createCriteria(Arac.class);
 		criteriaArac.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+		criteriaArac.addOrder(Order.desc("tarih"));
+		criteriaArac.addOrder(Order.desc("islemZamani"));
 		List<Arac> aracCikisListesi = criteriaArac.list();
 
 		return aracCikisListesi;
@@ -145,33 +127,69 @@ public class AracDAOImpl implements AracDAO {
 
 	@SuppressWarnings("unchecked")
 	@Transactional
-	@Override 
+	@Override
 	public List<Arac> donemYilGetir() {
 		Criteria criteriaYil = sessionFactory.getCurrentSession().createCriteria(Arac.class);
 		criteriaYil.setProjection(Projections.distinct(Projections.property("donemYil")));
 		return criteriaYil.list();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see dao.AracDAO#cikisYapanPersonelListesi()
-	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional
 	public List<Arac> cikisYapanPersonelListesi() {
 		Criteria criteriaPersonel = sessionFactory.getCurrentSession().createCriteria(Arac.class);
 		criteriaPersonel.createAlias("kullaniciList", "kullanici");
-		
-		ProjectionList list= Projections.projectionList();
+
+		ProjectionList list = Projections.projectionList();
 		list.add((Projections.property("kullanici.id")));
 		list.add((Projections.property("kullanici.adi")));
 		criteriaPersonel.setProjection(Projections.distinct(list));
-		
+
 		criteriaPersonel.addOrder(Order.asc("kullanici.adi"));
-		System.out.println("aracdao: "+criteriaPersonel.list().toString() );
+		// System.out.println("aracdao: " + criteriaPersonel.list().toString());
 		return criteriaPersonel.list();
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	@Transactional
+	public boolean ayniGorevdenVarMi(long mahalleID, String tarih, String cikisSaati, String girisSaati) {
+		Criteria criteriaArac = sessionFactory.getCurrentSession().createCriteria(Arac.class);
+
+		criteriaArac.add(Restrictions.eq("mahalle.id", mahalleID));
+		criteriaArac.add(Restrictions.eq("tarih", tarih));
+		criteriaArac.add(Restrictions.eq("cikisSaati", cikisSaati));
+		criteriaArac.add(Restrictions.eq("girisSaati", girisSaati));
+
+		List sonucList = criteriaArac.list();
+		return (sonucList != null && sonucList.size() > 0);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional
+	public List<Arac> gorevBul(String plaka, String tarih) {
+		Criteria criteriaGorevBul = sessionFactory.getCurrentSession().createCriteria(Arac.class);
+		System.out.println("aracDao gorevBUL Tarih: " + tarih);
+
+		System.out.println("aracDao gorevBUL Plaka: " + plaka);
+		// criteriaGorevBul.createAlias("mahalle", "mahalle");
+		// criteriaGorevBul.createAlias("kullaniciList", "kullanici");
+
+		criteriaGorevBul.add(Restrictions.eq("tarih", tarih));
+		// criteriaGorevBul.add(Restrictions.eq("cikisSaati", plaka));
+		// criteriaGorevBul.add(Restrictions.eq("girisSaati", plaka));
+
+		criteriaGorevBul.add(
+				(Restrictions.disjunction().add(Restrictions.or(Restrictions.ilike("resmiPlaka", "%" + plaka + "%"))
+						.add(Restrictions.ilike("ozelPlaka", "%" + plaka + "%"))
+
+				)));
+		// criteriaGorevBul.setProjection(Projections.distinct(Projections.property("kullanici.id")));
+
+		return criteriaGorevBul.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY).list();
+
 	}
 
 }

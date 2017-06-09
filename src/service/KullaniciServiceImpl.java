@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import dao.KullaniciDAO;
 import forms.Kullanici;
+import forms.KullaniciPicture;
 
 @Service
 public class KullaniciServiceImpl implements KullaniciService {
@@ -73,6 +74,15 @@ public class KullaniciServiceImpl implements KullaniciService {
 	@Override
 	public List<Kullanici> aktifKullaniciListesi(char durum) {
 		return kullaniciDAO.aktifKullaniciListesi(durum);
+	}
+
+	/* (non-Javadoc)
+	 * @see service.KullaniciService#kullaniciEkle2(forms.KullaniciPicture)
+	 */
+	@Override
+	public void kullaniciEkle2(KullaniciPicture kullaniciPicture) {
+		kullaniciDAO.kullaniciEkle2(kullaniciPicture);
+		
 	}
 
 }

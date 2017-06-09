@@ -3,6 +3,7 @@ package service;
 import java.util.List;
 
 import forms.Kullanici;
+import forms.KullaniciPicture;
 
 public interface KullaniciService {
 
@@ -15,6 +16,7 @@ public interface KullaniciService {
 	public Kullanici kullaniciGetirr(Long id);
 
 	public void kullaniciEkle(Kullanici kullanici);
+	public void kullaniciEkle2(KullaniciPicture kullaniciPicture);
 	
 	public List<Kullanici> aktifKullaniciListesi(char durum);
 }

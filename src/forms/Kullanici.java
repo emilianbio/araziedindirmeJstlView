@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -47,34 +48,6 @@ public class Kullanici implements Serializable {
 	@JoinColumn(name = "role")
 	private UserRoles roles;
 
-	public UserRoles getRoles() {
-
-		if (roles == null) {
-			roles = new UserRoles();
-		}
-		return roles;
-	}
-
-	public void setRoles(UserRoles roles) {
-		this.roles = roles;
-	}
-
-	public String getUnvan() {
-		return unvan;
-	}
-
-	public void setUnvan(String unvan) {
-		this.unvan = unvan;
-	}
-
-	public String getBirim() {
-		return birim;
-	}
-
-	public void setBirim(String birim) {
-		this.birim = birim;
-	}
-
 	@Column(name = "sicil_no")
 	private String sicilNo;
 
@@ -90,11 +63,27 @@ public class Kullanici implements Serializable {
 	@Column(name = "izin_hakki")
 	private Integer izinHakki;
 
+	@Column(name = "pic")
+	private byte[] pic;
+
+	
+	public UserRoles getRoles() {
+
+		if (roles == null) {
+			roles = new UserRoles();
+		}
+		return roles;
+	}
+
+	public void setRoles(UserRoles roles) {
+		this.roles = roles;
+	}
+
 	public long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -114,35 +103,29 @@ public class Kullanici implements Serializable {
 		this.sifre = sifre;
 	}
 
-	/**
-	 * @return the adi
-	 */
 	public String getAdi() {
 		return adi;
 	}
 
-	/**
-	 * @param adi
-	 *            the adi to set
-	 */
 	public void setAdi(String adi) {
 		this.adi = adi;
 	}
-	// public Unvanlar getUnvan() {
-	// return unvan;
-	// }
-	//
-	// public void setUnvan(Unvanlar unvan) {
-	// this.unvan = unvan;
-	// }
-	//
-	// public Birimler getBirim() {
-	// return birim;
-	// }
-	//
-	// public void setBirim(Birimler birim) {
-	// this.birim = birim;
-	// }
+
+	public String getUnvan() {
+		return unvan;
+	}
+
+	public void setUnvan(String unvan) {
+		this.unvan = unvan;
+	}
+
+	public String getBirim() {
+		return birim;
+	}
+
+	public void setBirim(String birim) {
+		this.birim = birim;
+	}
 
 	public String getSicilNo() {
 		return sicilNo;
@@ -184,30 +167,16 @@ public class Kullanici implements Serializable {
 		this.izinHakki = izinHakki;
 	}
 
-	public Kullanici() {
+	public byte[] getPic() {
+		return pic;
 	}
 
-	public void setId(long id) {
-		this.id = id;
+	public void setPic(byte[] pic) {
+		this.pic = pic;
 	}
 
-	
-	/**
-	 * @param isimSoyisim
-	 * @param sifre
-	 * @param adi
-	 * @param unvan
-	 * @param birim
-	 * @param roles
-	 * @param sicilNo
-	 * @param cepTelefonu
-	 * @param ePosta
-	 * @param durum
-	 * @param izinHakki
-	 */
-	public Kullanici(String isimSoyisim, String sifre, String adi, String unvan, String birim, UserRoles roles,
+	public Kullanici( String isimSoyisim, String sifre, String adi, String unvan, String birim, UserRoles roles,
 			String sicilNo, long cepTelefonu, String ePosta, char durum, Integer izinHakki) {
-		super();
 		this.isimSoyisim = isimSoyisim;
 		this.sifre = sifre;
 		this.adi = adi;
@@ -221,12 +190,9 @@ public class Kullanici implements Serializable {
 		this.izinHakki = izinHakki;
 	}
 
-	@Override
-	public String toString() {
-		return "Kullanici [id=" + id + ", isimSoyisim=" + isimSoyisim + ", sifre=" + sifre + ", adi=" + adi + ", unvan="
-				+ unvan + ", birim=" + birim + ", roles=" + roles + ", sicilNo=" + sicilNo
-				+ ", cepTelefonu=" + cepTelefonu + ", ePosta=" + ePosta + ", durum=" + durum + ", izinHakki="
-				+ izinHakki + "]";
+	public Kullanici() {
 	}
+
+	
 
 }

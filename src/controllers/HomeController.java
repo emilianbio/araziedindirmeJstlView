@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.catalina.filters.HttpHeaderSecurityFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -34,13 +33,13 @@ public class HomeController {
 	public String giris = "0";
 
 	@RequestMapping(value = "/")
-	public ModelAndView home(ModelMap model, HttpServletResponse response, HttpServletRequest request,HttpSession session)
-			throws UnsupportedEncodingException {
+	public ModelAndView home(ModelMap model, HttpServletResponse response, HttpServletRequest request,
+			HttpSession session) throws UnsupportedEncodingException {
 		if (kullanici == null) {
 			kullanici = new Kullanici();
- 
+
 		}
-		
+
 		Cookie cookie1 = new Cookie("id", "");
 		Cookie cookie2 = new Cookie("isim", "");
 		// cookie.setValue("");
@@ -55,7 +54,6 @@ public class HomeController {
 		modelAndView.addObject("girisBasarili", giris);
 		modelAndView.addObject("title", "GİRİŞ ");
 		modelAndView.addObject("kullanici", kullanici);
-
 		Genel.kullaniciLoginInfo = null;
 		return modelAndView;
 	}
@@ -68,9 +66,9 @@ public class HomeController {
 
 		}
 
-		// session = request.getSession();
-		// session.invalidate();
-		// Genel.kullaniciLoginInfo = null;
+		session = request.getSession();
+		session.invalidate();
+		Genel.kullaniciLoginInfo = null;
 		Cookie cookie1 = new Cookie("id", "");
 		Cookie cookie2 = new Cookie("isim", "");
 		// cookie.setValue("");
@@ -128,7 +126,7 @@ public class HomeController {
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ModelAndView kullaniciOnay(@ModelAttribute("kullanici") Kullanici kullanici,
 			@RequestParam(value = "isimSoyisim") String isim, @RequestParam(value = "sifre") String sifre,
-			HttpServletRequest request, HttpServletResponse response, ModelMap model)
+			HttpServletRequest request, HttpServletResponse response, ModelMap model, HttpSession session)
 			throws UnsupportedEncodingException {
 		// kullanici.toString();
 		response.setCharacterEncoding("UTF-8");
@@ -137,6 +135,9 @@ public class HomeController {
 		kullanici.setePosta(null);
 		kullanici.setSicilNo(null);
 		kullanici.setUnvan(null);
+		session = request.getSession();
+
+		session.setMaxInactiveInterval(15);
 
 		Kullanici kayitliKullanici = kullaniciService.kullaniciGiris(isim, sifre);
 		System.out.println(kullanici.getIsimSoyisim());
@@ -176,8 +177,8 @@ public class HomeController {
 	@RequestMapping("/error")
 	public String errorPage(ModelMap model) {
 		String message = araclar.Genel.getErrorMessage();
-		if (message != null)
-			model.put("errorMessage", message);
+		// if (message != null)
+		// model.put("errorMessage", message);
 		return "error";
 	}
 }

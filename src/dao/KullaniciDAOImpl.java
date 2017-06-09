@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import forms.Kullanici;
+import forms.KullaniciPicture;
 
 @Repository
 public class KullaniciDAOImpl implements KullaniciDAO {
@@ -89,6 +90,7 @@ public class KullaniciDAOImpl implements KullaniciDAO {
 	@Override
 	@Transactional
 	public void kullaniciEkle(Kullanici kullanici) {
+
 		sessionFactory.getCurrentSession().saveOrUpdate(kullanici);
 
 	}
@@ -119,10 +121,29 @@ public class KullaniciDAOImpl implements KullaniciDAO {
 	@Override
 	public Kullanici kullaniciBul(Long id) {
 		Criteria crtKullanici = sessionFactory.getCurrentSession().createCriteria(Kullanici.class);
-
-		Kullanici kullanici = (Kullanici) sessionFactory.getCurrentSession().load(Kullanici.class, id);
-		kullanici.getId();
-		return kullanici;
+		crtKullanici.add(Restrictions.eq("id", id));
+		// Kullanici kullanici = (Kullanici)
+		// sessionFactory.getCurrentSession().load(Kullanici.class, id);
+		// kullanici.getId();
+		return (Kullanici) crtKullanici.uniqueResult();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see dao.KullaniciDAO#kullaniciEkle2(forms.KullaniciPicture)
+	 */
+	@SuppressWarnings("null")
+	@Override
+	@Transactional
+	public void kullaniciEkle2(KullaniciPicture kullaniciPicture) {
+		Kullanici kullanici = null;
+
+		if (kullaniciPicture.getFileData() != null) {
+			byte[] image = kullaniciPicture.getFileData().getBytes();
+			if (image != null && image.length > 0)
+				kullanici.setPic(image);
+		}
+		sessionFactory.getCurrentSession().saveOrUpdate(kullanici);
+	}
 }

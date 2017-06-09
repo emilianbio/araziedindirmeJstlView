@@ -20,7 +20,7 @@ import service.UserRolesService;
  */
 
 @Controller
-@RequestMapping(value = "/roller")
+@RequestMapping(value = "/yonetim")
 public class UserRolesController {
 	@Autowired
 	KullaniciService kullaniciService;

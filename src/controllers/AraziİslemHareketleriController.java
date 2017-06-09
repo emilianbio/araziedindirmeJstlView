@@ -47,43 +47,52 @@ public class AraziİslemHareketleriController {
 	public String tusYazisi = "Kaydet";
 	public List<AraziİslemHareketleri> islemTipineGöreListe;
 	public Long id = null;
+	public String hata = "";
 
-	@RequestMapping(value = "/satis")
-	public ModelAndView Satis(ModelMap model, @CookieValue(value = "id") Long id, HttpServletRequest request,
-			@ModelAttribute("araziIslem") AraziİslemHareketleri islemHareketleri, BindingResult result) {
+	@RequestMapping(value = "/satis",method= RequestMethod.GET)
+	public String Satis(ModelMap model, @CookieValue(value = "id", required = false) Long id,
+			HttpServletRequest request, @ModelAttribute("araziIslem") AraziİslemHareketleri islemHareketleri,
+			BindingResult result) {
 
 		Genel.setKullaniciBean(null);
 		if (arazi == null) {
 			arazi = new AraziİslemHareketleri();
 		}
 
-		ModelAndView modelAndView = new ModelAndView("SatisCesitleri/Satis");
-		if (!result.hasErrors() || id != null) {
-			modelAndView.addObject("tusYazisi", tusYazisi);
-			modelAndView.addObject("ilceler", araclar.Genel.ilcelers());
-			modelAndView.addObject("title", "Satış Yoluyla Devir");
-			modelAndView.addObject("islemListesi", araziService.islemHareketleriListesi());
-			modelAndView.addObject("araziIslem", arazi);
-			modelAndView.addObject("islemTipineGöreListe", islemTipineGöreListe);
-			modelAndView.addObject("id", araziService.sonIdGetir());
+		if (id != null) {
+			// ModelAndView modelAndView = new
+			// ModelAndView("SatisCesitleri/Satis");
+			model.put("tusYazisi", tusYazisi);
+			model.put("ilceler", araclar.Genel.ilcelers());
+			model.put("title", "Satış Yoluyla Devir");
+			model.put("islemListesi", araziService.islemHareketleriListesi());
+			model.put("araziIslem", arazi);
+			model.put("islemTipineGöreListe", islemTipineGöreListe);
+			model.put("id", araziService.sonIdGetir());
 			tusYazisi = "Kaydet";
 			islemHareketleri.setId(0);
 			arazi = null;
 
-			return modelAndView;
+			if (hata == "error") {
+
+				model.put("errorMessage", hata);
+
+			}
+			hata = "";
+			return "SatisCesitleri/Satis";
 
 		} else {
-
-			System.out.println("satiş çeşilerinde hata ....");
-			return new ModelAndView("redirect:/anasayfa");
+			System.out.println("/--*/- araziişlemleri ID si null...");
+			System.out.println("satiş çeşitlerinde hata ....");
+			return "redirect:/anasayfa";
 
 		}
 	}
 
 	@RequestMapping(value = "/ekle")
-	public ModelAndView Satis2(@CookieValue(value = "id") Long id,
-			@ModelAttribute("araziIslem") AraziİslemHareketleri islemHareketleri, ModelMap model,
-			HttpServletRequest request, HttpServletResponse response) throws ParseException {
+	public ModelAndView Satis2(@CookieValue(value = "id") Long id, ModelMap model, HttpServletRequest request,
+			HttpServletResponse response, @ModelAttribute("araziIslem") AraziİslemHareketleri islemHareketleri,
+			BindingResult result) throws ParseException {
 
 		Kullanici kullanici = new Kullanici();
 		kullanici.setId(id);
@@ -91,8 +100,18 @@ public class AraziİslemHareketleriController {
 		System.out.println(islemHareketleri.getTarih());
 		islemHareketleri.setKullanici(kullanici);
 		islemHareketleri.setIslemZamani(new Date());
-		araziService.save(islemHareketleri);
 
+		if (!result.hasFieldErrors()) {
+			araziService.save(islemHareketleri);
+		} else {
+			hata = "error";
+			System.out.println(result.getAllErrors());
+			ModelAndView modelAndView = new ModelAndView("redirect:/satis-cesitleri/satis");
+			tusYazisi = "Kaydet";
+			modelAndView.addObject("tusYazisi", tusYazisi);
+
+			return modelAndView;
+		}
 		islemHareketleri.setId(0);
 		ModelAndView modelAndView = new ModelAndView("redirect:/satis-cesitleri/satis");
 
@@ -108,14 +127,14 @@ public class AraziİslemHareketleriController {
 		islemHareketleri.setKullanici(null);
 		islemHareketleri.setMahalle(null);
 		islemHareketleri.setNitelik(null);
-		islemHareketleri.setTarih(null);
+		islemHareketleri.setTarih("");
 		arazi = null;
 
 		System.out.println(arazi + "güncellendi");
 		modelAndView.addObject("araziIslem", arazi);
 		tusYazisi = "Kaydet";
 		modelAndView.addObject("tusYazisi", tusYazisi);
-		return new ModelAndView("redirect:/satis-cesitleri/satis");
+		return modelAndView;
 	}
 
 	@RequestMapping(value = "/araziIslemDuzelt/{id}")
@@ -149,16 +168,7 @@ public class AraziİslemHareketleriController {
 			@CookieValue(value = "id", required = false) Long id) {
 		Gson gson = new Gson();
 
-		Kullanici kullanici = kullaniciService.kullaniciGetirr(id);
-
-		if (kullanici.getRoles().getRollAdi().equals(araclar.RolesEnum.ROLE_SUPER_ADMIN.toString())
-				|| kullanici.getRoles().getRollAdi().equals(araclar.RolesEnum.ROLE_AUTHORIZED_USER.toString())) {
-			return gson.toJson(araziService.islemTipineGöreListele(islemTipi));
-
-		} else {
-
-			return gson.toJson(araziService.islemTipineVePersoneleGöreListele(islemTipi, id));
-		}
+		return gson.toJson(araziService.islemTipineGöreListele(islemTipi));
 	}
 
 	@RequestMapping(value = "/id", method = RequestMethod.GET)
@@ -166,6 +176,14 @@ public class AraziİslemHareketleriController {
 		System.out.println("id çalıştı");
 
 		return araziService.sonIdGetir().longValue();
+	}
+
+	@RequestMapping(value = "/araziIslemSil")
+	public String sil(@RequestParam(value = "id") Long id) {
+
+		araziService.sil(id);
+
+		return "redirect:/satis-cesitleri/satis";
 	}
 
 }

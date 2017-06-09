@@ -29,7 +29,8 @@
 	href="<c:url value="/assets/css/jquery.dataTables.min.css" />"
 	type="text/css">
 
-
+<!--  <link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />  -->
 <link rel="stylesheet"
 	href="<c:url value="/assets/script/chsosenJS/chosen.css" />"
 	type="text/css">
@@ -38,7 +39,8 @@
 	href="<c:url value="/assets/script/chsosenJS/chosen.min.css"/>"
 	type="text/css">
 
-
+<link rel="stylesheet" href="<c:url value="/assets/css/calender.css"/>"
+	type="text/css">
 
 <!-- scripts -->
 <script src="<c:url value="/assets/script/jquery-3.1.0.min.js" />"
@@ -59,6 +61,7 @@
 
 <script src='<c:url value="/assets/script/genel2.js"  ></c:url>'></script>
 
+<script src='<c:url value="/assets/script/calender.js"  ></c:url>'></script>
 
 <script
 	src='<c:url value="/assets/script/chsosenJS/chosen.jquery.js"  ></c:url>'></script>
@@ -68,6 +71,9 @@
 	src='<c:url value="/assets/script/chsosenJS/chosen.proto.js"  ></c:url>'></script>
 <script
 	src='<c:url value="/assets/script/chsosenJS/chosen.proto.min.js"  ></c:url>'></script>
+<script
+	src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+
 <script>
 	var pathname = window.location.pathname; // Returns path only
 	var url = window.location.href;
@@ -117,37 +123,44 @@
 
 	})
 </script>
-
+<style type="text/css">
+body {
+	background:
+		/* url(http://www.digiphotohub.com/wp-content/uploads/2015/09/bigstock-Abstract-Blurred-Background-Of-92820527.jpg); */
+		url("<c:url value='/assets/images/bigstock-Abstract-Blurred-Background-Of-92820527.jpg'/>");
+	background-size: 100%;
+}
+</style>
 
 
 </head>
 
-<body>
+<body bgcolor="#e3f2fd">
+
 
 	<!-- header -->
 	<jsp:include page="header.jsp" />
 	<!-- /header -->
-
 	<!-- sidebar -->
-	<jsp:include page="sidebar.jsp" />
+	<%-- <jsp:include page="sidebar.jsp" /> --%>
 	<!-- /sidebar -->
 
-	<div id="page-content-wrapper" class="page-content-toggle">
-		<div class="container-fluid">
-			<h3>${title}</h3>
-			<%-- <p>
+	<!-- <div id="page-content-wrapper" class="page-content-toggle"> -->
+
+	<%-- <h3>${title}</h3> --%>
+	<%-- <p>
 				<a href="${url }"><h4>${url}</h4></a>
 			</p> --%>
-			<div class="row">
-				<div id="content" class="col-md-8 col-md-offset-1 col-xs-12">
-					<jsp:include page="${partial}" /></div>
-			</div>
-			<!-- /row -->
+	<div class="container-fluid">
+		<div class="container">
+			<jsp:include page="${partial}" />
 		</div>
-
-		<!-- footer -->
-		<%-- <jsp:include page="footer.jsp" /> --%>
-		<!-- /footer -->
 	</div>
+	<!-- /row -->
+
+	<!-- footer -->
+	<%-- <jsp:include page="footer.jsp" /> --%>
+	<!-- /footer -->
+	<!-- </div> -->
 </body>
 </html>

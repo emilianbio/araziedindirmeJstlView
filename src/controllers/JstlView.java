@@ -12,8 +12,11 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.web.servlet.view.InternalResourceView;
+
+import araclar.Genel;
 
 public class JstlView extends InternalResourceView {
 	@Override
@@ -60,12 +63,15 @@ public class JstlView extends InternalResourceView {
 		request.setAttribute("yillar", model.get("yillar"));
 
 		request.setAttribute("arac", model.get("arac"));
+		
+		request.setAttribute("resim", model.get("resim"));
 
 		request.setAttribute("aracCikisListesi", model.get("aracCikisListesi"));
 		request.setAttribute("girisYapanKullanici", model.get("girisYapanKullanici"));
 		request.setAttribute("download", model.get("download"));
 		request.setAttribute("dosyaDurumu", model.get("dosyaDurumu"));
 		request.setAttribute("url", model.get("url"));
+		request.setAttribute("message", model.get("message"));
 		request.setAttribute("errorMessage", model.get("errorMessage"));
 		request.setAttribute("roll", model.get("roll"));
 		request.setAttribute("roller", model.get("roller"));
@@ -79,19 +85,19 @@ public class JstlView extends InternalResourceView {
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/template.jsp");
 		requestDispatcher.include(request, response);
 
-		// if (Genel.kullaniciLoginInfo != null) {
-		// HttpSession session = request.getSession(true); // create a new
-		// // session
-		//
-		// // put the UserDetails object here.
-		// session.setAttribute("userDetails",
-		// Genel.kullaniciLoginInfo.getAdi());
-		// session.setAttribute("userUnvan",
-		// Genel.kullaniciLoginInfo.getUnvan());
-		// session.setAttribute("userSicilNo",
-		// Genel.kullaniciLoginInfo.getSicilNo());
-		//
-		// }
+		if (Genel.kullaniciLoginInfo != null) {
+			HttpSession session = request.getSession(true); // create a new
+															// session
+			session.setMaxInactiveInterval(30);
+			// put the UserDetails object here.
+			session.setAttribute("userDetails", Genel.kullaniciLoginInfo.getAdi());
+			session.setAttribute("userUnvan", Genel.kullaniciLoginInfo.getUnvan());
+			session.setAttribute("userSicilNo", Genel.kullaniciLoginInfo.getSicilNo());
+
+		}
+
+		String url = request.getRequestURI();
+		System.out.println("JSTLView Adres Satırı :" + url);
 
 	}
 

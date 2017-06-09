@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.google.gson.Gson;
-
 import forms.AraziİslemHareketleri;
 import service.AracService;
 import service.AraziService;
@@ -83,38 +81,38 @@ public class RaporlarController {
 
 			if (!(araziList.get(i).getDevriIstenenParselAlani() == araziList.get(i).getIzinVerilenParselAlani()
 					+ araziList.get(i).getIzinVerilmeyenParselAlani())) {
+				System.err.println(i + ". Hata " + "==================VERİTABANI HATALI VERİLER==================");
 
-				System.out.println(i+". Hata "+"==================VERİTABANI HATALI VERİLER==================");
+				System.err.println("İşlemi Yapan: " + araziList.get(i).getKullanici().getAdi());
+				System.err.println("İşlemi Tarihi: " + araziList.get(i).getIslemZamani());
+				System.err.println("İşlem Detayları: ");
 
-				System.out.println("İşlemi Yapan: " + araziList.get(i).getKullanici().getAdi());
-				System.out.println("İşlemi Tarihi: " + araziList.get(i).getIslemZamani());
-				System.out.println("İşlem Detayları: ");
+				System.err.print("ID: " + araziList.get(i).getId() + "---");
 
-				System.out.print("ID: " + araziList.get(i).getId() + "---");
-
-				System.out.println(araziList.get(i).getTarih() + "-----");
-				System.out.print(
+				System.err.println(araziList.get(i).getTarih() + "-----");
+				System.err.print(
 						"Devri istenen parsel sayısı: " + araziList.get(i).getDevriIstenenParselSayisi() + "----");
-				System.out.println("Devri istenen parsel alanı: " + araziList.get(i).getDevriIstenenParselAlani());
+				System.err.println("Devri istenen parsel alanı: " + araziList.get(i).getDevriIstenenParselAlani());
 
-				System.out.print("İzin verilen parsel sayısı: " + araziList.get(i).getIzinVerilenParselSayisi() + "---");
-				System.out.println("İzin verilen parsel alanı: " + araziList.get(i).getIzinVerilenParselAlani());
+				System.err
+						.print("İzin verilen parsel sayısı: " + araziList.get(i).getIzinVerilenParselSayisi() + "---");
+				System.err.println("İzin verilen parsel alanı: " + araziList.get(i).getIzinVerilenParselAlani());
 
-				System.out.print(
+				System.err.print(
 						"İzin verilmeyen parsel sayısı: " + araziList.get(i).getIzinVerilmeyenParselSayisi() + "---");
-				System.out.println(
+				System.err.println(
 						"İzin verilmeyen parsel alanı: " + araziList.get(i).getIzinVerilmeyenParselAlani() + "---");
-				System.out.println("Fark: ");
-				System.out.print("Sayı: ");
-				System.out.println((int) araziList.get(i).getDevriIstenenParselSayisi()
+				System.err.println("Fark: ");
+				System.err.print("Sayı: ");
+				System.err.println((int) araziList.get(i).getDevriIstenenParselSayisi()
 						- (int) araziList.get(i).getIzinVerilenParselSayisi()
 						+ (int) araziList.get(i).getIzinVerilmeyenParselSayisi());
-				System.out.print("Alan: ");
-				System.out.println(
+				System.err.print("Alan: ");
+				System.err.println(
 						araziList.get(i).getDevriIstenenParselAlani() - araziList.get(i).getIzinVerilenParselAlani()
 								+ araziList.get(i).getIzinVerilmeyenParselAlani());
-			
-				System.out.println(i+". Hata "+"==================VERİTABANI HATALI VERİLER SON==================");
+
+				System.err.println(i + ". Hata " + "==================VERİTABANI HATALI VERİLER SON==================");
 			}
 
 		}
@@ -142,13 +140,6 @@ public class RaporlarController {
 		return raporlarService.raporlarListesi();
 	}
 
-	@RequestMapping(value = "/ilceyeGöreListeGetir", method = RequestMethod.GET)
-	public @ResponseBody String islemTipineGöreListeGetir(@RequestParam(value = "ilce", required = true) String ilce) {
-		Gson gson = new Gson();
-
-		return gson.toJson(araziService.ilceyeGöreListele(ilce));
-	}
-
 	public ModelAndView toplamAraziSatislari() {
 		ModelAndView modelAndView = new ModelAndView("redirect:/raporlar/satisrapor");
 
@@ -167,9 +158,6 @@ public class RaporlarController {
 				izinVerilmeyenParselAlaniToplami = 0;
 
 		for (int i = 0; i < arazi.size(); i++) {
-
-			// System.out.println("rarporlar TOPLAM sys :" +
-			// arazi.get(i).getTarih());
 
 			devriIstenenParselSayisiToplami += arazi.get(i).getDevriIstenenParselSayisi();
 			devriIstenenParselAlaniToplami += arazi.get(i).getDevriIstenenParselAlani();
@@ -198,97 +186,80 @@ public class RaporlarController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/ucayliktoplamgetir", method = RequestMethod.GET)
 	public @ResponseBody Map<String, Long> ucAylikToplam(@RequestParam(value = "yil") String yil,
-			@RequestParam(value = "birinciAy") String birinciAy, @RequestParam(value = "ikinciAy") String ikinciAy,
-			@RequestParam(value = "ucuncuAy") String ucuncuAy) {
+			@RequestParam(value = "birinciAy") String birinciAy, @RequestParam(value = "ikinciAy") String ikinciAy) {
 		List<AraziİslemHareketleri> arazi = new ArrayList<AraziİslemHareketleri>();
-		arazi = araziService.islemHareketleriListesi();
+		arazi = araziService.ucAylikRapor(yil, birinciAy, ikinciAy);
 		int devriIstenenParselSayisiToplami = 0, izinVerilenParselSayisiToplami = 0,
 				izinVerilmeyenParselSayisiToplami = 0;
-		int devriIstenenParselSayisiToplami2 = 0, izinVerilenParselSayisiToplami2 = 0,
-				izinVerilmeyenParselSayisiToplami2 = 0;
-		int devriIstenenParselSayisiToplami3 = 0, izinVerilenParselSayisiToplami3 = 0,
-				izinVerilmeyenParselSayisiToplami3 = 0;
 		float devriIstenenParselAlaniToplami = 0, izinVerilenParselAlaniToplami = 0,
 				izinVerilmeyenParselAlaniToplami = 0;
-		float devriIstenenParselAlaniToplami2 = 0, izinVerilenParselAlaniToplami2 = 0,
-				izinVerilmeyenParselAlaniToplami2 = 0;
-		float devriIstenenParselAlaniToplami3 = 0, izinVerilenParselAlaniToplami3 = 0,
-				izinVerilmeyenParselAlaniToplami3 = 0;
-		System.out.println("seçilen yıl : " + yil);
 		for (int i = 0; i < arazi.size(); i++) {
 
-			String[] yilKismi = arazi.get(i).getTarih().split("-");
-			String year = yilKismi[0];
+			devriIstenenParselSayisiToplami += arazi.get(i).getDevriIstenenParselSayisi();
+			devriIstenenParselAlaniToplami += arazi.get(i).getDevriIstenenParselAlani();
 
-			String[] ayKismi = arazi.get(i).getTarih().split("-");
+			izinVerilenParselSayisiToplami += arazi.get(i).getIzinVerilenParselSayisi();
 
-			String firstM = ayKismi[1];
-			String secondM = ayKismi[1];
-			String thirdM = ayKismi[1];
-			System.out.println("rarporlar TOPLAM sys :" + year + "/" + firstM + "/" + secondM + "/" + thirdM);
-			System.out.println("true-false :" + year.equals("2016"));
-			System.out.println("true-false :" + firstM.equals("10"));
+			izinVerilenParselAlaniToplami += arazi.get(i).getIzinVerilenParselAlani();
 
-			if (year.equals(yil)) {
-				if (firstM.equals(birinciAy)) {
-					devriIstenenParselSayisiToplami += arazi.get(i).getDevriIstenenParselSayisi();
-					devriIstenenParselAlaniToplami += arazi.get(i).getDevriIstenenParselAlani();
+			izinVerilmeyenParselSayisiToplami += arazi.get(i).getIzinVerilmeyenParselSayisi();
 
-					izinVerilenParselSayisiToplami += arazi.get(i).getIzinVerilenParselSayisi();
+			izinVerilmeyenParselAlaniToplami += arazi.get(i).getIzinVerilmeyenParselAlani();
 
-					izinVerilenParselAlaniToplami += arazi.get(i).getIzinVerilenParselAlani();
-
-					izinVerilmeyenParselSayisiToplami += arazi.get(i).getIzinVerilmeyenParselSayisi();
-
-					izinVerilmeyenParselAlaniToplami += arazi.get(i).getIzinVerilmeyenParselAlani();
-
-				}
-
-				if (firstM.equals(ikinciAy)) {
-					devriIstenenParselSayisiToplami2 += arazi.get(i).getDevriIstenenParselSayisi();
-					devriIstenenParselAlaniToplami2 += arazi.get(i).getDevriIstenenParselAlani();
-
-					izinVerilenParselSayisiToplami2 += arazi.get(i).getIzinVerilenParselSayisi();
-
-					izinVerilenParselAlaniToplami2 += arazi.get(i).getIzinVerilenParselAlani();
-
-					izinVerilmeyenParselSayisiToplami2 += arazi.get(i).getIzinVerilmeyenParselSayisi();
-
-					izinVerilmeyenParselAlaniToplami2 += arazi.get(i).getIzinVerilmeyenParselAlani();
-
-				}
-				if (firstM.equals(ucuncuAy)) {
-					devriIstenenParselSayisiToplami3 += arazi.get(i).getDevriIstenenParselSayisi();
-					devriIstenenParselAlaniToplami3 += arazi.get(i).getDevriIstenenParselAlani();
-
-					izinVerilenParselSayisiToplami3 += arazi.get(i).getIzinVerilenParselSayisi();
-
-					izinVerilenParselAlaniToplami3 += arazi.get(i).getIzinVerilenParselAlani();
-
-					izinVerilmeyenParselSayisiToplami3 += arazi.get(i).getIzinVerilmeyenParselSayisi();
-
-					izinVerilmeyenParselAlaniToplami3 += arazi.get(i).getIzinVerilmeyenParselAlani();
-
-				}
-
-			}
 		}
 		Map<String, Long> toplam = new JSONObject();
 
-		toplam.put("devriIstenenParselSayisiToplami", (long) devriIstenenParselSayisiToplami
-				+ devriIstenenParselSayisiToplami2 + devriIstenenParselSayisiToplami3);
-		toplam.put("devriIstenenParselAlaniToplami", (long) (devriIstenenParselAlaniToplami
-				+ devriIstenenParselAlaniToplami2 + devriIstenenParselAlaniToplami3));
-		toplam.put("izinVerilenParselSayisiToplami", (long) izinVerilenParselSayisiToplami
-				+ izinVerilenParselSayisiToplami2 + izinVerilenParselSayisiToplami3);
-		toplam.put("izinVerilenParselAlaniToplami", (long) (izinVerilenParselAlaniToplami
-				+ izinVerilenParselAlaniToplami2 + izinVerilenParselAlaniToplami3));
-		toplam.put("izinVerilmeyenParselSayisiToplami", (long) izinVerilmeyenParselSayisiToplami
-				+ izinVerilmeyenParselSayisiToplami2 + izinVerilmeyenParselSayisiToplami3);
-		toplam.put("izinVerilmeyenParselAlaniToplami", (long) (izinVerilmeyenParselAlaniToplami
-				+ izinVerilmeyenParselAlaniToplami2 + izinVerilmeyenParselAlaniToplami3));
+		toplam.put("devriIstenenParselSayisiToplami", (long) devriIstenenParselSayisiToplami);
+		toplam.put("devriIstenenParselAlaniToplami", (long) devriIstenenParselAlaniToplami);
+		toplam.put("izinVerilenParselSayisiToplami", (long) izinVerilenParselSayisiToplami);
+		toplam.put("izinVerilenParselAlaniToplami", (long) izinVerilenParselAlaniToplami);
+		toplam.put("izinVerilmeyenParselSayisiToplami", (long) izinVerilmeyenParselSayisiToplami);
+		toplam.put("izinVerilmeyenParselAlaniToplami", (long) izinVerilmeyenParselAlaniToplami);
 
 		return toplam;
 	}
 
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/ilceyeGöreListeGetir", method = RequestMethod.GET)
+	public @ResponseBody Map<String, Long> ilceyeGöreListeGetir(
+			@RequestParam(value = "ilceID", required = true) String ilce,
+			@RequestParam(value = "ilceBirinciAy", required = true) String ilkTarih,
+			@RequestParam(value = "ilceIkinciAy", required = true) String sonTarih
+
+	) {
+		List<AraziİslemHareketleri> arazi = new ArrayList<AraziİslemHareketleri>();
+
+		int devriIstenenParselSayisiToplami = 0, izinVerilenParselSayisiToplami = 0,
+				izinVerilmeyenParselSayisiToplami = 0;
+
+		float devriIstenenParselAlaniToplami = 0, izinVerilenParselAlaniToplami = 0,
+				izinVerilmeyenParselAlaniToplami = 0;
+		arazi = araziService.ilceyeGöreListele2(ilce, ilkTarih, sonTarih);
+
+		for (int i = 0; i < arazi.size(); i++) {
+
+			devriIstenenParselSayisiToplami += arazi.get(i).getDevriIstenenParselSayisi();
+			devriIstenenParselAlaniToplami += arazi.get(i).getDevriIstenenParselAlani();
+
+			izinVerilenParselSayisiToplami += arazi.get(i).getIzinVerilenParselSayisi();
+
+			izinVerilenParselAlaniToplami += arazi.get(i).getIzinVerilenParselAlani();
+
+			izinVerilmeyenParselSayisiToplami += arazi.get(i).getIzinVerilmeyenParselSayisi();
+
+			izinVerilmeyenParselAlaniToplami += arazi.get(i).getIzinVerilmeyenParselAlani();
+
+		}
+
+		Map<String, Long> toplam = new JSONObject();
+
+		toplam.put("devriIstenenParselSayisiToplami", (long) devriIstenenParselSayisiToplami);
+		toplam.put("devriIstenenParselAlaniToplami", (long) (devriIstenenParselAlaniToplami));
+		toplam.put("izinVerilenParselSayisiToplami", (long) izinVerilenParselSayisiToplami);
+		toplam.put("izinVerilenParselAlaniToplami", (long) (izinVerilenParselAlaniToplami));
+		toplam.put("izinVerilmeyenParselSayisiToplami", (long) izinVerilmeyenParselSayisiToplami);
+		toplam.put("izinVerilmeyenParselAlaniToplami", (long) izinVerilmeyenParselAlaniToplami);
+
+		return toplam;
+	}
 }

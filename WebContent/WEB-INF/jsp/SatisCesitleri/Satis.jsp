@@ -10,6 +10,10 @@ input {
 	width: 5em;
 }
 
+input, select {
+	background-color: none;
+}
+
 #date {
 	width: 9em;
 }
@@ -18,16 +22,62 @@ label {
 	display: inline-block;
 }
 </style>
+<c:if test="${!empty errorMessage }">
 
+	<script>
+
+alert("o-Girdiğiniz bilgilerde hata var"+"\n"+"o-Tekar Giriniz...");
+return false;
+</script>
+
+</c:if>
 
 
 <script type="text/javascript">
+
+var today = new Date();
+var dd = today.getDate();
+var mm = today.getMonth()+1; //January is 0!
+var yyyy = today.getFullYear();
+jq(document).ready(function(){
+ if(dd<10){
+        dd='0'+dd
+    } 
+    if(mm<10){
+        mm='0'+mm
+    } 
+
+today = yyyy+'-'+mm+'-'+dd;
+document.getElementById("date").setAttribute("max", today);
+});
 	var jq = jQuery.noConflict();
 	var id = parseInt('${araziIslem.id}');
 	jq("#yanlisBilgi").hide();
+	
+	
+	function silmekIstediginizeEminMisiniz(id) {
+		
+		if(confirm(id+ ' Silinsin mi?')){
+			
+			window.location.href =' ${pageContext.request.contextPath}/satis-cesitleri/araziIslemSil?id='+id;
+			
+		}
+			
+			
+	}
 
 	jq(document).ready(
 			function() {
+				
+
+				 jq(".allownumericwithoutdecimal").on("keypress keyup blur",function (event) {    
+				           jq(this).val(jq(this).val().replace(/[^\d].+/, ""));
+				            if ((event.which < 48 || event.which > 57)) {
+				                event.preventDefault();
+				            }
+				 });
+				
+				
 				console.log("güncellenecek Id: " + id);
 				/* console.log(jq("#satirno" + id)); */
 				if (id == 0) {
@@ -77,13 +127,17 @@ label {
 						var toplamIzinVerilmeyenParselAlani = 0;
 						// vtden silmesi için ne yaptın
 						// alert("buraya kadar hata olacaK mı?");
-
+console.log("cookie ID: " + '${cookie.id.value}');
+var cookieID= parseInt('${cookie.id.value}');
+console.log("cookie ID2: " + '${cookie.id.value}');
 						for (var i = 0; i < data.length; i++) {
 							var tblRow = "<tr class="+"xx id="+"satirno"+data[i].id +" >"
-									+ "<td>"
-									+ "<a href="+"${pageContext.request.contextPath}/satis-cesitleri/araziIslemDuzelt/" + data[i].id+">"
-									+ data[i].islemTipi
-									+ "</a>  </td>"
+							
+									+ "<td><a  style='color:green;'   href="+"${pageContext.request.contextPath}/satis-cesitleri/araziIslemDuzelt/" + data[i].id+">"
+									+"Düzelt</a><br>"+ 							
+									"<a  style='color:red;' href="+"javascript:silmekIstediginizeEminMisiniz(" + data[i].id+");>"
+									+ "Sil"
+									+ "</a></td>"
 									+ "<td>"
 									+ data[i].tarih
 									+ "</td>"
@@ -116,7 +170,11 @@ label {
 									+ "</td>"
 									+ "<td>"
 									+ data[i].nitelik
-									+ "</td>" + "</tr>";
+									+ "-"
+									+ "<br>"
+									+ data[i].islemYapan
+									+ "</td>"
+									+ "</tr>";
 							//	jq(tblRow).insertAfter(".ayirici :nth-child(n)");//#islemTablosu tr:last-child
 
 							jq(tblRow).appendTo("#islemTablosu").last().show();
@@ -131,6 +189,9 @@ label {
 
 						}
 						console.log(toplamDevriIstenenParselSayisi);
+						//jq("#islemTablosu").css({"display":"block","opacity":".9"}); 
+						jq("#islemTablosu").css({"width":"100%","height":"307px",//find("tr:gt(6)")
+					    "overflow-y":"auto","display" : "block"});
 						if (id != 0) {
 							//jq("#satirno" + id).css('background-color', '#f00');
 							jq("#satirno" + id).addClass("info");
@@ -163,6 +224,11 @@ label {
 	}) */
 	function ekle() {
 
+		if (jq("#tipSelect").val() == "" || jq("#tipSelect").val() == null||jq("#tipSelect").val() == '0') {
+			alert("! İşlem Tipi Seçiniz")
+			return true;
+		}
+		
 		if (jq("#date").val() == "" || jq("#date").val() == null) {
 			alert("! Tarih Seçiniz")
 			return true;
@@ -201,9 +267,17 @@ label {
 		}
 		console.log(new Date());
 		var form = jq('#myForm').serialize();
-		if (!confirm("Eklemek İstediğinize Emin misiniz?"))
+		if (!confirm("Eklemek İstediğinize Emin misiniz?")) {
+
 			return false;
-		jq
+
+		} else {
+
+			jq('#myForm').submit();
+
+		}
+
+		/* jq
 				.ajax({
 					data : form,
 					type : 'post',
@@ -275,8 +349,8 @@ label {
 										jq("#kaydetBtn").val("Kaydet");
 										jq("#kaydet").show();
 										jq("#guncelle").hide();
-										//jq(".ayirici :nth-child(n+2)").remove();
-										//jq("#islemTablosu").find("tr:gt(6)").remove();
+										//jq(".ayirici :nth-child(n+2)").remove();//commented
+										//jq("#islemTablosu").find("tr:gt(6)").remove();//commented
 										jq(girilenDegerler)
 												.insertAfter(
 														"#islemTablosu tr:nth-child(7)")
@@ -290,9 +364,10 @@ label {
 														+ " // "
 														+ jq(
 																'#tipSelect option:selected')
-																.text());/* jq('#list option:selected').text() */
+																.text());
+										// jq('#list option:selected').text()//commented
 										jq("#myForm")[0].reset();
-										//jq("#devriIstenenParselAlani").val("");
+										//jq("#devriIstenenParselAlani").val("");//commented
 										jq("#satisTipi")
 												.val(
 														jq(
@@ -313,7 +388,7 @@ label {
 
 					},
 
-				});
+				}); */
 	}
 	function tipDegistir() {
 
@@ -368,8 +443,6 @@ label {
 			jq("#chartContainer").show("fade");
 		}
 
-		
-
 		if (jq("#tipSelect").val() == "KİRALAMA") {
 			jq("#tipLabelTxt").text("KİRALAMA");
 			jq("#satisTipi").val("KİRALAMA");
@@ -384,168 +457,157 @@ label {
 
 	}
 </script>
-<br>
-<select id="tipSelect" style="border: none;" name="islemTipi"
-	onchange="islemTipineGöreTabloGetir(this.value);tipDegistir()">
-	<option value="0">Lütfen İşlem Tipini Seçiniz..---</option>
-	<option value="SATIŞ (5403)">SATIŞ (5403)</option>
-	<option value="VASIF">VASIF</option>
-	<option value="MİRAS">MİRAS</option>
-	<option value="3083">3083</option>
-	<option value="İFRAZ">İFRAZ</option>
-	<option value="KİRALAMA">KİRALAMA</option>
-</select>
+	<div class="container">
+		<div class="container">
+			<h3>Satış Ekle</h3>
+			<div class="table-responsive">
+				<select id="tipSelect" style="border: none;" name="islemTipi"
+					onchange="islemTipineGöreTabloGetir(this.value);tipDegistir()">
+					<option value="0">Lütfen İşlem Tipini Seçiniz..---</option>
+					<option value="SATIŞ (5403)">SATIŞ (5403)</option>
+					<option value="VASIF">VASIF</option>
+					<option value="MİRAS">MİRAS</option>
+					<option value="3083">3083</option>
+					<option value="İFRAZ">İFRAZ</option>
+					<option value="KİRALAMA">KİRALAMA</option>
+				</select>
 
 
 
-<div id="chartContainer" style="border: 1px; border-color: red;">
+				<div id="chartContainer">
 
-	<div id='yanlisBilgi'
-		style='z-index: 20000; display: none; margin-left: 50px; border-radius: 5px; text-align: center; top: 50%; left: 75%; box-sizing: border-box; left: 50%; border: 5px groove #ffb3d1; font-size: 20px; position: fixed; background-color: white; -webkit-transform: translate(-50%, -50%); opacity: 1; filter: alpha(opacity = 90); width: 70%; height: 35%;'>
+					<div id='yanlisBilgi'
+						style='z-index: 20000; display: none; margin-left: 50px; border-radius: 5px; text-align: center; top: 50%; left: 75%; box-sizing: border-box; left: 50%; border: 5px groove #ffb3d1; font-size: 20px; position: fixed; background-color: white; -webkit-transform: translate(-50%, -50%); opacity: 1; filter: alpha(opacity = 90); width: 70%; height: 35%;'>
 
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<td><img width="50px" src="../assets/images/loading.gif"></td>
+								</tr>
+							</thead>
 
+							<tr>
+								<td>--Girilen parsel sayıları veya alanları birbirini
+									tutmuyor olabilir</td>
+							</tr>
+							<tr>
+								<td>Lütfen Kontrol Ederek Tekrar Deneyiniz...</td>
+							</tr>
+							<tr>
+								<td><input type="button" value="KAPAT" onclick="kapat();"
+									class="btn btn-success"></td>
+							</tr>
 
-		<table class="table table-striped">
-			<thead>
-				<tr>
-					<td><img width="50px" src="../assets/images/loading.gif"></td>
-				</tr>
-			</thead>
-
-			<tr>
-				<td>--Girilen parsel sayıları veya alanları birbirini tutmuyor
-					olabilir</td>
-			</tr>
-			<tr>
-				<td>Lütfen Kontrol Ederek Tekrar Deneyiniz...</td>
-			</tr>
-			<tr>
-				<td><input type="button" value="KAPAT" onclick="kapat();"
-					class="btn btn-success"></td>
-			</tr>
-
-		</table>
+						</table>
 
 
-	</div>
+					</div>
 
+					<div class="table-responsive">
+						<form:form action="ekle" method="post" commandName="araziIslem"
+							autocomplete="off" id="myForm">
+							<form:hidden path="id" />
+							<table class="table table-striped bg-info"
+								style="text-align: center;" id="islemTablosu">
+								<tr align="center" style="text-align: center">
+									<td colspan="12">TARIM ARAZİLERİNİN <strong><label
+											style="text-align: center;" id="tipLabelTxt"> &nbsp;</label>
+									</strong> YOLUYLA DEVRİ
+									</td>
 
-	<form:form action="#" method="post" commandName="araziIslem"
-		id="myForm">
-		<form:hidden path="id" />
-		<table border="" class="table" style="text-align: center;"
-			id="islemTablosu">
-			<tr align="center" style="text-align: center">
-				<td colspan="12">TARIM ARAZİLERİNİN <strong><label
-						style="text-align: center;" id="tipLabelTxt"> &nbsp;</label> </strong>
-					YOLUYLA DEVRİ
-				</td>
-
-			</tr>
-			<tr>
-				<td rowspan="2">İŞLEM TİPİ</td>
-				<td rowspan="2">TARİH</td>
-				<td rowspan="2">İLÇE</td>
-				<td rowspan="2">EVRAK NO</td>
-				<td rowspan="2">MAHALLE</td>
-				<td colspan="2">DEVRİ İSTENEN</td>
-				<td colspan="2">İZİN VERİLEN</td>
-				<td colspan="2">İZİN VERİLMEYEN</td>
-				<td rowspan="2">NİTELİK</td>
-			</tr>
-			<tr>
-				<td>Parsel Sayısı</td>
-				<td>Alan (m<sup>2</sup>)
-				</td>
-				<td>Parsel Sayısı</td>
-				<td>Alan (m<sup>2</sup>)
-				</td>
-				<td>Parsel Sayısı</td>
-				<td>Alan (m<sup>2</sup>)
-				</td>
-			</tr>
-			<tr>
-				<td><form:input path="islemTipi" id="satisTipi"
-						style="border: none;" readonly="readonly"
-						placeHolder="Satış Tipi..." /></td>
-				<td width="300px"><form:input id="date" type="date" onkeydown="return false"
-						path="tarih" style="border: none;" placeholder="Tarih......" /></td>
-				<td><form:select style="border: none;" path="ilce" id="ilce">
-						<form:option value="NONE" label="--- Seçiniz ---" />
-						<form:options items="${ilceler}" />
-					</form:select></td>
-				<td><form:input id="evrakNo" style="border: none;"
-						placeholder="Evrak No" path="evrakNo" /></td>
-				<td><form:input id="mahalle" style="border: none;"
-						placeholder="Mahalle" path="mahalle" /></td>
-				<td><form:input id="devriIstenenParselSayisi"
-						style="border: none;" placeholder="Parsel Sayısı"
-						path="devriIstenenParselSayisi" /></td>
-				<td><form:input id="devriIstenenParselAlani"
-						style="border: none;" placeholder="Alan(m²)"
-						path="devriIstenenParselAlani" /></td>
-				<td><form:input id="izinVerilenParselSayisi"
-						style="border: none;" placeholder="Parsel Sayısı"
-						path="izinVerilenParselSayisi" /></td>
-				<td><form:input id="izinVerilenParselAlani"
-						style="border: none;" placeholder="Alan(m²)"
-						path="izinVerilenParselAlani" /></td>
-				<td><form:input id="izinVerilmeyenParselSayisi"
-						style="border: none;" placeholder="Parsel Sayısı"
-						path="izinVerilmeyenParselSayisi" /></td>
-				<td><form:input id="izinVerilmeyenParselAlani"
-						style="border: none;" placeholder="Alan(m²)"
-						path="izinVerilmeyenParselAlani" /></td>
-				<td><form:select style="border: none;" path="nitelik"
-						id="nitelik">
-						<form:option value="Satış">Satış</form:option>
-						<form:option value="İntikal">İntikal</form:option>
-						<form:option value="Kiralama">Kiralama</form:option>
-					</form:select> <!-- <input id="nitelik"
+								</tr>
+								<tr>
+									<td rowspan="2">İŞLEM TİPİ</td>
+									<td rowspan="2">TARİH</td>
+									<td rowspan="2">İLÇE</td>
+									<td rowspan="2">EVRAK NO</td>
+									<td rowspan="2">MAHALLE</td>
+									<td colspan="2">DEVRİ İSTENEN</td>
+									<td colspan="2">İZİN VERİLEN</td>
+									<td colspan="2">İZİN VERİLMEYEN</td>
+									<td rowspan="2">NİTELİK</td>
+								</tr>
+								<tr>
+									<td>Parsel Sayısı</td>
+									<td>Alan (m<sup>2</sup>)
+									</td>
+									<td>Parsel Sayısı</td>
+									<td>Alan (m<sup>2</sup>)
+									</td>
+									<td>Parsel Sayısı</td>
+									<td>Alan (m<sup>2</sup>)
+									</td>
+								</tr>
+								<tr>
+									<td><form:input path="islemTipi" id="satisTipi"
+											style="border: none;" readonly="readonly"
+											placeHolder="Satış Tipi..." /></td>
+									<td width="300px"><form:input id="date" type="date"
+											onkeydown="return false" path="tarih" style="border: none;"
+											placeholder="Tarih......" /></td>
+									<td><form:select style="border: none;" path="ilce"
+											id="ilce">
+											<form:option value="NONE" label="--- Seçiniz ---" />
+											<form:options items="${ilceler}" />
+										</form:select></td>
+									<td><form:input id="evrakNo" style="border: none;"
+											placeholder="Evrak No" path="evrakNo" /></td>
+									<td><form:input id="mahalle" style="border: none;"
+											placeholder="Mahalle" path="mahalle" /></td>
+									<td><form:input id="devriIstenenParselSayisi"
+											style="border: none;" placeholder="Parsel Sayısı"
+											path="devriIstenenParselSayisi" /></td>
+									<td><form:input id="devriIstenenParselAlani"
+											class="allownumericwithoutdecimal" style="border: none;"
+											placeholder="Alan(m²)" path="devriIstenenParselAlani" /></td>
+									<td><form:input id="izinVerilenParselSayisi"
+											style="border: none;" placeholder="Parsel Sayısı"
+											path="izinVerilenParselSayisi" /></td>
+									<td><form:input id="izinVerilenParselAlani"
+											class="allownumericwithoutdecimal" style="border: none;"
+											placeholder="Alan(m²)" path="izinVerilenParselAlani" /></td>
+									<td><form:input id="izinVerilmeyenParselSayisi"
+											style="border: none;" placeholder="Parsel Sayısı"
+											path="izinVerilmeyenParselSayisi" /></td>
+									<td><form:input id="izinVerilmeyenParselAlani"
+											class="allownumericwithoutdecimal" style="border: none;"
+											placeholder="Alan(m²)" path="izinVerilmeyenParselAlani" /></td>
+									<td><form:select style="border: none;" path="nitelik"
+											id="nitelik">
+											<form:option value="Satış">Satış</form:option>
+											<form:option value="İntikal">İntikal</form:option>
+											<form:option value="Kiralama">Kiralama</form:option>
+										</form:select> <!-- <input id="nitelik"
 					style="border: none; size: 5px; margin: 0px; padding: 0px;"
 					placeholder="Nitelik" name="nitelik">--></td>
-			</tr>
-			<%-- <c:if test="${tusYazisi == 'Kaydet'}"> --%>
-			<tr style="background-color: #ffd480" id="kaydet">
-				<td colspan="12"><input id="kaydetBtn" type="button"
-					onclick="ekle()" class="btn btn-success" value="${tusYazisi }"
-					style="border: none; background-color: #e68a00"></td>
-			</tr>
-			<%-- </c:if>
+								</tr>
+								<%-- <c:if test="${tusYazisi == 'Kaydet'}"> --%>
+								<tr id="kaydet">
+									<td colspan="12"><input id="kaydetBtn" type="button"
+										onclick="ekle()" class="btn btn-info  btn-lg pull-right"
+										value="${tusYazisi }"></td>
+								</tr>
+								<%-- </c:if>
 			<c:if test="${tusYazisi == 'Güncelle'}"> --%>
-			<tr style="background-color: #ffd480" id="guncelle">
-				<td colspan="12"><input id="guncelleBtn" type="button"
-					onclick="ekle()" class="btn btn-success" value="${tusYazisi }"
-					style="border: none; background-color: #80bfff"> <input
-					type="button" class="btn btn-success" value="Vazgeç"
-					onclick="javascript:location.href='./vazgec'"
-					style="border: none; background-color: #e68a00"></td>
-			</tr>
-			<%-- </c:if> --%>
-			<tr align="center" style="text-align: center; font: bold"
-				class="ayirici">
-				<td colspan="12">İŞLEM BİLGİLERİ</td>
-			</tr>
-			<%-- <c:forEach items="${islemListesi}" var="islem" varStatus="sira">
 
-				<tr id="islemListeSatiri">
-					<td><a
-						href="${pageContext.request.contextPath}/satis-cesitleri/araziIslemDuzelt/${islem.id}">${islem.islemTipi}</a>
-					</td>
-					<td>${islem.tarih}</td>
-					<td>${islem.ilce}</td>
-					<td>${islem.evrakNo}</td>
-					<td>${islem.mahalle}</td>
-					<td>${islem.devriIstenenParselSayisi}</td>
-					<td>${islem.devriIstenenParselAlani}</td>
-					<td>${islem.izinVerilenParselSayisi}</td>
-					<td>${islem.izinVerilenParselAlani}</td>
-					<td>${islem.izinVerilmeyenParselSayisi}</td>
-					<td>${islem.izinVerilmeyenParselAlani}</td>
-					<td>${islem.nitelik}</td>
-				</tr>
-			</c:forEach> --%>
-		</table>
-	</form:form>
+								<tr id="guncelle">
+									<td colspan="12"><input id="guncelleBtn" type="button"
+										onclick="ekle()" class="btn  btn-info btn-lg pull-right"
+										value="${tusYazisi }"> <input type="button"
+										class="btn btn-danger btn-lg pull-right" value="Vazgeç"
+										onclick="javascript:location.href='./vazgec'"></td>
+								</tr>
 
-</div>
+								<%-- </c:if> --%>
+								<tr align="center" style="text-align: center; font: bold"
+									class="ayirici">
+									<td colspan="12">İŞLEM BİLGİLERİ</td>
+								</tr>
+
+							</table>
+						</form:form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>

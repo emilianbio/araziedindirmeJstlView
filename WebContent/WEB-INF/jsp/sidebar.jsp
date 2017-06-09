@@ -99,13 +99,13 @@
 			<li>
 				<!-- !HATIRLATMA! sayfa yenilendiğinde aktif olan link sidebar kısmında seçili olarak geliyor -->
 				<ul id="sabitler"
-					class="sub-menu collapse ${fn:contains(pageContext.request.requestURI,'yer-ekleme') ? 'in' : ''}">
+					class="sub-menu collapse ${fn:contains(pageContext.request.requestURI,'yonetim') ? 'in' : ''}">
 					<!-- HATIRLATMA SONU! -->
 					<li><a
-						href="${pageContext.request.contextPath}/yer-ekleme/sabitler">Köy/Mahalle/İlçe/İl
+						href="${pageContext.request.contextPath}/yonetim/sabitler">Köy/Mahalle/İlçe/İl
 							Ekleme</a></li>
-					<li><a
-						href="${pageContext.request.contextPath}/roller/rol-yonetimi">Kullanici
+					<li><a class="${fn:contains(pageContext.request.requestURI,'roller') ? 'in' : ''}"
+						href="${pageContext.request.contextPath}/yonetim/rol-yonetimi">Kullanici
 							Yetki Belirleme</a></li>
 				</ul>
 			</li>
