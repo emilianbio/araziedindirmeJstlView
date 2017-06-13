@@ -45,7 +45,7 @@
 <body onload="document.loginForm.input['sifre'].focus();">
 	<c:if test="${empty cookie.id.value }">
 		<div class="container">
-			<form class="form-signin" action="login" method="post">
+			<form class="form-signin" action="login" method="post" autocomplete="off">
 				<h3 class="form-signin-heading">Please sign in</h3>
 
 				<label for="inputEmail" class="sr-only">Email address</label> <input

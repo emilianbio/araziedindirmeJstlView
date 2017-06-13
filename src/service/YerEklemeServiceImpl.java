@@ -31,21 +31,18 @@ public class YerEklemeServiceImpl implements YerEklemeService {
 	@Override
 	@Transactional
 	public List<Yerler> tipGetir() {
-		// TODO Auto-generated method stub
 		return yerEklemeDao.tipGetir();
 	}
 
 	@Override
 	@Transactional
 	public List<Yerler> altTipGetir(Long Id, Boolean durum) {
-		// TODO Auto-generated method stub
 		return yerEklemeDao.altTipGetir(Id, durum);
 	}
 
 	@Override
 	@Transactional
 	public Yerler tipsGetir(Long id) {
-		// TODO Auto-generated method stub
 		return yerEklemeDao.tipsGetir(id);
 	}
 

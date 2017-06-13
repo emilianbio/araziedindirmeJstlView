@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
+
 import forms.AraziİslemHareketleri;
 import service.AracService;
 import service.AraziService;
@@ -217,6 +219,15 @@ public class RaporlarController {
 		toplam.put("izinVerilmeyenParselAlaniToplami", (long) izinVerilmeyenParselAlaniToplami);
 
 		return toplam;
+	}
+
+	@RequestMapping(value = "/islemTipineGoreUcAylikToplamgetir", method = RequestMethod.GET)
+	public @ResponseBody String islemTipineGoreUcAaylikToplamgetir(@RequestParam(value = "islemTipi") String islemTipi,
+			@RequestParam(value = "yil") String yil, @RequestParam(value = "birinciAy") String birinciAy,
+			@RequestParam(value = "ikinciAy") String ikinciAy) {
+		Gson gson = new Gson();
+
+		return gson.toJson(araziService.islemTipineGoreUcAylikRapor(islemTipi, yil, birinciAy, ikinciAy));
 	}
 
 	@SuppressWarnings("unchecked")

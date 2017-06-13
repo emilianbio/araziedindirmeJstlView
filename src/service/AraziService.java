@@ -27,4 +27,7 @@ public interface AraziService {
 	public List<AraziİslemHareketleri> ilceyeGöreListele2(String ilce, String ilkTarih, String sonTarih);
 
 	public List<AraziİslemHareketleri> ucAylikRapor(String yil, String ilkAy, String sonAy);
+
+	public JSONArray islemTipineGoreUcAylikRapor(String islemTipi, String yil, String ilkAy,
+			String sonAy);
 }

@@ -28,7 +28,6 @@ public class UserRolesServiceImpl implements UserRolesService {
 	 */
 	@Override
 	public void ekle(UserRoles roles) {
-		// TODO Auto-generated method stub
 		userRolesDAO.ekle(roles);
 	}
 
@@ -39,7 +38,6 @@ public class UserRolesServiceImpl implements UserRolesService {
 	 */
 	@Override
 	public List<UserRoles> roleList() {
-		// TODO Auto-generated method stub
 		return userRolesDAO.roleList();
 	}
 }

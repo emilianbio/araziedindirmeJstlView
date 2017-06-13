@@ -67,7 +67,7 @@
 							href="${pageContext.request.contextPath}/satis-cesitleri/satis">Satış
 								Ekle</a></li>
 					</ul></li>
-				<c:if test="${cookie.id.value eq 1 or cookie.id.value eq  7 }">
+				<c:if test="${cookie.id.value eq 1 or cookie.id.value eq  9 }">
 					<li class="dropdown"><a href="#" data-toggle="dropdown"
 						class="dropdown-toggle"> <i class="fa fa-file"
 							aria-hidden="true"></i>&nbsp;<span>Raporlar</span><span
@@ -105,7 +105,7 @@
 									Yetki Belirleme</a></li>
 
 						</ul></li>
- 
+
 				</c:if>
 				<c:if test="${empty cookie.id.value }">
 					<li><a
@@ -119,18 +119,19 @@
 					<li class="dropdown"><a href="#" data-toggle="dropdown"
 						class="dropdown-toggle"> <i class="fa fa-user"
 							aria-hidden="true"></i>&nbsp;<span>${cookie.isim.value }</span><span
-							class="caret"></span></a>
+							class="caret"></span></a> <c:if test="${cookie.id.value eq 1 }">
+							<ul class="dropdown-menu">
 
-						<ul class="dropdown-menu">
-							<li><a
-								href="${pageContext.request.contextPath}/kullanici-islemleri/kullanici">Kullanıcı
-									Bilgileri</a></li>
-							<li><a
-								class="${fn:contains(pageContext.request.requestURI,'roller') ? 'in' : ''}"
-								href="${pageContext.request.contextPath}/kullanici-islemleri/kullanici-profile"><span
-									class="fa fa-xs fa-gear">Ayarlar</span></a></li>
+								<li><a
+									href="${pageContext.request.contextPath}/kullanici-islemleri/kullanici">Kullanıcı
+										Bilgileri</a></li>
+								<li><a
+									class="${fn:contains(pageContext.request.requestURI,'roller') ? 'in' : ''}"
+									href="${pageContext.request.contextPath}/kullanici-islemleri/kullanici-profile"><span
+										class="fa fa-xs fa-gear">Ayarlar</span></a></li>
 
-						</ul></li>
+							</ul>
+						</c:if></li>
 
 					<li><a href="${pageContext.request.contextPath}/cikis"><span
 							class="fa fa-sign-out"></span> Logout</a></li>

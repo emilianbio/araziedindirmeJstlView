@@ -15,7 +15,6 @@ public class SystemProperties {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		Properties properties = System.getProperties();
 		String[] part = properties.toString().split(",");
 

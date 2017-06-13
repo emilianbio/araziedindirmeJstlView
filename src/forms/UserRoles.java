@@ -70,7 +70,6 @@ public class UserRoles implements Serializable {
 	 * 
 	 */
 	public UserRoles() {
-		// TODO Auto-generated constructor stub
 	}
 
 }

@@ -61,6 +61,7 @@ public class AraziDAOImpl implements AraziDAO {
 		Criteria criteriaDemirbas = sessionFactory.getCurrentSession().createCriteria(AraziİslemHareketleri.class);
 		criteriaDemirbas.addOrder(Order.desc("islemZamani"));
 		criteriaDemirbas.add(Restrictions.eq("islemTipi", islemTipi));
+
 		// criteriaDemirbas.setMaxResults(5);
 		JSONArray donecek = new JSONArray();
 		List<AraziİslemHareketleri> araziIslemListesi = new ArrayList<AraziİslemHareketleri>();
@@ -278,12 +279,6 @@ public class AraziDAOImpl implements AraziDAO {
 		return criteriaDemirbas.list();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see dao.AraziDAO#ucAylikRapor(java.lang.String, java.lang.String,
-	 * java.lang.String)
-	 */
 	@Override
 	@Transactional
 	public List<AraziİslemHareketleri> ucAylikRapor(String yil, String ilkAy, String sonAy) {
@@ -317,5 +312,58 @@ public class AraziDAOImpl implements AraziDAO {
 		// criteriaDemirbas.setProjection(Projections.groupProperty("islemZamani"));
 
 		return criteriaDemirbas.list();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional
+	public JSONArray islemTipineGoreUcAylikRapor(String islemTipi, String yil, String ilkAy, String sonAy) {
+		Criteria criteriaDemirbas = sessionFactory.getCurrentSession().createCriteria(AraziİslemHareketleri.class);
+		// criteriaDemirbas.addOrder(Order.desc("islemZamani"));
+
+		// System.out.println("seçilen yıl: " + yil);
+		// System.out.println("ilk dönem: " + ilkAy);
+		// System.out.println("son dönem: " + sonAy);
+		criteriaDemirbas.add(Restrictions.eq("islemTipi", islemTipi));
+		criteriaDemirbas.add(Restrictions.like("tarih", "%" + yil + "%"));
+		criteriaDemirbas.add(Restrictions.ge("tarih", ilkAy));
+		criteriaDemirbas.add(Restrictions.le("tarih", sonAy));
+
+		// criteriaDemirbas.setMaxResults(5);
+		JSONArray donecek = new JSONArray();
+		List<AraziİslemHareketleri> araziIslemListesi = new ArrayList<AraziİslemHareketleri>();
+		araziIslemListesi = criteriaDemirbas.list();
+		Iterator<AraziİslemHareketleri> iterator = araziIslemListesi.iterator();
+		while (iterator.hasNext()) {
+			JSONObject jsonObject = new JSONObject();
+			AraziİslemHareketleri tip = iterator.next();
+			jsonObject.put("id", tip.getId());
+			jsonObject.put("islemYapan", tip.getKullanici().getAdi());
+			jsonObject.put("islemYapanID", tip.getKullanici().getId());
+			jsonObject.put("tarih", tip.getTarih());
+			jsonObject.put("ilce", tip.getIlce());
+			jsonObject.put("evrakNo", tip.getEvrakNo());
+			jsonObject.put("mahalle", tip.getMahalle());
+			jsonObject.put("devriIstenenParselSayisi", tip.getDevriIstenenParselSayisi());
+			jsonObject.put("devriIstenenParselAlani", tip.getDevriIstenenParselAlani());
+			jsonObject.put("izinVerilenParselSayisi", tip.getIzinVerilenParselSayisi());
+			jsonObject.put("izinVerilenParselAlani", tip.getIzinVerilenParselAlani());
+			jsonObject.put("izinVerilmeyenParselSayisi", tip.getIzinVerilmeyenParselSayisi());
+			jsonObject.put("izinVerilmeyenParselAlani", tip.getIzinVerilmeyenParselAlani());
+			jsonObject.put("nitelik", tip.getNitelik());
+			if (tip.getIslemTipi() == "SATIŞ") {
+				jsonObject.put("islemTipi", tip.getIslemTipi() + " (5403)");
+			} else {
+				jsonObject.put("islemTipi", tip.getIslemTipi());
+			}
+
+			// donecek.add(tip.getAlisFiyati());
+			// donecek.add(tip.getHisseFiyati());
+			// donecek.add(tip.getSatisFiyati());
+			// donecek.add(tip.getHayvanNo());
+			donecek.add(jsonObject);
+		}
+
+		return (donecek);
 	}
 }

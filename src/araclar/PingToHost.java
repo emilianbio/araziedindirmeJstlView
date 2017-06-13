@@ -21,7 +21,6 @@ public class PingToHost {
 		try {
 			address = InetAddress.getByName("46.245.167.55");
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -29,7 +28,6 @@ public class PingToHost {
 		try {
 			reachable = address.isReachable(10000);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

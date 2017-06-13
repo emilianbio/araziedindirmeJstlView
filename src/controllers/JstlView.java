@@ -63,7 +63,7 @@ public class JstlView extends InternalResourceView {
 		request.setAttribute("yillar", model.get("yillar"));
 
 		request.setAttribute("arac", model.get("arac"));
-		
+
 		request.setAttribute("resim", model.get("resim"));
 
 		request.setAttribute("aracCikisListesi", model.get("aracCikisListesi"));
@@ -73,6 +73,7 @@ public class JstlView extends InternalResourceView {
 		request.setAttribute("url", model.get("url"));
 		request.setAttribute("message", model.get("message"));
 		request.setAttribute("errorMessage", model.get("errorMessage"));
+		request.setAttribute("errors", model.get("errors"));
 		request.setAttribute("roll", model.get("roll"));
 		request.setAttribute("roller", model.get("roller"));
 		request.setAttribute("dataPoints", model.get("dataPoints"));
@@ -106,13 +107,11 @@ public class JstlView extends InternalResourceView {
 			request.setCharacterEncoding("UTF-8");
 			response.setCharacterEncoding("UTF-8");
 		} catch (UnsupportedEncodingException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		try {
 			chain.doFilter(request, response);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

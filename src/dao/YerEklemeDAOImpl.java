@@ -31,7 +31,6 @@ public class YerEklemeDAOImpl implements YerEklemeDAO {
 	@Override
 	public void ekle(Yerler yerler) {
 		sessionFactory.getCurrentSession().saveOrUpdate(yerler);
-		// TODO Auto-generated method stub
 
 	}
 

@@ -30,7 +30,6 @@ public class KullaniciServiceImpl implements KullaniciService {
 	 */
 	@Override
 	public List<Kullanici> kullanici() {
-		// TODO Auto-generated method stub
 		return kullaniciDAO.kullanici();
 	}
 
@@ -41,7 +40,6 @@ public class KullaniciServiceImpl implements KullaniciService {
 	 */
 	@Override
 	public List<Kullanici> kullanGetir(Long id) {
-		// TODO Auto-generated method stub
 		return kullaniciDAO.kullaniciGetir(id);
 	}
 
@@ -52,7 +50,6 @@ public class KullaniciServiceImpl implements KullaniciService {
 	 */
 	@Override
 	public Kullanici kullaniciGetirr(Long id) {
-		// TODO Auto-generated method stub
 		return kullaniciDAO.kullaniciGetirr(id);
 	}
 

@@ -38,7 +38,6 @@ public class IzinIslemleriServiceImpl implements IzinIslemleriService {
 	 */
 	@Override
 	public List<IzinIslemleri> izinListesi() {
-		// TODO Auto-generated method stub
 		return izinDao.izinListesi();
 	}
 
@@ -49,7 +48,6 @@ public class IzinIslemleriServiceImpl implements IzinIslemleriService {
 	 */
 	@Override
 	public IzinIslemleri izinGetir(Long id) {
-		// TODO Auto-generated method stub
 		return izinDao.izinGetir(id);
 	}
 

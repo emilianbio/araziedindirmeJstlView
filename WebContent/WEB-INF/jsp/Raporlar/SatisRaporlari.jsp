@@ -7,11 +7,11 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <script type="text/javascript">
 	var jq = jQuery.noConflict();
-	islemTipineGöreTabloGetir('SATIŞ (5403)');
+	/* islemTipineGöreTabloGetir('SATIŞ (5403)');
 	islemTipineGöreTabloGetir('MİRAS');
 	islemTipineGöreTabloGetir('3083');
-	islemTipineGöreTabloGetir('VASIF');
-	islemlerToplami();
+	islemTipineGöreTabloGetir('VASIF'); */
+	//islemlerToplami();
 	function islemlerToplami() {
 		jq
 				.ajax({
@@ -49,15 +49,20 @@
 
 				});
 	}
-	function islemTipineGöreTabloGetir(islemTipi) {
+	function islemTipineGöreTabloGetir() {
+		ucAylikToplam();
+		var islemTipi = jq("#islemTipi3").val();
 
 		jq
 				.ajax({
 					type : "GET",
-					url : '${pageContext.request.contextPath}/satis-cesitleri/islemTipineGöreListeGetir.json',
+					url : '${pageContext.request.contextPath}/raporlar/islemTipineGoreUcAylikToplamgetir.json',
 					contentType : "application/x-www-form-urlencoded;charset=UTF-8",
 					data : {
-						islemTipi : islemTipi
+						islemTipi : islemTipi,
+						yil : jq("#yil3").val(),
+						birinciAy : jq("#birinciAy3").val(),
+						ikinciAy : jq("#ikinciAy3").val(),
 					},
 					success : function(data) {
 						var toplamDevriIstenenParselAlani = 0;
@@ -94,19 +99,30 @@
 								+ "</td><td>" + toplamIzinVerilmeyenParselAlani
 								+ "</td>";
 
+						var islemTipi = jq('#islemTipi3').val();
 						if (islemTipi == "SATIŞ (5403)") {
-
+							jq('#satis td:nth-child(n+2)').remove();
 							jq(tblRow).appendTo("#satis");
 
 						} else if (islemTipi == "MİRAS") {
-
+							jq('#miras td:nth-child(n+2)').remove();
 							jq(tblRow).appendTo("#miras");
 						} else if (islemTipi == "3083") {
+							jq('#3083 td:nth-child(n+2)').remove();
 							jq(tblRow).appendTo("#3083");
-						} else
+						} else if (islemTipi == "İFRAZ")
 
 						{
+							jq('#ifraz td:nth-child(n+2)').remove();
+							jq(tblRow).appendTo("#ifraz");
+						} else if (islemTipi == "KİRALAMA") {
+							jq('#kira td:nth-child(n+2)').remove();
+							jq(tblRow).appendTo("#kira");
+
+						} else {
+							jq('#vasif td:nth-child(n+2)').remove();
 							jq(tblRow).appendTo("#vasif");
+
 						}
 
 						//jQueryDataTable(array);
@@ -224,9 +240,9 @@
 					url : '${pageContext.request.contextPath}/raporlar/ucayliktoplamgetir.json',
 					contentType : "application/x-www-form-urlencoded;charset=UTF-8",
 					data : {
-						yil : jq("#yil").val(),
-						birinciAy : jq("#birinciAy").val(),
-						ikinciAy : jq("#ikinciAy").val(),
+						yil : jq("#yil3").val(),
+						birinciAy : jq("#birinciAy3").val(),
+						ikinciAy : jq("#ikinciAy3").val(),
 					},
 					success : function(data) {
 
@@ -245,8 +261,56 @@
 								+ "</td><td>"
 								+ data.izinVerilmeyenParselAlaniToplami
 								+ "</td>";
-						jq("#ucAyToplam td:nth-child(n+2)").remove();
+						jq("#toplam td:nth-child(n+2)").remove();
+						jq(tblRow).appendTo("#toplam");
+						/* jq("#ucAyToplam td:nth-child(n+2)").remove();
 						jq(tblRow).appendTo("#ucAyToplam");
+						 */
+					},
+					complete : function(data) {
+
+					},
+					error : function(xhr, textStatus, errorThrown) {
+
+						alert(textStatus + "***" + xhr + "***" + errorThrown);
+					}
+
+				});
+	}
+
+	function islemTipineGoreUcAylikToplam() {
+
+		jq
+				.ajax({
+					type : "GET",
+					url : '${pageContext.request.contextPath}/raporlar/islemTipineGoreUcAylikToplamgetir.json',
+					contentType : "application/x-www-form-urlencoded;charset=UTF-8",
+					data : {
+						islemTipi : jq("#islemTipi2").val(),
+						yil : jq("#yil2").val(),
+						birinciAy : jq("#birinciAy2").val(),
+						ikinciAy : jq("#ikinciAy2").val(),
+					},
+					success : function(data) {
+
+						console.log(data.devriIstenenParselSayisiToplami);
+
+						var tblRow;
+						tblRow = "<td>" + data.devriIstenenParselSayisiToplami
+								+ "</td><td>"
+								+ data.devriIstenenParselAlaniToplami
+								+ "</td><td>"
+								+ data.izinVerilenParselSayisiToplami
+								+ "</td><td>"
+								+ data.izinVerilenParselAlaniToplami
+								+ "</td><td>"
+								+ data.izinVerilmeyenParselSayisiToplami
+								+ "</td><td>"
+								+ data.izinVerilmeyenParselAlaniToplami
+								+ "</td>";
+						jq("#islemTipineGoreUcAyToplam td:nth-child(n+2)")
+								.remove();
+						jq(tblRow).appendTo("#islemTipineGoreUcAyToplam");
 
 					},
 					complete : function(data) {
@@ -428,11 +492,13 @@
 		document.body.innerHTML = oldPage;
 	}
 
+
+
 	jq(document).ready(function() {
 		jq('select option').css('background-color', 'rgba(255,0,0,0.0)');
 		jq('table').addClass("table table-striped bg-info");
 		jq('table').css({
-			"opacity" : ".85"
+			"opacity" : "1"
 		});
 	});
 
@@ -449,42 +515,50 @@
 	<button type="button" class="btn btn-info" data-toggle="collapse"
 		data-target="#demo">TÜM SATIŞ İSTATİSTİKLERİ</button>
 	<div id="demo" class="collapse">
-		<select style="border: none;" name="yil" id="yil"
-			onchange="ucAylikToplam();">
-			<option value="" label="--- Seçiniz ---" />
-			<option value="2016" label="2016" />
-			<option value="2017" label="2017" />
-		</select> <select style="border: none;" name="birinciAy" id="birinciAy"
-			onchange="ucAylikToplam()">
-			<option value="" label="--- Seçiniz ---" />
-			<option value="2017-01-01" label="Ocak"></option>
-			<option value="2017-02-01" label="Şubat"></option>
-			<option value="2017-03-01" label="Mart"></option>
-			<option value="2017-04-01" label="Nisan"></option>
-			<option value="2017-05-01" label="Mayıs"></option>
-			<option value="2017-06-01" label="Haziran"></option>
-			<option value="2017-07-01" label="Temmuz"></option>
-			<option value="2017-08-01" label="Ağustos"></option>
-			<option value="2017-09-01" label="Eylül"></option>
-			<option value="2017-10-01" label="Ekim"></option>
-			<option value="2017-11-01" label="Kasım"></option>
-			<option value="2017-12-01" label="Aralık"></option>
-		</select> <select style="border: none;" name="ikinciAy" id="ikinciAy"
-			onchange="ucAylikToplam()">
-			<option value="" label="--- Seçiniz ---" />
-			<option value="2017-01-31" label="Ocak"></option>
-			<option value="2017-02-31" label="Şubat"></option>
-			<option value="2017-03-31" label="Mart"></option>
-			<option value="2017-04-31" label="Nisan"></option>
-			<option value="2017-05-31" label="Mayıs"></option>
-			<option value="2017-06-31" label="Haziran"></option>
-			<option value="2017-07-31" label="Temmuz"></option>
-			<option value="2017-08-31" label="Ağustos"></option>
-			<option value="2017-09-31" label="Eylül"></option>
-			<option value="2017-10-31" label="Ekim"></option>
-			<option value="2017-11-31" label="Kasım"></option>
-			<option value="2017-12-31" label="Aralık"></option>
-		</select>
+		<form>
+			<select style="border: none;" name="yil" id="yil3">
+				<option value="" label="--- Seçiniz ---" />
+				<option value="2016" label="2016" />
+				<option value="2017" label="2017" />
+			</select> <select style="border: none;" name="birinciAy" id="birinciAy3">
+				<option value="" label="--- Seçiniz ---" />
+				<option value="2017-01-01" label="Ocak"></option>
+				<option value="2017-02-01" label="Şubat"></option>
+				<option value="2017-03-01" label="Mart"></option>
+				<option value="2017-04-01" label="Nisan"></option>
+				<option value="2017-05-01" label="Mayıs"></option>
+				<option value="2017-06-01" label="Haziran"></option>
+				<option value="2017-07-01" label="Temmuz"></option>
+				<option value="2017-08-01" label="Ağustos"></option>
+				<option value="2017-09-01" label="Eylül"></option>
+				<option value="2017-10-01" label="Ekim"></option>
+				<option value="2017-11-01" label="Kasım"></option>
+				<option value="2017-12-01" label="Aralık"></option>
+			</select> <select style="border: none;" name="ikinciAy" id="ikinciAy3">
+				<option value="" label="--- Seçiniz ---" />
+				<option value="2017-01-31" label="Ocak"></option>
+				<option value="2017-02-31" label="Şubat"></option>
+				<option value="2017-03-31" label="Mart"></option>
+				<option value="2017-04-31" label="Nisan"></option>
+				<option value="2017-05-31" label="Mayıs"></option>
+				<option value="2017-06-31" label="Haziran"></option>
+				<option value="2017-07-31" label="Temmuz"></option>
+				<option value="2017-08-31" label="Ağustos"></option>
+				<option value="2017-09-31" label="Eylül"></option>
+				<option value="2017-10-31" label="Ekim"></option>
+				<option value="2017-11-31" label="Kasım"></option>
+				<option value="2017-12-31" label="Aralık"></option>
+			</select> <select id="islemTipi3" style="border: none;" name="islemTipi">
+				<option value="0">Lütfen İşlem Tipini Seçiniz..---</option>
+				<option value="SATIŞ (5403)">SATIŞ (5403)</option>
+				<option value="VASIF">VASIF</option>
+				<option value="MİRAS">MİRAS</option>
+				<option value="3083">3083</option>
+				<option value="İFRAZ">İFRAZ</option>
+				<option value="KİRALAMA">KİRALAMA</option>
+			</select> <input type="button" onclick="islemTipineGöreTabloGetir()"
+				value="Getir">
+		</form>
 		<div id="tableDiv">
 			<table id="sonuc1" class="table table-striped bg-info">
 				<thead>
@@ -509,6 +583,14 @@
 					</tr>
 					<tr id="3083">
 						<td><input type="text" value="3083" style="border: none"
+							readonly="readonly"></td>
+					</tr>
+					<tr id="kira">
+						<td><input type="text" value="KİRA" style="border: none"
+							readonly="readonly"></td>
+					</tr>
+					<tr id="ifraz">
+						<td><input type="text" value="İFRAZ" style="border: none"
 							readonly="readonly"></td>
 					</tr>
 					<tr id="vasif">

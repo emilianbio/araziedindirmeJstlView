@@ -6,24 +6,21 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <style>
-input {
+/* input {
 	border: 2px solid lightblue;
 	border-radius: 7px;
 	outline: none;
-}
-
+} */
 select {
 	/*border: 2px solid lightblue;*/
 	border-radius: 5px;
 	outline: 2px;
 }
-/* table {
-	width: 300px;
-	float: left;
-	display: inline;
-	padding: 10px;
-	float: left;
-} */
+
+.text-danger {
+	color: #ff0000;
+	font-style: italic;
+}
 </style>
 
 <c:if test="${kullanici.id==0 }">
@@ -36,19 +33,27 @@ select {
 	</script>
 
 </c:if>
+<div class="jumbatron">
+	<div class="container">${errors }</div>
+
+</div>
+
 <form:form method="POST" action="kullaniciEkle" commandName="kullanici"
 	enctype="multipart/form-data">
 
 	<table class="table">
 		<tr>
 			<td>İsim Soyisim</td>
-			<td><form:input path="adi" /></td>
+			<td><form:input path="adi" class="form-control input-xs" /></td>
+			<td><form:errors path="*" cssClass="text-danger" /></td>
 			<td>Kullanici Adı</td>
 			<td><form:input path="isimSoyisim" /></td>
+			<td><form:errors path="*" cssClass="text-danger" /></td>
 			<c:if test="${cookie.id.value==1 }">
 				<td>Rol</td>
 				<td><form:select path="roles.id" items="${roller}"
-						itemLabel="rollAdi" itemValue="id">
+						class="selectpicker" data-live-search="true" itemLabel="rollAdi"
+						data-tokens="id" itemValue="id">
 						<%-- <form:option value="0">---Seçiniz------------</form:option>
 					<form:option value="2">20 Gün</form:option>
 					<form:option value="3">30 Gün</form:option> --%>
@@ -78,8 +83,8 @@ select {
 			<td>E-Posta</td>
 			<td><form:input path="ePosta" /></td>
 			<td>Cep Telefonu</td>
-			<td><form:input path="cepTelefonu" id="cepTelefonu" /></td>
-
+			<td><form:input path="cepTelefonu" id="cepTelefonu" />asd</td>
+			<td><form:errors path="*" cssClass="text-danger" /></td>
 			<c:if test="${cookie.id.value==1 }">
 				<td>Durum</td>
 				<td><form:select path="durum" id="durum">
@@ -89,11 +94,21 @@ select {
 					</form:select></td>
 			</c:if>
 		</tr>
+
 		<tr>
 			<td>Resim</td>
-			<td><form:input type="image" path="pic" width="100px"
-					src="${pageContext.request.contextPath}/kullanici-islemleri/photoGoster2?id=${kullanici.id} " /></td>
-			<td><input type="file" name="file" /> ${message }</td>
+
+			<c:if test="${kullanici.id ne 0}">
+				<td><form:input type="image" path="pic" width="100px"
+						src="${pageContext.request.contextPath}/kullanici-islemleri/photoGoster2?id=${kullanici.id} " /></td>
+			</c:if>
+			<c:if test="${kullanici.id eq 0}">
+				<td><form:input type="image" path="pic" width="50px"
+						height="50px"
+						src="${pageContext.request.contextPath}/assets/images/personelimage/avatar" /></td>
+			</c:if>
+			<td><input type="file" name="file" multiple="multiple" />
+				${message }</td>
 		</tr>
 		<tr>
 			<c:if test="${kullanici.id!=0 }">
@@ -108,7 +123,7 @@ select {
 </form:form>
 <c:if test="${cookie.id.value==1 }">
 
-	<table class="table">
+	<table class="table table-striped">
 		<tr>
 			<td>Sıra</td>
 			<td>İsim Soyisim</td>
@@ -342,248 +357,3 @@ select {
 	</fieldset>
 </form>
  --%>
- 
- <div class="container-fluid">
-  <div class="row">
-    <div class="fb-profile">
-        <img align="left" class="fb-image-lg" src="http://lorempixel.com/850/280/nightlife/5/" alt="Profile image example"/>
-        <img align="left" class="fb-image-profile thumbnail" src="http://lorempixel.com/180/180/people/9/" alt="Profile image example"/>
-        <div class="fb-profile-text">
-            <h1>Eli Macy</h1>
-            
-        </div>
-    </div>
-  </div>
-</div> <!-- /container fluid-->  
-<div class="container">
-  <div class="col-sm-8">
-
-      <div data-spy="scroll" class="tabbable-panel">
-        <div class="tabbable-line">
-          <ul class="nav nav-tabs ">
-            <li class="active">
-              <a href="#tab_default_1" data-toggle="tab">
-              About Her </a>
-            </li>
-            <li>
-              <a href="#tab_default_2" data-toggle="tab">
-             Education& Career</a>
-            </li>
-            <li>
-              <a href="#tab_default_3" data-toggle="tab">
-             Family Details</a>
-            </li>
-             <li>
-              <a href="#tab_default_4" data-toggle="tab">
-             Desire Partner</a>
-            </li>
-          </ul>
-          <div class="tab-content">
-            <div class="tab-pane active" id="tab_default_1">
- 
-              <p>
-                My daughter  is good looking, with pleasant personality, smart, well educated, from well cultural and  a religious family background. having respect in heart for others.  
-                would like to thanks you for visiting through my daughter;s profile. 
-                She has done PG in Human Resources after her graduation. 
-                At present working IN INSURANCE sector as Manager Training .
-              </p>
-              <h4>About her Family</h4>
-              <p>
-                About her family she belongs to a religious and a well cultural family background. 
-                Father - Retired from a Co-operate Bank as a Manager. 
-                Mother - she is a home maker. 
-                1 younger brother - works for Life Insurance n manages cluster. 
-              </p>
-              <h4>Education </h4>
-              <p>I have done PG in Human Resourses</p>
-              <h4>Occupation</h4>
-              <p>At present Working in Insurance sector</p>
-           
-            </div>
-            <div class="tab-pane" id="tab_default_2">
-              <p>
-                Education& Career
-              </p>
-              <div class="row">
-              <div class="col-sm-6">
-                <div class="form-group">
-                     <label for="email">Highest Education:</label>
-                      <p> MBA/PGDM</p>
-                 </div>
-                  <div class="form-group">
-                     <label for="email">Place of Birth:</label>
-                      <p> pune, maharashtra</p>
-                 </div>
-                  <div class="form-group">
-                     <label for="email">Place of Birth:</label>
-                      <p> pune, maharashtra</p>
-                 </div>
-                  <div class="form-group">
-                     <label for="email">Place of Birth:</label>
-                      <p> pune, maharashtra</p>
-                 </div>
-              </div>
-              <div class="col-sm-6">
-                 <div class="form-group">
-                     <label for="email">Place of Birth:</label>
-                      <p> pune, maharashtra</p>
-                 </div>
-                  <div class="form-group">
-                     <label for="email">Place of Birth:</label>
-                      <p> pune, maharashtra</p>
-                 </div>
-                  <div class="form-group">
-                     <label for="email">Place of Birth:</label>
-                      <p> pune, maharashtra</p>
-                 </div>
-                  <div class="form-group">
-                     <label for="email">Place of Birth:</label>
-                      <p> pune, maharashtra</p>
-                 </div>
-
-               </div>
-              </div>
-
-             
-           
-            </div>
-            <div class="tab-pane" id="tab_default_3">
-              <p>
-                Family Details
-              </p>
-              <div class="row">
-              <div class="col-sm-6">
-                <div class="form-group">
-                     <label for="email">Highest Education:</label>
-                      <p> MBA/PGDM</p>
-                 </div>
-                  <div class="form-group">
-                     <label for="email">Place of Birth:</label>
-                      <p> pune, maharashtra</p>
-                 </div>
-                  <div class="form-group">
-                     <label for="email">Place of Birth:</label>
-                      <p> pune, maharashtra</p>
-                 </div>
-                  <div class="form-group">
-                     <label for="email">Place of Birth:</label>
-                      <p> pune, maharashtra</p>
-                 </div>
-              </div>
-              <div class="col-sm-6">
-                 <div class="form-group">
-                     <label for="email">Place of Birth:</label>
-                      <p> pune, maharashtra</p>
-                 </div>
-                  <div class="form-group">
-                     <label for="email">Place of Birth:</label>
-                      <p> pune, maharashtra</p>
-                 </div>
-                  <div class="form-group">
-                     <label for="email">Place of Birth:</label>
-                      <p> pune, maharashtra</p>
-                 </div>
-                  <div class="form-group">
-                     <label for="email">Place of Birth:</label>
-                      <p> pune, maharashtra</p>
-                 </div>
-
-               </div>
-              </div>
-            </div>
-             <div class="tab-pane" id="tab_default_4">
-              <p>
-               Lifestyle
-
-              </p>
-               <div class="row">
-              <div class="col-sm-6">
-                <div class="form-group">
-                     <label for="email">Highest Education:</label>
-                      <p> MBA/PGDM</p>
-                 </div>
-                  <div class="form-group">
-                     <label for="email">Place of Birth:</label>
-                      <p> pune, maharashtra</p>
-                 </div>
-                  <div class="form-group">
-                     <label for="email">Place of Birth:</label>
-                      <p> pune, maharashtra</p>
-                 </div>
-                  <div class="form-group">
-                     <label for="email">Place of Birth:</label>
-                      <p> pune, maharashtra</p>
-                 </div>
-              </div>
-              <div class="col-sm-6">
-                 <div class="form-group">
-                     <label for="email">Place of Birth:</label>
-                      <p> pune, maharashtra</p>
-                 </div>
-                  <div class="form-group">
-                     <label for="email">Place of Birth:</label>
-                      <p> pune, maharashtra</p>
-                 </div>
-                  <div class="form-group">
-                     <label for="email">Place of Birth:</label>
-                      <p> pune, maharashtra</p>
-                 </div>
-                  <div class="form-group">
-                     <label for="email">Place of Birth:</label>
-                      <p> pune, maharashtra</p>
-                 </div>
-
-               </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-  
-  </div>
-  <div class="col-sm-4">
-   <div class="panel panel-default">
-    <div class="menu_title">
-       Horoscope
-    </div>
-    <div class="panel-body">
-        <div class="row">
-            <div class="col-lg-12">
-                 <div class="form-group">
-                     <label for="email">Place of Birth:</label>
-                      <p> pune, maharashtra</p>
-                 </div>
-                  <div class="form-group">
-                      <label for="email">Date of Birth:</label>
-                      <p> 26 Sep 2017</p>
-                  </div>
-                  <div class="form-group">
-                      <label for="email">Time of Birth:</label>
-                      <p> 11:20 min.</p>
-                  </div>
-                   <div class="form-group">
-                      <label for="email">Horroscoe Match not Necessory</label>
-                   </div>
-                    <div class="form-group">
-                      <label for="email">Sun Sign:</label>
-                      <p> Scorpio</p>
-                    </div>
-                    <div class="form-group">
-                      <label for="email">Rashi/ Moon sign:</label>
-                      <p> Mesh</p>
-                    </div>
-                     <div class="form-group">
-                      <label for="email">Nakshtra:</label>
-                      <p> Bharani</p>
-                    </div>
-                      <div class="form-group">
-                      <label for="email">Manglik:</label>
-                      <p> Manglik</p>
-                    </div>
-                <button type="submit" class="btn btn-danger btn-block">Submit</button>
-            </div>
-        </div>
-    </div>
-</div>
-  </div>
-</div>

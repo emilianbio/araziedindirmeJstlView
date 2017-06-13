@@ -4,14 +4,15 @@
 package forms;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -66,7 +67,9 @@ public class Kullanici implements Serializable {
 	@Column(name = "pic")
 	private byte[] pic;
 
-	
+	@OneToMany(targetEntity = Kullanici.class)
+	public List<byte[]> pictureList;
+
 	public UserRoles getRoles() {
 
 		if (roles == null) {
@@ -175,7 +178,7 @@ public class Kullanici implements Serializable {
 		this.pic = pic;
 	}
 
-	public Kullanici( String isimSoyisim, String sifre, String adi, String unvan, String birim, UserRoles roles,
+	public Kullanici(String isimSoyisim, String sifre, String adi, String unvan, String birim, UserRoles roles,
 			String sicilNo, long cepTelefonu, String ePosta, char durum, Integer izinHakki) {
 		this.isimSoyisim = isimSoyisim;
 		this.sifre = sifre;
@@ -193,6 +196,12 @@ public class Kullanici implements Serializable {
 	public Kullanici() {
 	}
 
-	
+	public List<byte[]> getPictureList() {
+		return pictureList;
+	}
+
+	public void setPictureList(List<byte[]> pictureList) {
+		this.pictureList = pictureList;
+	}
 
 }

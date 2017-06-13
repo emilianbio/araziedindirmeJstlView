@@ -49,7 +49,7 @@ public class AraziİslemHareketleriController {
 	public Long id = null;
 	public String hata = "";
 
-	@RequestMapping(value = "/satis",method= RequestMethod.GET)
+	@RequestMapping(value = "/satis", method = RequestMethod.GET)
 	public String Satis(ModelMap model, @CookieValue(value = "id", required = false) Long id,
 			HttpServletRequest request, @ModelAttribute("araziIslem") AraziİslemHareketleri islemHareketleri,
 			BindingResult result) {
@@ -89,7 +89,7 @@ public class AraziİslemHareketleriController {
 		}
 	}
 
-	@RequestMapping(value = "/ekle")
+	@RequestMapping(value = "/ekle", method = RequestMethod.POST)
 	public ModelAndView Satis2(@CookieValue(value = "id") Long id, ModelMap model, HttpServletRequest request,
 			HttpServletResponse response, @ModelAttribute("araziIslem") AraziİslemHareketleri islemHareketleri,
 			BindingResult result) throws ParseException {

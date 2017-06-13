@@ -26,7 +26,6 @@ public class AraziServiceImpl implements AraziService {
 
 	@Override
 	public AraziİslemHareketleri araziİslemGetir(Long id) {
-		// TODO Auto-generated method stub
 		return araziDAO.araziİslemGetir(id);
 	}
 
@@ -37,13 +36,11 @@ public class AraziServiceImpl implements AraziService {
 
 	@Override
 	public Long sonIdGetir() {
-		// TODO Auto-generated method stub
 		return araziDAO.sonIdGetir();
 	}
 
 	@Override
 	public JSONArray ilceyeGöreListele(String ilce) {
-		// TODO Auto-generated method stub
 		return araziDAO.ilceyeGöreListele(ilce);
 	}
 
@@ -56,7 +53,6 @@ public class AraziServiceImpl implements AraziService {
 	 */
 	@Override
 	public JSONArray islemTipineVePersoneleGöreListele(String islemTipi, Long id) {
-		// TODO Auto-generated method stub
 		return araziDAO.islemTipineVePersoneleGöreListele(islemTipi, id);
 	}
 
@@ -78,7 +74,6 @@ public class AraziServiceImpl implements AraziService {
 	 */
 	@Override
 	public List<AraziİslemHareketleri> ilceyeGöreListele2(String ilce, String ilkTarih, String sonTarih) {
-		// TODO Auto-generated method stub
 		return araziDAO.ilceyeGöreListele2(ilce, ilkTarih, sonTarih);
 	}
 
@@ -90,8 +85,13 @@ public class AraziServiceImpl implements AraziService {
 	 */
 	@Override
 	public List<AraziİslemHareketleri> ucAylikRapor(String yil, String ilkAy, String sonAy) {
-		// TODO Auto-generated method stub
 		return araziDAO.ucAylikRapor(yil, ilkAy, sonAy);
+	}
+
+	@Override
+	public JSONArray islemTipineGoreUcAylikRapor(String islemTipi, String yil, String ilkAy,
+			String sonAy) {
+		return araziDAO.islemTipineGoreUcAylikRapor(islemTipi, yil, ilkAy, sonAy);
 	}
 
 }
